@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Monitor, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { businessConfig } from '../config/business';
+import logoImg from '../assets/logo_clean.png';
 
 export default function Navbar({ onNavigate, activeSection }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -65,8 +66,8 @@ export default function Navbar({ onNavigate, activeSection }) {
         {/* RIGHT SIDE: Business Logo + Marathi Business Name */}
         <div className="nav-right">
           <a href="#home" onClick={() => handleNavClick('home')} className="brand-logo">
-            <div className="logo-icon">
-              <Monitor size={22} />
+            <div className="logo-icon" style={{ background: 'transparent', boxShadow: 'none' }}>
+              <img src={logoImg} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
             <div className="brand-titles">
               <span className="brand-name">{businessConfig.businessNameMarathi}</span>

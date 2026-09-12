@@ -3,8 +3,9 @@ import * as Icons from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
 
 export default function ServiceCard({ service, onSelectService }) {
-  // Pick dynamic icon from Lucide React
-  const IconComponent = Icons[service.icon] || Icons.FileText;
+  // Pick dynamic icon from Lucide React, unless it's a custom imported image URL
+  const isCustomIcon = typeof service.icon === 'string' && (service.icon.startsWith('/') || service.icon.includes('.'));
+  const IconComponent = !isCustomIcon && Icons[service.icon] ? Icons[service.icon] : Icons.FileText;
 
   return (
     <div 
@@ -16,7 +17,11 @@ export default function ServiceCard({ service, onSelectService }) {
     >
       <div className="card-top">
         <div className="card-icon-wrapper">
-          <IconComponent size={24} />
+          {isCustomIcon ? (
+            <img src={service.icon} alt={service.marathiName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+          ) : (
+            <IconComponent size={24} />
+          )}
         </div>
         <h3 className="service-marathi-name">{service.marathiName}</h3>
         <span className="service-english-name">({service.englishName})</span>

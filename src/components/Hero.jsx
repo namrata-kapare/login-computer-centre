@@ -6,12 +6,6 @@ export default function Hero({ onExploreClick }) {
   return (
     <section id="home" className="hero-section">
       <div className="container hero-content">
-        {/* Location Badge */}
-        <div className="location-tag">
-          <MapPin size={16} />
-          <span>{businessConfig.location}</span>
-        </div>
-
         {/* Main Heading in Marathi */}
         <h1 className="hero-heading">
           {businessConfig.businessNameMarathi}

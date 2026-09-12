@@ -52,10 +52,11 @@ export default function Contact() {
           {/* Card 3: Email & Timings */}
           <div className="contact-info-card">
             <div className="contact-icon-bubble">
-              <Clock size={26} />
+              <Clock size={26} className="desktop-only" />
+              <Mail size={26} className="mobile-only" style={{display: 'none'}} />
             </div>
-            <h3 className="contact-card-title">✉️ ई-मेल व 🕘 वेळ (Email)</h3>
-            <p className="contact-card-text">
+            <h3 className="contact-card-title">✉️ ई-मेल <span className="desktop-only">व 🕘 वेळ</span> (Email)</h3>
+            <p className="contact-card-text desktop-only">
               वेळ: <strong>{businessConfig.timing.todayTimingText}</strong>
             </p>
             <p className="contact-card-text" style={{ fontSize: '0.9rem', color: 'var(--primary-blue)', marginTop: '0.4rem' }}>
@@ -65,7 +66,7 @@ export default function Contact() {
         </div>
 
         {/* Action Buttons */}
-        <div className="contact-actions" style={{ marginBottom: '2.5rem' }}>
+        <div className="contact-actions" style={{ marginBottom: '1rem' }}>
           <a href={`tel:${businessConfig.phoneRaw}`} className="btn-primary">
             <PhoneCall size={20} />
             <span>📞 कॉल करा</span>
@@ -78,29 +79,9 @@ export default function Contact() {
             className="btn-secondary"
           >
             <MapPin size={20} />
-            <span>📍 मॅपवर शोधा (Find on Map)</span>
+            <span>📍 नकाशावर शोधा (Find on Map)</span>
             <ExternalLink size={16} style={{ marginLeft: '4px' }} />
           </a>
-        </div>
-
-        {/* Responsive Google Maps Embed Box */}
-        <div id="map-embed-box" className="map-wrapper" style={{
-          borderRadius: 'var(--radius-lg)',
-          overflow: 'hidden',
-          boxShadow: 'var(--shadow-md)',
-          border: '1px solid var(--primary-border)',
-          backgroundColor: '#ffffff'
-        }}>
-          <iframe 
-            src={businessConfig.mapEmbedSrc}
-            width="100%" 
-            height="420" 
-            style={{ border: 0, display: 'block' }} 
-            allowFullScreen="" 
-            loading="lazy" 
-            referrerPolicy="strict-origin-when-cross-origin"
-            title="Login Computer Centre Jejuri Google Map"
-          ></iframe>
         </div>
       </div>
     </section>

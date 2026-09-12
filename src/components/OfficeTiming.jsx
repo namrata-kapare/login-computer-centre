@@ -35,12 +35,18 @@ export default function OfficeTiming() {
   return (
     <section className="timing-section">
       <div className="container">
-        <div className="section-header" style={{ marginBottom: '1.5rem' }}>
+        <div className="section-header desktop-only" style={{ marginBottom: '1.5rem' }}>
           <div className="section-badge">
             <Clock size={16} />
             <span>आजची कार्यालयीन स्थिती व वेळ (Working Hours)</span>
           </div>
           <h2 className="section-title">आजची कार्यालयीन वेळ</h2>
+        </div>
+
+        <div className="mobile-only-flex" style={{ display: 'none', justifyContent: 'center', marginBottom: '1rem' }}>
+          <div style={{ padding: '0.6rem 1.25rem', backgroundColor: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--primary-border)', boxShadow: 'var(--shadow-sm)' }}>
+            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-dark)', margin: 0, textAlign: 'center' }}>आजची कार्यालयीन वेळ</h2>
+          </div>
         </div>
 
         <div className="timing-card">
