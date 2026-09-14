@@ -1,24 +1,57 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
+import { getServiceCustomIcon } from '../utils/serviceIcons';
 
-export default function ServiceCard({ service, onSelectService }) {
-  // Pick dynamic icon from Lucide React, unless it's a custom imported image URL
-  const isCustomIcon = typeof service.icon === 'string' && (service.icon.startsWith('/') || service.icon.includes('.'));
-  const IconComponent = !isCustomIcon && Icons[service.icon] ? Icons[service.icon] : Icons.FileText;
+export default function ServiceCard({ service, onSelectService, index = 0 }) {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const cardRef = useRef(null);
+  const customIconSrc = getServiceCustomIcon(service);
+  const IconComponent = !customIconSrc && Icons[service.icon] ? Icons[service.icon] : Icons.FileText;
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsRevealed(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsRevealed(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -20px 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const staggerDelay = `${(index % 8) * 40}ms`;
 
   return (
     <div 
-      className="service-card"
+      ref={cardRef}
+      className={`service-card ${isRevealed ? 'revealed' : 'reveal-init'}`}
+      style={{ transitionDelay: isRevealed ? staggerDelay : '0ms' }}
       onClick={() => onSelectService(service)}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelectService(service); }}
     >
       <div className="card-top">
-        <div className="card-icon-wrapper">
-          {isCustomIcon ? (
-            <img src={service.icon} alt={service.marathiName} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        <div className={`card-icon-wrapper ${customIconSrc ? 'has-custom-icon' : ''}`}>
+          {customIconSrc ? (
+            <img 
+              src={customIconSrc} 
+              alt={service.marathiName || service.englishName || 'Service Icon'} 
+              style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1px', display: 'block' }} 
+            />
           ) : (
             <IconComponent size={24} />
           )}

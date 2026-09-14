@@ -551,7 +551,7 @@ button {
   flex-direction: column;
   justify-content: space-between;
   box-shadow: var(--shadow-sm);
-  transition: var(--transition-normal);
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow var(--transition-normal), border-color var(--transition-normal);
   position: relative;
   overflow: hidden;
 }
@@ -568,6 +568,17 @@ button {
   transition: var(--transition-fast);
 }
 
+.service-card.reveal-init {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.service-card.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.service-card.revealed:hover,
 .service-card:hover {
   transform: translateY(-5px);
   box-shadow: var(--shadow-hover);
@@ -595,10 +606,22 @@ button {
   transition: var(--transition-fast);
 }
 
+.card-icon-wrapper.has-custom-icon,
+.card-icon-wrapper:has(img) {
+  background-color: transparent;
+  background: transparent;
+}
+
 .service-card:hover .card-icon-wrapper {
   background-color: var(--primary-blue);
   color: #ffffff;
   transform: scale(1.05);
+}
+
+.service-card:hover .card-icon-wrapper.has-custom-icon,
+.service-card:hover .card-icon-wrapper:has(img) {
+  background-color: transparent;
+  background: transparent;
 }
 
 .service-marathi-name {
@@ -793,6 +816,12 @@ button {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+.modal-header-icon.has-custom-icon,
+.modal-header-icon:has(img) {
+  background-color: transparent;
+  background: transparent;
 }
 
 .modal-title-box {
@@ -991,6 +1020,16 @@ button {
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
+}
+
+.contact-icon-bubble.bubble-red {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
+
+.contact-icon-bubble.bubble-yellow {
+  background-color: #fef9c3;
+  color: #ca8a04;
 }
 
 .contact-card-title {

@@ -214,23 +214,6 @@ export const servicesData = [
     ],
     keywords: ["शेतकरी", "farmer id", "शेतकरी ओळखपत्र", "कृषी कार्ड"]
   },
-  {
-    id: 25,
-    marathiName: "शेतकरी ओळखपत्र (प्रत २)",
-    englishName: "Farmer Identity Card",
-    category: "पॅन / आधार व ओळखपत्र सेवा",
-    isActive: true,
-    icon: "UserCheck",
-    shortDescription: "शेतकऱ्यांसाठी कृषी योजना व ओळखपत्र सेवा.",
-    purpose: "शासकीय कृषी योजना, पीक कर्ज व सवलतींसाठी आवश्यक असणारे अधिकृत शेतकरी ओळखपत्र.",
-    documents: [
-      "आधार कार्ड",
-      "डिजिटल ७/१२ उतारा",
-      "पासपोर्ट फोटो",
-      "मोबाईल नंबर"
-    ],
-    keywords: ["शेतकरी", "farmer card", "कृषी", "ओळखपत्र"]
-  },
 
   // -------------------------------------------------------------
   // B. शेतकरी व जमीन संबंधित सेवा
@@ -380,20 +363,6 @@ export const servicesData = [
       "मूळ कागदपत्रे"
     ],
     keywords: ["रंगीत झेरॉक्स", "color xerox", "रंगीत", "कॉपी"]
-  },
-  {
-    id: 16,
-    marathiName: "रंगीत प्रिंट",
-    englishName: "Color Print",
-    category: "प्रिंटिंग, झेरॉक्स व डिजिटल सेवा",
-    isActive: true,
-    icon: "Printer",
-    shortDescription: "डिजिटल फाइल्स, PDF व फोटो प्रिंटिंग HD क्वालिटीमध्ये.",
-    purpose: "मोबाइल, पेनड्राइव्ह किंवा ईमेलद्वारा प्राप्त कागदपत्रांच्या, प्रमाणपत्रांच्या उच्च प्रतीच्या प्रिंट काढणे.",
-    documents: [
-      "डिजिटल फाईल (PDF / Image / Word) - पेनड्राइव्ह किंवा व्हॉट्सॲपद्वारे"
-    ],
-    keywords: ["प्रिंट", "color print", "रंगीत प्रिंट", "printer", "pdf print"]
   },
   {
     id: 17,

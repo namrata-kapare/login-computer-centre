@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import * as Icons from 'lucide-react';
 import { X, CheckCircle, Info, PhoneCall, AlertTriangle, User } from 'lucide-react';
 import { businessConfig } from '../config/business';
+import { getServiceCustomIcon } from '../utils/serviceIcons';
 
 export default function ServiceDetails({ service, onClose, onContactClick }) {
   useEffect(() => {
@@ -18,7 +19,8 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
 
   if (!service) return null;
 
-  const IconComponent = Icons[service.icon] || Icons.FileText;
+  const customIconSrc = getServiceCustomIcon(service);
+  const IconComponent = !customIconSrc && Icons[service.icon] ? Icons[service.icon] : Icons.FileText;
 
   const handleContactAction = () => {
     // Open direct mobile dialer using tel:9767696067
@@ -30,8 +32,16 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
         <div className="modal-header">
-          <div className="modal-header-icon">
-            <IconComponent size={28} />
+          <div className={`modal-header-icon ${customIconSrc ? 'has-custom-icon' : ''}`}>
+            {customIconSrc ? (
+              <img 
+                src={customIconSrc} 
+                alt={service.marathiName || service.englishName || 'Service Icon'} 
+                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1px', display: 'block' }} 
+              />
+            ) : (
+              <IconComponent size={28} />
+            )}
           </div>
           <div className="modal-title-box">
             <h2 className="modal-marathi-title">{service.marathiName}</h2>

@@ -79,10 +79,11 @@ export default function ServiceGrid({ onSelectService }) {
         {/* Service Cards Grid */}
         {filteredServices.length > 0 ? (
           <div className="services-grid">
-            {filteredServices.map((service) => (
+            {filteredServices.map((service, index) => (
               <ServiceCard
                 key={service.id}
                 service={service}
+                index={index}
                 onSelectService={onSelectService}
               />
             ))}

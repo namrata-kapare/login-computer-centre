@@ -18,7 +18,7 @@ export default function Contact() {
         <div className="contact-cards-grid">
           {/* Card 1: Address */}
           <div className="contact-info-card">
-            <div className="contact-icon-bubble">
+            <div className="contact-icon-bubble bubble-red">
               <MapPin size={26} />
             </div>
             <h3 className="contact-card-title">📍 पत्ता (Address)</h3>
@@ -32,7 +32,7 @@ export default function Contact() {
 
           {/* Card 2: Mobile & Phone */}
           <div className="contact-info-card">
-            <div className="contact-icon-bubble">
+            <div className="contact-icon-bubble bubble-red">
               <Phone size={26} />
             </div>
             <h3 className="contact-card-title">📞 मोबाईल (Mobile)</h3>
@@ -51,9 +51,8 @@ export default function Contact() {
 
           {/* Card 3: Email & Timings */}
           <div className="contact-info-card">
-            <div className="contact-icon-bubble">
-              <Clock size={26} className="desktop-only" />
-              <Mail size={26} className="mobile-only" style={{display: 'none'}} />
+            <div className="contact-icon-bubble bubble-yellow">
+              <Mail size={26} />
             </div>
             <h3 className="contact-card-title">✉️ ई-मेल <span className="desktop-only">व 🕘 वेळ</span> (Email)</h3>
             <p className="contact-card-text desktop-only">
