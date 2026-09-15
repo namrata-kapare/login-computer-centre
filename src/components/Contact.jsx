@@ -1,5 +1,4 @@
 import React from 'react';
-import { MapPin, Phone, Mail, Clock, ExternalLink, PhoneCall } from 'lucide-react';
 import { businessConfig } from '../config/business';
 
 export default function Contact() {
@@ -19,23 +18,25 @@ export default function Contact() {
           {/* Card 1: Address */}
           <div className="contact-info-card">
             <div className="contact-icon-bubble bubble-red">
-              <MapPin size={26} />
+              <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📍</span>
             </div>
-            <h3 className="contact-card-title">📍 पत्ता (Address)</h3>
-            <p className="contact-card-text" style={{ fontWeight: 700, color: 'var(--text-dark)' }}>
+            <h3 className="contact-card-title" style={{ fontWeight: 'normal' }}>
+              <strong>पत्ता</strong> (<strong>Address</strong>)
+            </h3>
+            <p className="contact-card-text" style={{ fontWeight: 'normal', color: 'var(--text-dark)' }}>
               {businessConfig.shortName}
             </p>
-            <p className="contact-card-text" style={{ marginTop: '0.25rem', color: 'var(--text-muted)' }}>
+            <p className="contact-card-text" style={{ marginTop: '0.25rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
               {businessConfig.address}
             </p>
           </div>
 
           {/* Card 2: Mobile & Phone */}
           <div className="contact-info-card">
-            <div className="contact-icon-bubble bubble-red">
-              <Phone size={26} />
+            <div className="contact-icon-bubble bubble-green">
+              <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📞</span>
             </div>
-            <h3 className="contact-card-title">📞 मोबाईल (Mobile)</h3>
+            <h3 className="contact-card-title">मोबाईल (Mobile)</h3>
             <p className="contact-card-text">
               <a 
                 href={`tel:${businessConfig.phoneRaw}`} 
@@ -49,17 +50,14 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* Card 3: Email & Timings */}
+          {/* Card 3: Email */}
           <div className="contact-info-card">
             <div className="contact-icon-bubble bubble-yellow">
-              <Mail size={26} />
+              <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>✉️</span>
             </div>
-            <h3 className="contact-card-title">✉️ ई-मेल <span className="desktop-only">व 🕘 वेळ</span> (Email)</h3>
-            <p className="contact-card-text desktop-only">
-              वेळ: <strong>{businessConfig.timing.todayTimingText}</strong>
-            </p>
-            <p className="contact-card-text" style={{ fontSize: '0.9rem', color: 'var(--primary-blue)', marginTop: '0.4rem' }}>
-              <a href={`mailto:${businessConfig.email}`}>✉️ {businessConfig.email}</a>
+            <h3 className="contact-card-title">ई-मेल (Email)</h3>
+            <p className="contact-card-text" style={{ fontSize: '0.95rem', color: 'var(--primary-blue)', marginTop: '0.5rem' }}>
+              <a href={`mailto:${businessConfig.email}`}>{businessConfig.email}</a>
             </p>
           </div>
         </div>
@@ -67,8 +65,7 @@ export default function Contact() {
         {/* Action Buttons */}
         <div className="contact-actions" style={{ marginBottom: '1rem' }}>
           <a href={`tel:${businessConfig.phoneRaw}`} className="btn-primary">
-            <PhoneCall size={20} />
-            <span>📞 कॉल करा</span>
+            <span>कॉल करा</span>
           </a>
 
           <a 
@@ -77,9 +74,7 @@ export default function Contact() {
             rel="noopener noreferrer"
             className="btn-secondary"
           >
-            <MapPin size={20} />
-            <span>📍 नकाशावर शोधा (Find on Map)</span>
-            <ExternalLink size={16} style={{ marginLeft: '4px' }} />
+            <span>नकाशावर शोधा (Find on Map)</span>
           </a>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Menu, X, Monitor } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import logoImg from '../assets/login logo1.jpeg';
 import { businessConfig } from '../config/business';
 
 export default function Navbar({ onNavigate, activeSection }) {
@@ -65,9 +66,11 @@ export default function Navbar({ onNavigate, activeSection }) {
         {/* RIGHT SIDE: Business Logo + Marathi Business Name */}
         <div className="nav-right">
           <a href="#home" onClick={() => handleNavClick('home')} className="brand-logo">
-            <div className="logo-icon">
-              <Monitor size={22} />
-            </div>
+            <img 
+              src={logoImg} 
+              alt={businessConfig.businessNameMarathi} 
+              className="brand-logo-img" 
+            />
             <div className="brand-titles">
               <span className="brand-name">{businessConfig.businessNameMarathi}</span>
             </div>

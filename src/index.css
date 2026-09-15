@@ -215,6 +215,14 @@ button {
   flex-shrink: 0;
 }
 
+.brand-logo-img {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
 .brand-titles {
   display: flex;
   flex-direction: column;
@@ -1025,6 +1033,11 @@ button {
 .contact-icon-bubble.bubble-red {
   background-color: #fee2e2;
   color: #dc2626;
+}
+
+.contact-icon-bubble.bubble-green {
+  background-color: #dcfce7;
+  color: #16a34a;
 }
 
 .contact-icon-bubble.bubble-yellow {
