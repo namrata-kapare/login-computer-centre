@@ -90,12 +90,25 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
             </h3>
             <ul className="doc-list">
               {service.documents && service.documents.length > 0 ? (
-                service.documents.map((doc, idx) => (
-                  <li key={idx} className="doc-item">
-                    <CheckCircle className="doc-check-icon" size={18} />
-                    <span>{doc}</span>
-                  </li>
-                ))
+                service.documents.map((doc, idx) => {
+                  const isSubItem = typeof doc === 'string' && (doc.trim().startsWith('-') || doc.trim().startsWith('•'));
+                  const cleanText = isSubItem ? doc.replace(/^[\s-•]+/, '').trim() : doc;
+
+                  return (
+                    <li 
+                      key={idx} 
+                      className={`doc-item ${isSubItem ? 'doc-sub-item' : ''}`}
+                      style={isSubItem ? { marginLeft: '1.5rem', background: '#f8fafc', borderLeft: '3px solid #3b82f6', padding: '0.5rem 0.8rem', fontSize: '0.9rem' } : {}}
+                    >
+                      {isSubItem ? (
+                        <span style={{ color: '#3b82f6', fontWeight: 'bold', marginRight: '6px', fontSize: '1rem' }}>•</span>
+                      ) : (
+                        <CheckCircle className="doc-check-icon" size={18} />
+                      )}
+                      <span>{cleanText}</span>
+                    </li>
+                  );
+                })
               ) : (
                 <li className="doc-item">
                   <CheckCircle className="doc-check-icon" size={18} />
@@ -103,6 +116,13 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
                 </li>
               )}
             </ul>
+
+            {/* Red Note directly below Required Documents list */}
+            {(service.docNote || (service.availabilityMessage && (service.availabilityMessage.startsWith('टीप:') || service.availabilityMessage.startsWith('महत्त्वाची सूचना:')))) && (
+              <div className="doc-red-note">
+                {service.docNote || service.availabilityMessage}
+              </div>
+            )}
           </div>
 
           {/* Seasonal / Availability Message or General Disclaimer */}
@@ -111,7 +131,7 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
             <div>
               <strong>महत्त्वाची सूचना:</strong>
               <p style={{ marginTop: '2px' }}>
-                {service.availabilityMessage 
+                {service.availabilityMessage && !service.docNote && !service.availabilityMessage.startsWith('टीप:') && !service.availabilityMessage.startsWith('महत्त्वाची सूचना:')
                   ? service.availabilityMessage 
                   : "कागदपत्रांची आवश्यकता व प्रक्रिया सेवेनुसार बदलू शकते. अर्ज करण्यापूर्वी किंवा अधिक माहितीसाठी आमच्याशी थेट संपर्क साधा."}
               </p>

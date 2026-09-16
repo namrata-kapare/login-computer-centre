@@ -933,6 +933,19 @@ button {
   font-size: 0.9rem;
 }
 
+.doc-red-note {
+  margin-top: 0.85rem;
+  padding: 0.75rem 1rem;
+  background-color: #fef2f2;
+  border-left: 3.5px solid #dc2626;
+  border-radius: var(--radius-sm);
+  color: #dc2626;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
 .modal-footer {
   padding: 1.25rem 1.75rem;
   background-color: #f8fafc;
