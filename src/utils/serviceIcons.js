@@ -142,13 +142,13 @@ export function getServiceCustomIcon(service) {
   if (eng.includes('jaat') || mar.includes('जात पडताळणी') || eng.includes('caste validity')) return iconJaatPadtalani;
   if (eng.includes('aadhaar-pan') || eng.includes('aadhaar + pan') || (mar.includes('आधार') && mar.includes('पॅन') && mar.includes('लिंक'))) return iconAadhaarPan;
   if (eng.includes('pan card') || mar.includes('पॅन कार्ड')) return iconPancard;
-  if (eng.includes('passport') || mar.includes('पासपोर्ट')) return iconPassportPhoto;
+  if (eng.includes('passport photo') || eng.includes('passport size') || mar.includes('पासपोर्ट फोटो') || mar.includes('पासपोर्ट साईज')) return iconPassportPhoto;
   if (eng.includes('farmer') || mar.includes('शेतकरी')) return iconShetkari;
   if (eng.includes('digital 7/12') || mar.includes('डिजिटल ७/१२')) return iconDigital712;
   if (eng.includes('8a') || mar.includes('८-अ')) return icon8a;
   if (eng.includes('ferfar') || mar.includes('फेरफार')) return iconFerfar;
   if (eng.includes('pik vima') || mar.includes('पीक विमा') || eng.includes('crop insurance')) return iconPikVima;
-  if (eng.includes('boja') || mar.includes('बोजा कमी') || eng.includes('charge on 7/12') || eng.includes('removal of charge')) return icon712BojaKami;
+  if (eng.includes('boja kami') || mar.includes('बोजा कमी') || eng.includes('removal of charge') || eng.includes('reduction of charge')) return icon712BojaKami;
   if (eng.includes('xerox') && !eng.includes('color') && (mar === 'झेरॉक्स' || !mar.includes('रंगीत'))) return iconXerox;
   if (eng.includes('color print') || mar.includes('कलर प्रिंट') || mar.includes('रंगीत प्रिंट')) return iconColorPrint;
   if (eng.includes('document scan') || mar.includes('कागदपत्र स्कॅन')) return iconDocumentScan;

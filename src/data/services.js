@@ -449,5 +449,116 @@ export const servicesData = [
       "ग्राम महसूल अधिकारी यांनी त्यावरती सहशिक्खा देणे आवश्यक असते"
     ],
     keywords: ["सोसायटी", "e-agreement", "भाडेकरार", "rent agreement", "करार"]
+  },
+
+  // -------------------------------------------------------------
+  // G. नवीन सेवा (New Services)
+  // -------------------------------------------------------------
+  {
+    id: 25,
+    marathiName: "पासपोर्ट ऑनलाईन नोंदणी",
+    englishName: "Passport Online Registration",
+    category: "इतर ऑनलाइन सेवा",
+    isActive: true,
+    icon: "Globe",
+    shortDescription: "",
+    purpose: "",
+    documents: [
+      "Aadhar Card",
+      "Pan Card",
+      "शाळा सोडल्याचा दाखला / जन्माचा दाखला / SSC Board Certificate",
+      "Name Change Married Certificate OR English Language Gazette",
+      "Passport Size Photo Copy"
+    ],
+    keywords: ["passport", "पासपोर्ट", "passport online", "ऑनलाइन पासपोर्ट", "registration", "online registration"]
+  },
+  {
+    id: 26,
+    marathiName: "7/12 वर बोजा नोंदवणे",
+    englishName: "Charge Registration on 7/12",
+    category: "शेतकरी व जमीन संबंधित सेवा",
+    isActive: true,
+    icon: "FilePlus",
+    shortDescription: "",
+    purpose: "",
+    documents: [
+      "सातबारा",
+      "8 अ",
+      "कर्जदाराने घेतलेल्या कर्जाची नोंद करण्यासाठी ज्या बँकेकडून कर्ज घेतले असेल त्या बँकेचे लेटर"
+    ],
+    keywords: ["7/12", "७/१२", "बोजा", "बोजा नोंदवणे", "सातबारा", "charge", "loan charge", "boja"]
+  },
+  {
+    id: 27,
+    marathiName: "तहसीलदार उत्पन्न दाखला",
+    englishName: "Tehsildar Income Certificate",
+    category: "प्रमाणपत्र व शासकीय सेवा",
+    isActive: true,
+    icon: "FileText",
+    shortDescription: "",
+    purpose: "",
+    documents: [
+      "आधार कार्ड",
+      "रेशन कार्ड",
+      "वडिलांचा फोटो",
+      "वडिलांचे आधार कार्ड",
+      "तलाठी उत्पन्न दाखला",
+      "सातबारा उतारा",
+      "स्वयंघोषणापत्र"
+    ],
+    keywords: ["उत्पन्न", "दाखला", "तहसीलदार", "उत्पन्न दाखला", "income", "income certificate", "tehsildar"]
+  },
+  {
+    id: 28,
+    marathiName: "नवीन बँक खाते",
+    englishName: "New Bank Account",
+    category: "इतर ऑनलाइन सेवा",
+    isActive: true,
+    icon: "Landmark",
+    shortDescription: "",
+    purpose: "",
+    documents: [
+      "aadhar card",
+      "pancard",
+      "photo"
+    ],
+    keywords: ["बँक", "खाते", "नवीन बँक खाते", "bank", "account", "new bank account", "bank account"]
+  },
+  {
+    id: 29,
+    marathiName: "मतदार नोंदणी",
+    englishName: "Voter Registration",
+    category: "पॅन / आधार व ओळखपत्र सेवा",
+    isActive: true,
+    icon: "Vote",
+    shortDescription: "",
+    purpose: "",
+    documents: [
+      "aadhar card",
+      "photo",
+      "aadhar link mobile number",
+      "आई, वडिलांचे मतदान ओळखपत्र",
+      "जन्म प्रमाणपत्र / शाळा सोडल्याचा दाखला / दहावी certificate यापैकी एक",
+      "SIR 2002 यादीतील क्रमांक (आई, वडील, आजी, आजोबा, पती यापैकी एक)"
+    ],
+    keywords: ["मतदार", "मतदान", "मतदार नोंदणी", "voter", "voter id", "voter registration", "election"],
+    docNote: "टीप: अर्जदाराची जन्म तारीख 1 August 2008 पूर्वीची असावी."
+  },
+  {
+    id: 30,
+    marathiName: "बियाणे अनुदान योजना",
+    englishName: "Seed Subsidy Scheme",
+    category: "शेतकरी व जमीन संबंधित सेवा",
+    isActive: true,
+    icon: "Sprout",
+    shortDescription: "",
+    purpose: "",
+    documents: [
+      "7/12 आणि 8/a उतारा",
+      "aadhar card",
+      "bank passbook",
+      "mobile number (aadhar ला link असलेला हवा)"
+    ],
+    keywords: ["बियाणे", "अनुदान", "योजना", "बियाणे अनुदान योजना", "seed", "subsidy", "krishi", "कृषी"]
   }
 ];
