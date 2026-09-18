@@ -144,7 +144,7 @@ export default function AdminDashboard() {
 
   const handleLogout = async () => {
     await logoutAdmin();
-    navigate('/admin/login');
+    navigate('/');
   };
 
   // 1. Status Update Toggle

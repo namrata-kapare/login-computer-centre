@@ -12,11 +12,11 @@ export default function AdminLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If already logged in, redirect straight to /admin
+    // If already logged in, redirect straight to /admin/dashboard
     async function verify() {
       const data = await getAdminMe();
       if (data && data.admin) {
-        navigate('/admin', { replace: true });
+        navigate('/admin/dashboard', { replace: true });
       }
     }
     verify();
@@ -34,7 +34,7 @@ export default function AdminLogin() {
     setLoading(true);
     try {
       await loginAdmin(email, password);
-      navigate('/admin');
+      navigate('/admin/dashboard');
     } catch (err) {
       setError(err.message || 'वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.');
     } finally {
@@ -97,7 +97,7 @@ export default function AdminLogin() {
               <input
                 type="text"
                 className="form-input"
-                placeholder="उदा. admin@loginjejuri.com"
+                placeholder="वापरकर्तानाव किंवा ई-मेल टाका"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required

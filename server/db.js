@@ -41,19 +41,17 @@ export function getIsMongoConnected() {
 // Initial Data Seeder for MongoDB
 async function seedInitialData() {
   try {
-    // 1. Seed Admin
-    const adminEmail = (process.env.ADMIN_EMAIL || 'admin@loginjejuri.com').toLowerCase().trim();
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    // 1. Seed / Update Admin
+    const adminEmail = (process.env.ADMIN_EMAIL || 'login').toLowerCase().trim();
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Login@123';
+    const passwordHash = bcrypt.hashSync(adminPassword, 10);
     
-    const existingAdmin = await Admin.findOne({ email: adminEmail });
-    if (!existingAdmin) {
-      const passwordHash = bcrypt.hashSync(adminPassword, 10);
-      await Admin.create({
-        email: adminEmail,
-        passwordHash
-      });
-      console.log(`👤 Seeded initial admin account: ${adminEmail}`);
-    }
+    await Admin.findOneAndUpdate(
+      { email: adminEmail },
+      { email: adminEmail, passwordHash },
+      { upsert: true, new: true }
+    );
+    console.log(`👤 Admin account configured: ${adminEmail}`);
 
     // 2. Seed Business Settings
     const existingSettings = await BusinessSettings.findOne();
@@ -93,8 +91,8 @@ async function seedInitialData() {
 
 // Seed In-Memory Store for fallback mode
 function seedMemoryStore() {
-  const adminEmail = (process.env.ADMIN_EMAIL || 'admin@loginjejuri.com').toLowerCase().trim();
-  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminEmail = (process.env.ADMIN_EMAIL || 'login').toLowerCase().trim();
+  const adminPassword = process.env.ADMIN_PASSWORD || 'Login@123';
 
   memoryStore.admin = {
     email: adminEmail,

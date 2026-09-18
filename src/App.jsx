@@ -15,14 +15,18 @@ export default function App() {
         {/* Private Admin Login Route */}
         <Route path="/admin/login" element={<AdminLogin />} />
 
-        {/* Protected Private Admin Dashboard Route */}
+        {/* Protected Private Admin Dashboard Routes */}
         <Route 
-          path="/admin" 
+          path="/admin/dashboard" 
           element={
             <AdminProtectedRoute>
               <AdminDashboard />
             </AdminProtectedRoute>
           } 
+        />
+        <Route 
+          path="/admin" 
+          element={<Navigate to="/admin/dashboard" replace />} 
         />
 
         {/* Fallback Catch-all Route */}
