@@ -15,6 +15,15 @@ export default function OfficeTiming() {
     specialNotice: ''
   });
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     async function loadInfo() {
       const data = await getBusinessInfo();
@@ -32,73 +41,94 @@ export default function OfficeTiming() {
     loadInfo();
   }, []);
 
+  // Marathi Day Name
+  const daysMarathi = ['रविवार', 'सोमवार', 'मंगळवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'];
+  const currentDay = daysMarathi[currentTime.getDay()];
+
+  // Marathi Month Name and Date
+  const monthsMarathi = [
+    'जानेवारी', 'फेब्रुवारी', 'मार्च', 'एप्रिल', 'मे', 'जून',
+    'जुलै', 'ऑगस्ट', 'सप्टेंबर', 'ऑक्टोबर', 'नोव्हेंबर', 'डिसेंबर'
+  ];
+  const formattedDate = `${currentTime.getDate()} ${monthsMarathi[currentTime.getMonth()]} ${currentTime.getFullYear()}`;
+
+  // Formatted Current Time (12-hour format with AM/PM)
+  let hours = currentTime.getHours();
+  const minutes = currentTime.getMinutes().toString().padStart(2, '0');
+  const seconds = currentTime.getSeconds().toString().padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12 || 12;
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedTime = `${formattedHours}:${minutes}:${seconds} ${ampm}`;
+
   return (
     <section className="timing-section">
       <div className="container">
-        <div className="section-header desktop-only" style={{ marginBottom: '1.5rem' }}>
-          <div className="section-badge">
-            <Clock size={16} />
-            <span>आजची कार्यालयीन स्थिती व वेळ (Working Hours)</span>
-          </div>
+        {/* Section Title: "आजची कार्यालयीन वेळ" */}
+        <div className="section-header" style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
           <h2 className="section-title">आजची कार्यालयीन वेळ</h2>
         </div>
 
-        <div className="mobile-only-flex" style={{ display: 'none', justifyContent: 'center', marginBottom: '1rem' }}>
-          <div style={{ padding: '0.6rem 1.25rem', backgroundColor: '#ffffff', borderRadius: 'var(--radius-md)', border: '1px solid var(--primary-border)', boxShadow: 'var(--shadow-sm)' }}>
-            <h2 style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-dark)', margin: 0, textAlign: 'center' }}>आजची कार्यालयीन वेळ</h2>
-          </div>
-        </div>
-
+        {/* Decorated Working Hours & Office Status Card */}
         <div className="timing-card">
-          {/* Prominent Open / Closed Status Display */}
-          <div className="timing-block" style={{ gridColumn: '1 / -1', textAlign: 'center' }}>
-            <div style={{ marginBottom: '0.75rem' }}>
-              {info.isOpen ? (
-                <span className="status-badge-public open">
-                  <CheckCircle size={18} />
-                  <span>🟢 आज कार्यालय खुले आहे</span>
-                </span>
-              ) : (
-                <span className="status-badge-public closed">
-                  <XCircle size={18} />
-                  <span>🔴 आज कार्यालय बंद आहे</span>
-                </span>
-              )}
+          {/* 1. Prominent Open / Closed Status Display */}
+          <div className={`office-status-banner ${info.isOpen ? 'status-open' : 'status-closed'}`}>
+            {info.isOpen ? (
+              <>
+                <span className="status-dot dot-open"></span>
+                <CheckCircle size={22} className="status-icon" />
+                <span className="status-text">आज कार्यालय सुरू आहे</span>
+              </>
+            ) : (
+              <>
+                <span className="status-dot dot-closed"></span>
+                <XCircle size={22} className="status-icon" />
+                <span className="status-text">आज कार्यालय बंद आहे</span>
+              </>
+            )}
+          </div>
+
+          {/* 2. Automatic Live Info Grid: Date, Day, Current Time */}
+          <div className="timing-live-grid">
+            <div className="live-info-box">
+              <div className="live-info-label">
+                <Calendar size={17} />
+                <span>आजची तारीख</span>
+              </div>
+              <div className="live-info-value">{formattedDate}</div>
             </div>
 
-            <div className="timing-day" style={{ justifyContent: 'center' }}>
-              <Calendar size={20} />
-              <span>कार्यालयीन वेळ</span>
+            <div className="live-info-box">
+              <div className="live-info-label">
+                <Clock size={17} />
+                <span>आजचा वार</span>
+              </div>
+              <div className="live-info-value">{currentDay}</div>
             </div>
-            <div className="timing-val" style={{ fontSize: '1.35rem', padding: '0.6rem 1.5rem', marginTop: '0.4rem' }}>
+
+            <div className="live-info-box">
+              <div className="live-info-label">
+                <Clock size={17} />
+                <span>सध्याची वेळ</span>
+              </div>
+              <div className="live-info-value time-ticker">{formattedTime}</div>
+            </div>
+          </div>
+
+          {/* 3. Office Working Hours Display */}
+          <div className="office-hours-box">
+            <div className="hours-title">
+              <Clock size={20} />
+              <span>कार्यालयीन वेळ:</span>
+            </div>
+            <div className="hours-time-text">
               {info.todayTimingText || `${info.openingTime} ते ${info.closingTime}`}
             </div>
           </div>
 
-          {/* Regular Weekdays & Sunday Summary */}
-          <div className="timing-block">
-            <div className="timing-day">
-              <Clock size={18} />
-              <span>{info.weekdaysTitle}</span>
-            </div>
-            <p style={{ fontWeight: 600, color: 'var(--text-dark)' }}>
-              {info.openingTime} ते {info.closingTime}
-            </p>
-          </div>
-
-          <div className="timing-block">
-            <div className="timing-day">
-              <Clock size={18} />
-              <span>{info.sundayTitle}</span>
-            </div>
-            <p style={{ fontWeight: 600, color: '#d97706' }}>
-              {info.sundayTime}
-            </p>
-          </div>
-
-          {/* Daily Special Notice Support */}
+          {/* 4. Special Notice (if set by Admin) */}
           {info.specialNotice && (
-            <div className="timing-note" style={{ gridColumn: '1 / -1' }}>
+            <div className="timing-note">
               <AlertCircle size={18} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'middle', color: '#d97706' }} />
               <span><strong>विशेष सूचना:</strong> {info.specialNotice}</span>
             </div>

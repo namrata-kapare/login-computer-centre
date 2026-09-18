@@ -21,6 +21,12 @@ import iconXerox from '../assets/service-icons/xerox.png';
 import iconColorPrint from '../assets/service-icons/color-print.png';
 import iconLamination from '../assets/service-icons/lamination.png';
 import iconLagnaBiodata from '../assets/service-icons/lagna-biodata.png';
+import iconPassportOnlineRegistration from '../assets/service-icons/passport-online-registration.png';
+import icon712VarilBojaNondavane from '../assets/service-icons/712-varil-boja-nondavane.png';
+import iconTahsildarUtpannaDakhala from '../assets/service-icons/tahsildar-utpanna-dakhala.png';
+import iconNewBankAccount from '../assets/service-icons/new-bank-account.png';
+import iconMatdarNondani from '../assets/service-icons/matdar-nondani.png';
+import iconBiyaneAnudanYojana from '../assets/service-icons/biyane-anudan-yojana.png';
 
 export const serviceIconsMap = {
   // Service IDs mapped to custom PNG icons
@@ -46,6 +52,12 @@ export const serviceIconsMap = {
   22: iconShetkari,       // Shetkari / Farmer Identity Card
   23: iconSocietyEkarar,  // Society E-Karar / Society E-Agreement
   24: icon712BojaKami,    // 7/12 Boja Kami / ७/१२ बोजा कमी करणे
+  25: iconPassportOnlineRegistration, // Passport Online Registration / पासपोर्ट ऑनलाईन नोंदणी
+  26: icon712VarilBojaNondavane,       // 7/12 वर बोजा नोंदवणे / Charge Registration on 7/12
+  27: iconTahsildarUtpannaDakhala,     // तहसीलदार उत्पन्न दाखला / Tehsildar Income Certificate
+  28: iconNewBankAccount,             // New Bank Account / नवीन बँक खाते
+  29: iconMatdarNondani,              // मतदार नोंदणी / Voter Registration
+  30: iconBiyaneAnudanYojana,          // बियाणे अनुदान योजना / Seed Subsidy Scheme
 
   // Key mappings
   'hsc17': iconHsc17,
@@ -94,6 +106,18 @@ export const serviceIconsMap = {
   'lamination.png': iconLamination,
   'lagna-biodata': iconLagnaBiodata,
   'lagna-biodata.png': iconLagnaBiodata,
+  'passport-online-registration': iconPassportOnlineRegistration,
+  'passport-online-registration.png': iconPassportOnlineRegistration,
+  '712-varil-boja-nondavane': icon712VarilBojaNondavane,
+  '712-varil-boja-nondavane.png': icon712VarilBojaNondavane,
+  'tahsildar-utpanna-dakhala': iconTahsildarUtpannaDakhala,
+  'tahsildar-utpanna-dakhala.png': iconTahsildarUtpannaDakhala,
+  'new-bank-account': iconNewBankAccount,
+  'new-bank-account.png': iconNewBankAccount,
+  'matdar-nondani': iconMatdarNondani,
+  'matdar-nondani.png': iconMatdarNondani,
+  'biyane-anudan-yojana': iconBiyaneAnudanYojana,
+  'biyane-anudan-yojana.png': iconBiyaneAnudanYojana,
 };
 
 /**
@@ -143,12 +167,18 @@ export function getServiceCustomIcon(service) {
   if (eng.includes('aadhaar-pan') || eng.includes('aadhaar + pan') || (mar.includes('आधार') && mar.includes('पॅन') && mar.includes('लिंक'))) return iconAadhaarPan;
   if (eng.includes('pan card') || mar.includes('पॅन कार्ड')) return iconPancard;
   if (eng.includes('passport photo') || eng.includes('passport size') || mar.includes('पासपोर्ट फोटो') || mar.includes('पासपोर्ट साईज')) return iconPassportPhoto;
+  if (eng.includes('passport online') || (mar.includes('पासपोर्ट') && mar.includes('नोंदणी'))) return iconPassportOnlineRegistration;
   if (eng.includes('farmer') || mar.includes('शेतकरी')) return iconShetkari;
   if (eng.includes('digital 7/12') || mar.includes('डिजिटल ७/१२')) return iconDigital712;
   if (eng.includes('8a') || mar.includes('८-अ')) return icon8a;
   if (eng.includes('ferfar') || mar.includes('फेरफार')) return iconFerfar;
   if (eng.includes('pik vima') || mar.includes('पीक विमा') || eng.includes('crop insurance')) return iconPikVima;
   if (eng.includes('boja kami') || mar.includes('बोजा कमी') || eng.includes('removal of charge') || eng.includes('reduction of charge')) return icon712BojaKami;
+  if ((eng.includes('charge') && eng.includes('7/12')) || (mar.includes('7/12') && mar.includes('बोजा नोंदवणे')) || (mar.includes('७/१२') && mar.includes('बोजा नोंदवणे'))) return icon712VarilBojaNondavane;
+  if (eng.includes('tehsildar') || eng.includes('tahsildar') || mar.includes('तहसीलदार') || mar.includes('उत्पन्न दाखला')) return iconTahsildarUtpannaDakhala;
+  if (eng.includes('new bank') || (mar.includes('नवीन') && mar.includes('बँक')) || eng.includes('bank account')) return iconNewBankAccount;
+  if (eng.includes('voter') || mar.includes('मतदार नोंदणी') || mar.includes('मतदार')) return iconMatdarNondani;
+  if (eng.includes('seed') || mar.includes('बियाणे') || eng.includes('subsidy')) return iconBiyaneAnudanYojana;
   if (eng.includes('xerox') && !eng.includes('color') && (mar === 'झेरॉक्स' || !mar.includes('रंगीत'))) return iconXerox;
   if (eng.includes('color print') || mar.includes('कलर प्रिंट') || mar.includes('रंगीत प्रिंट')) return iconColorPrint;
   if (eng.includes('document scan') || mar.includes('कागदपत्र स्कॅन')) return iconDocumentScan;

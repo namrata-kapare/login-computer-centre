@@ -11,7 +11,7 @@ export default function SearchBar({ searchQuery, setSearchQuery }) {
           className="search-input"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="आपल्याला कोणती सेवा हवी आहे ते शोधा... (उदा. पॅन, 7/12, झेरॉक्स, अधिवास, उद्योग)"
+          placeholder="आपल्याला कोणती सेवा हवी आहे?"
           aria-label="सेवा शोधा"
         />
         {searchQuery && (

@@ -448,9 +448,9 @@ export default function AdminDashboard() {
                 <div className="status-current-badge">
                   वर्तमान स्थिती:{' '}
                   {businessInfo.isOpen ? (
-                    <span className="badge-open">🟢 खुले आहे (Open)</span>
+                    <span className="badge-open">🟢 आज कार्यालय सुरू आहे</span>
                   ) : (
-                    <span className="badge-closed">🔴 बंद आहे (Closed)</span>
+                    <span className="badge-closed">🔴 आज कार्यालय बंद आहे</span>
                   )}
                 </div>
 
@@ -460,7 +460,7 @@ export default function AdminDashboard() {
                     className={`btn-status-toggle ${businessInfo.isOpen ? 'active-open' : ''}`}
                   >
                     <CheckCircle size={20} />
-                    <span>कार्यालय खुले</span>
+                    <span>आज कार्यालय सुरू आहे</span>
                   </button>
 
                   <button 
@@ -468,7 +468,7 @@ export default function AdminDashboard() {
                     className={`btn-status-toggle ${!businessInfo.isOpen ? 'active-closed' : ''}`}
                   >
                     <XCircle size={20} />
-                    <span>कार्यालय बंद</span>
+                    <span>आज कार्यालय बंद आहे</span>
                   </button>
                 </div>
               </div>

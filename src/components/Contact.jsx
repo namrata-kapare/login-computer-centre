@@ -6,10 +6,9 @@ export default function Contact() {
     <section id="contact" className="contact-section">
       <div className="container">
         <div className="section-header">
-          <div className="section-badge">संपर्क (Contact Us)</div>
-          <h2 className="section-title">आमच्याशी संपर्क साधा</h2>
+          <h2 className="section-title">आमच्याशी संपर्क</h2>
           <p className="section-subtitle">
-            कोणत्याही सेवेबाबत अधिक माहितीसाठी किंवा कागदपत्रांच्या शंकांचे निरसन करण्यासाठी आमच्याशी संपर्क साधा.
+            अधिक माहितीसाठी आमच्याशी संपर्क साधा.
           </p>
         </div>
 

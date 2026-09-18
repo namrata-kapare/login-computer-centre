@@ -30,7 +30,7 @@ export default function Navbar({ onNavigate, activeSection }) {
                 className={`nav-link ${activeSection === 'home' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}
               >
-                मुख्यपृष्ठ (Home)
+                Home
               </a>
             </li>
             <li>
@@ -39,7 +39,7 @@ export default function Navbar({ onNavigate, activeSection }) {
                 className={`nav-link ${activeSection === 'services' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('services'); }}
               >
-                आमच्या सेवा (Services)
+                Services
               </a>
             </li>
             <li>
@@ -48,7 +48,7 @@ export default function Navbar({ onNavigate, activeSection }) {
                 className={`nav-link ${activeSection === 'about' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('about'); }}
               >
-                आमच्याबद्दल (About Us)
+                About Us
               </a>
             </li>
             <li>
@@ -57,7 +57,7 @@ export default function Navbar({ onNavigate, activeSection }) {
                 className={`nav-link ${activeSection === 'contact' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }}
               >
-                संपर्क (Contact Us)
+                Contact Us
               </a>
             </li>
           </ul>
@@ -92,22 +92,22 @@ export default function Navbar({ onNavigate, activeSection }) {
         <ul className="mobile-nav">
           <li>
             <a href="#home" className="mobile-nav-link" onClick={() => handleNavClick('home')}>
-              मुख्यपृष्ठ (Home)
+              Home
             </a>
           </li>
           <li>
             <a href="#services" className="mobile-nav-link" onClick={() => handleNavClick('services')}>
-              आमच्या सेवा (Services)
+              Services
             </a>
           </li>
           <li>
             <a href="#about" className="mobile-nav-link" onClick={() => handleNavClick('about')}>
-              आमच्याबद्दल (About Us)
+              About Us
             </a>
           </li>
           <li>
             <a href="#contact" className="mobile-nav-link" onClick={() => handleNavClick('contact')}>
-              संपर्क (Contact Us)
+              Contact Us
             </a>
           </li>
         </ul>

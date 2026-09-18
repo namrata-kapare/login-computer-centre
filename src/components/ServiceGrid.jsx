@@ -51,7 +51,6 @@ export default function ServiceGrid({ onSelectService }) {
       <div className="container">
         {/* Section Heading */}
         <div className="section-header">
-          <div className="section-badge">आमच्या सेवा (Our Services)</div>
           <h2 className="section-title">आमच्याकडे उपलब्ध सेवा</h2>
           <p className="section-subtitle">
             आपल्या आवश्यकतेनुसार सेवा निवडा आणि लागणारी सर्व कागदपत्रे जाणून घ्या.

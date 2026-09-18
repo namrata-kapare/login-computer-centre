@@ -66,11 +66,25 @@ async function seedInitialData() {
       console.log('⚙️ Seeded initial business settings.');
     }
 
-    // 3. Seed Services
+    // 3. Seed / Sync Services
     const serviceCount = await Service.countDocuments();
     if (serviceCount === 0) {
       await Service.insertMany(servicesData);
       console.log(`📦 Seeded ${servicesData.length} initial services into MongoDB.`);
+    } else {
+      for (const service of servicesData) {
+        await Service.updateOne(
+          { id: service.id },
+          { 
+            $set: { 
+              shortDescription: service.shortDescription,
+              purpose: service.purpose,
+              documents: service.documents,
+              icon: service.icon
+            } 
+          }
+        );
+      }
     }
   } catch (seedErr) {
     console.error('Error seeding initial MongoDB data:', seedErr);
