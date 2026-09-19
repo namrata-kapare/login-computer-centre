@@ -7,7 +7,8 @@ export default function ServiceCard({ service, onSelectService, index = 0 }) {
   const [isRevealed, setIsRevealed] = useState(false);
   const cardRef = useRef(null);
   const customIconSrc = getServiceCustomIcon(service);
-  const IconComponent = !customIconSrc && Icons[service.icon] ? Icons[service.icon] : Icons.FileText;
+  const LucideIcon = !customIconSrc && service.icon && Icons[service.icon] ? Icons[service.icon] : null;
+  const hasIcon = Boolean(customIconSrc || LucideIcon);
 
   useEffect(() => {
     const el = cardRef.current;
@@ -45,17 +46,19 @@ export default function ServiceCard({ service, onSelectService, index = 0 }) {
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelectService(service); }}
     >
       <div className="card-top">
-        <div className={`card-icon-wrapper ${customIconSrc ? 'has-custom-icon' : ''}`}>
-          {customIconSrc ? (
-            <img 
-              src={customIconSrc} 
-              alt={service.marathiName || service.englishName || 'Service Icon'} 
-              style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1px', display: 'block' }} 
-            />
-          ) : (
-            <IconComponent size={24} />
-          )}
-        </div>
+        {hasIcon && (
+          <div className={`card-icon-wrapper ${customIconSrc ? 'has-custom-icon' : ''}`}>
+            {customIconSrc ? (
+              <img 
+                src={customIconSrc} 
+                alt={service.marathiName || service.englishName || 'Service Icon'} 
+                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1px', display: 'block' }} 
+              />
+            ) : (
+              <LucideIcon size={24} />
+            )}
+          </div>
+        )}
         <h3 className="service-marathi-name">{service.marathiName}</h3>
         <span className="service-english-name">({service.englishName})</span>
         <p className="service-desc">{service.shortDescription}</p>

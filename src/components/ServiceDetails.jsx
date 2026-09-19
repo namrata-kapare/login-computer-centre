@@ -20,7 +20,8 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
   if (!service) return null;
 
   const customIconSrc = getServiceCustomIcon(service);
-  const IconComponent = !customIconSrc && Icons[service.icon] ? Icons[service.icon] : Icons.FileText;
+  const LucideIcon = !customIconSrc && service.icon && Icons[service.icon] ? Icons[service.icon] : null;
+  const hasIcon = Boolean(customIconSrc || LucideIcon);
 
   const handleContactAction = () => {
     // Open direct mobile dialer using tel:9767696067
@@ -32,17 +33,19 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
         <div className="modal-header">
-          <div className={`modal-header-icon ${customIconSrc ? 'has-custom-icon' : ''}`}>
-            {customIconSrc ? (
-              <img 
-                src={customIconSrc} 
-                alt={service.marathiName || service.englishName || 'Service Icon'} 
-                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1px', display: 'block' }} 
-              />
-            ) : (
-              <IconComponent size={28} />
-            )}
-          </div>
+          {hasIcon && (
+            <div className={`modal-header-icon ${customIconSrc ? 'has-custom-icon' : ''}`}>
+              {customIconSrc ? (
+                <img 
+                  src={customIconSrc} 
+                  alt={service.marathiName || service.englishName || 'Service Icon'} 
+                  style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1px', display: 'block' }} 
+                />
+              ) : (
+                <LucideIcon size={28} />
+              )}
+            </div>
+          )}
           <div className="modal-title-box">
             <h2 className="modal-marathi-title">{service.marathiName}</h2>
             <span className="modal-english-title">({service.englishName})</span>

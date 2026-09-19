@@ -34,11 +34,15 @@ connectDB();
 // 1. Admin Login
 app.post('/api/admin/login', async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const { email, username, password } = req.body || {};
     const inputEmail = (email || username || '').toLowerCase().trim();
 
     if (!inputEmail || !password) {
-      return res.status(400).json({ error: 'वापरकर्तानाव व पासवर्ड आवश्यक आहे.' });
+      return res.status(400).json({
+        success: false,
+        message: 'वापरकर्तानाव व पासवर्ड आवश्यक आहे.',
+        error: 'वापरकर्तानाव व पासवर्ड आवश्यक आहे.'
+      });
     }
 
     let adminUser = null;
@@ -46,36 +50,49 @@ app.post('/api/admin/login', async (req, res) => {
     if (getIsMongoConnected()) {
       adminUser = await Admin.findOne({ email: inputEmail });
     } else {
-      if (memoryStore.admin && memoryStore.admin.email === inputEmail) {
+      if (memoryStore.admin && memoryStore.admin.email.toLowerCase() === inputEmail) {
         adminUser = memoryStore.admin;
       }
     }
 
     if (!adminUser) {
-      return res.status(401).json({ error: 'वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.' });
+      return res.status(401).json({
+        success: false,
+        message: 'वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.',
+        error: 'वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.'
+      });
     }
 
     const isMatch = bcrypt.compareSync(password, adminUser.passwordHash);
     if (!isMatch) {
-      return res.status(401).json({ error: 'वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.' });
+      return res.status(401).json({
+        success: false,
+        message: 'वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.',
+        error: 'वापरकर्तानाव किंवा पासवर्ड चुकीचा आहे.'
+      });
     }
 
     const token = jwt.sign({ email: adminUser.email }, JWT_SECRET, { expiresIn: '7d' });
 
     return res.json({
       success: true,
+      message: 'लॉगिन यशस्वी झाले.',
       token,
       admin: { email: adminUser.email }
     });
   } catch (err) {
     console.error('Login error:', err);
-    return res.status(500).json({ error: 'सर्वर त्रुटी. कृपया पुन्हा प्रयत्न करा.' });
+    return res.status(500).json({
+      success: false,
+      message: 'सर्व्हर त्रुटी. कृपया पुन्हा प्रयत्न करा.',
+      error: 'सर्व्हर त्रुटी. कृपया पुन्हा प्रयत्न करा.'
+    });
   }
 });
 
 // 2. Get Current Admin Profile
 app.get('/api/admin/me', authMiddleware, (req, res) => {
-  return res.json({ admin: req.admin });
+  return res.json({ success: true, admin: req.admin });
 });
 
 // 3. Admin Logout
@@ -341,12 +358,24 @@ app.delete('/api/admin/services/:id', authMiddleware, async (req, res) => {
 });
 
 // ------------------------------------------------------------------
-// FRONTEND STATIC BUILD & SPA ROUTER HANDLER
+// API 404 & SPA ROUTING HANDLERS (Express 5 compatible)
 // ------------------------------------------------------------------
 
+// Catch-all for undefined /api routes (ensures JSON response, never HTML)
+app.use('/api', (req, res) => {
+  return res.status(404).json({
+    success: false,
+    message: `API endpoint '${req.method} ${req.originalUrl || req.url}' सापडला नाही.`,
+    error: 'API Endpoint not found.'
+  });
+});
+
+// Serve frontend static build files
 app.use(express.static(path.join(__dirname, 'dist')));
 
-app.get('*', (req, res) => {
+// SPA Catch-all fallback for non-API routes
+app.use((req, res, next) => {
+  if (req.method !== 'GET') return next();
   const distIndex = path.join(__dirname, 'dist', 'index.html');
   res.sendFile(distIndex, (err) => {
     if (err) {
@@ -355,6 +384,21 @@ app.get('*', (req, res) => {
   });
 });
 
+// Global Express Error Handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err);
+  if (req.path && req.path.startsWith('/api')) {
+    return res.status(500).json({
+      success: false,
+      message: 'अंतर्गत सर्व्हर त्रुटी (Internal Server Error).',
+      error: err.message || 'Internal Server Error'
+    });
+  }
+  return res.status(500).send('Internal Server Error');
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
+
+

@@ -21,7 +21,7 @@ export const servicesData = [
     englishName: "HSC 17 No. Form",
     category: "ऑनलाइन शैक्षणिक सेवा",
     isActive: true,
-    icon: "GraduationCap",
+    icon: "hsc17",
     shortDescription: "फक्त 12वी (HSC) साठी",
     purpose: "खाजगी विद्यार्थी (Private Student) म्हणून १२ वी (HSC) ची परीक्षा देण्यासाठी १७ नंबरचा ऑनलाईन अर्ज भरण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
@@ -47,7 +47,7 @@ export const servicesData = [
     englishName: "Domicile Certificate",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "Home",
+    icon: null,
     shortDescription: "महाराष्ट्रातील रहिवासाचा शासकीय दाखला दाखवण्यासाठी उपयुक्त.",
     purpose: "महाराष्ट्रातील रहिवासाचा अधिकृत पुरावा म्हणून अधिवास प्रमाणपत्राचा उपयोग विविध शैक्षणिक प्रवेश, शासकीय नोकऱ्या आणि इतर शासकीय कामांसाठी केला जातो.",
     documents: [
@@ -68,7 +68,7 @@ export const servicesData = [
     englishName: "Udyam Registration",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "Building2",
+    icon: null,
     shortDescription: "सूक्ष्म, लघु व मध्यम उद्योगांसाठी (MSME) शासकीय नोंदणी.",
     purpose: "नवीन किंवा सुरु असलेल्या व्यवसायाला MSME अंतर्गत शासकीय ओळख मिळवण्यासाठी, बँकेचे करंट अकाऊंट उघडण्यासाठी व विविध सरकारी योजनांचा लाभ घेण्यासाठी.",
     documents: [
@@ -88,7 +88,7 @@ export const servicesData = [
     englishName: "Shop Act License",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "Store",
+    icon: "shop-act",
     shortDescription: "व्यवसाय व दुकान सुरू करण्यासाठी आवश्यक असणारा शॉप ॲक्ट परवाना.",
     purpose: "कोणताही लहान-मोठा व्यवसाय किंवा दुकान कायदेशीररित्या चालवण्यासाठी आणि स्थानिक प्राधिकरणाकडे नोंदणी करण्यासाठी हा परवाना आवश्यक असतो.",
     documents: [
@@ -108,7 +108,7 @@ export const servicesData = [
     englishName: "Food License - FSSAI",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "UtensilsCrossed",
+    icon: "fssai",
     shortDescription: "खाद्यपदार्थ, हॉटेल्स व किराणा व्यवसायासाठी FSSAI परवाना.",
     purpose: "अन्नपदार्थांची निर्मिती, विक्री किंवा साठवणूक करणाऱ्या सर्व लहान-मोठ्या व्यावसायिकांसाठी FSSAI नोंदणी / परवाना अनिवार्य आहे.",
     documents: [
@@ -128,7 +128,7 @@ export const servicesData = [
     englishName: "Gazette Certificate",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "FileSignature",
+    icon: "maharashtra-shasan-rajpatra",
     shortDescription: "नाव, जन्मतारीख किंवा धर्मातील बदलाची शासकीय राजपत्रात नोंदणी.",
     purpose: "नाव बदलणे (उदा. लग्नानंतरचे नाव), नावातील स्पेलिंग दुरुस्ती, जन्मतारीख दुरुस्ती किंवा धर्म बदल अधिकृत करण्यासाठी महाराष्ट्र शासनाच्या राजपत्रात (Gazette) नोंदणी केली जाते.",
     documents: [
@@ -146,7 +146,7 @@ export const servicesData = [
     englishName: "Caste Validity",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "ShieldCheck",
+    icon: "jaat-padtalani-pramanpatra",
     shortDescription: "जात पडताळणी समितीकडे ऑनलाईन अर्ज व मार्गदर्शन.",
     purpose: "शासकीय नोकरी, पदव्युत्तर व व्यावसायिक शिक्षण प्रवेश आणि निवडणुकांसाठी जातीच्या प्रमाणपत्राची अचूकता सिद्ध करण्यासाठी जात पडताळणी आवश्यक असते.",
     documents: [
@@ -176,7 +176,7 @@ export const servicesData = [
     englishName: "PAN Card",
     category: "पॅन / आधार व ओळखपत्र सेवा",
     isActive: true,
-    icon: "IdCard",
+    icon: "pancard",
     shortDescription: "नवीन पॅन कार्ड काढणे किंवा जुन्या पॅन कार्डमध्ये दुरुस्ती करणे.",
     purpose: "आर्थिक व्यवहार, बँक खाते उघडणे, आयकर परतावा आणि ओळखीचा पुरावा म्हणून पॅन कार्ड अत्यंत आवश्यक आहे. नवीन किंवा दुरुस्ती अर्ज करून दिला जातो.",
     documents: [
@@ -193,7 +193,7 @@ export const servicesData = [
     englishName: "Aadhaar-PAN Linking",
     category: "पॅन / आधार व ओळखपत्र सेवा",
     isActive: true,
-    icon: "Link2",
+    icon: "aadhaar-pan-link",
     shortDescription: "पॅन कार्ड आणि आधार कार्ड ऑनलाइन जोडणी सेवा.",
     purpose: "प्राप्तीकर (Income Tax) नियमांनुसार आधार आणि पॅन कार्ड लिंक असणे बंधनकारक आहे. पॅन कार्ड सक्रिय ठेवण्यासाठी ही सेवा त्वरित पूर्ण करून दिली जाते.",
     documents: [
@@ -210,7 +210,7 @@ export const servicesData = [
     englishName: "Passport Size Photo",
     category: "पॅन / आधार व ओळखपत्र सेवा",
     isActive: true,
-    icon: "Camera",
+    icon: "passport-photo",
     shortDescription: "शासकीय कामांसाठी त्वरित पासपोर्ट फोटो काढणे व प्रिंट करणे.",
     purpose: "शाळा, कॉलेज, नोकरी, पॅन कार्ड, पासपोर्ट व विविध शासकीय अर्जांसाठी आवश्यक असणारे चांगल्या गुणवत्तेचे पासपोर्ट साईज फोटो तात्काळ मिळवा.",
     documents: [
@@ -224,7 +224,7 @@ export const servicesData = [
     englishName: "Farmer Identity Card",
     category: "पॅन / आधार व ओळखपत्र सेवा",
     isActive: true,
-    icon: "UserCheck",
+    icon: "shetkari-olakhpatra",
     shortDescription: "शेतकऱ्यांसाठी अधिकृत डिजिटल ओळखपत्र (स्मार्ट कार्ड).",
     purpose: "शासकीय कृषी योजना, खते व बियाणे सबसिडी आणि शेतकरी सवलतींचा लाभ मिळवण्यासाठी उपयुक्त शेतकरी आयडी.",
     documents: [
@@ -244,7 +244,7 @@ export const servicesData = [
     englishName: "Digital 7/12 Extract",
     category: "शेतकरी व जमीन संबंधित सेवा",
     isActive: true,
-    icon: "MapPin",
+    icon: "digital-712",
     shortDescription: "डिजिटल स्वाक्षरित ७/१२ उतारा तात्काळ डाऊनलोड व प्रिंट.",
     purpose: "जमिनीची मालकी, क्षेत्रफळ व पिकांची नोंद पाहण्यासाठी तसेच बँक कर्ज, पीक विमा व विविध शासकीय योजनांसाठी अधिकृत डिजिटल ७/१२ उतारा मिळवणे.",
     documents: [
@@ -260,7 +260,7 @@ export const servicesData = [
     englishName: "8A Extract",
     category: "शेतकरी व जमीन संबंधित सेवा",
     isActive: true,
-    icon: "Layers",
+    icon: "8a-utara",
     shortDescription: "खातेदाराच्या सर्व जमिनींची एकत्रित नोंद दर्शवणारा ८-अ उतारा.",
     purpose: "एकाच गावात शेतकऱ्याच्या नावावर असलेल्या सर्व गट क्रमांकाची व एकंदर क्षेत्राची एकत्रित माहिती ८-अ उताऱ्यावरून मिळते.",
     documents: [
@@ -308,7 +308,7 @@ export const servicesData = [
     englishName: "Heir Entry",
     category: "शेतकरी व जमीन संबंधित सेवा",
     isActive: true,
-    icon: "Users",
+    icon: "varas-nond",
     shortDescription: "७/१२ उताऱ्यावर मयत खातेदाराच्या कायदेशीर वारसांची नोंद करणे.",
     purpose: "जमीन मालकाच्या निधनानंतर कायदेशीर वारसांची नावे ७/१२ उताऱ्यावर लावण्यासाठी महसूल विभागाकडे ऑनलाईन / ऑफलाईन अर्ज प्रक्रियेसाठी मदत.",
     documents: [
@@ -325,7 +325,7 @@ export const servicesData = [
     englishName: "City Survey Extract",
     category: "शेतकरी व जमीन संबंधित सेवा",
     isActive: true,
-    icon: "Building",
+    icon: "city-survey",
     shortDescription: "नगर भूमापन (City Survey) मिळकत पत्रिका उतारा.",
     purpose: "शहरी भागातील किंवा गावठाणातील जागेची मालकी, सिटी सर्व्हे नंबर व क्षेत्रफळ पाहण्यासाठी अद्ययावत मिळकत पत्रिका मिळवणे.",
     documents: [
@@ -375,7 +375,7 @@ export const servicesData = [
     englishName: "Color Xerox",
     category: "प्रिंटिंग, झेरॉक्स व डिजिटल सेवा",
     isActive: true,
-    icon: "Palette",
+    icon: "color-print",
     shortDescription: "हुबेहूब व स्पष्ट गुणवत्तेची कलर झेरॉक्स सुविधा.",
     purpose: "महत्त्वाची कागदपत्रे, नकाशे, फोटो किंवा प्रमाणपत्रांच्या स्पष्ट रंगीत प्रती मिळवण्यासाठी.",
     documents: [
@@ -421,7 +421,7 @@ export const servicesData = [
     englishName: "Marriage Biodata",
     category: "इतर ऑनलाइन सेवा",
     isActive: true,
-    icon: "Heart",
+    icon: "lagna-biodata",
     shortDescription: "आकर्षक व सुटसुटीत वैवाहिक बायोडाटा तयार करणे.",
     purpose: "विवाहाच्या स्थळांसाठी लागणारा वैयक्तिक, कौटुंबिक व शैक्षणिक माहिती असलेला आकर्षक व सुटसुटीत मराठी किंवा इंग्रजी बायोडाटा डिझाइन करून प्रिंट मिळवा.",
     documents: [

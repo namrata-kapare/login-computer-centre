@@ -3,7 +3,11 @@ import jwt from 'jsonwebtoken';
 export const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return res.status(401).json({ error: 'अनधिकृत प्रवेश. कृपया लॉगिन करा.' });
+    return res.status(401).json({
+      success: false,
+      message: 'अनधिकृत प्रवेश. कृपया लॉगिन करा.',
+      error: 'अनधिकृत प्रवेश. कृपया लॉगिन करा.'
+    });
   }
 
   const token = authHeader.split(' ')[1];
@@ -12,6 +16,10 @@ export const authMiddleware = (req, res, next) => {
     req.admin = decoded;
     next();
   } catch (err) {
-    return res.status(401).json({ error: 'लॉगिन सत्र संपले आहे किंवा चुकीचे आहे.' });
+    return res.status(401).json({
+      success: false,
+      message: 'लॉगिन सत्र संपले आहे किंवा चुकीचे आहे.',
+      error: 'लॉगिन सत्र संपले आहे किंवा चुकीचे आहे.'
+    });
   }
 };
