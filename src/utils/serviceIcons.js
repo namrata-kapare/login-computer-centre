@@ -15,19 +15,20 @@ import iconNewBankAccount from '../assets/service-icons/new-bank-account.png';
 import iconMatdarNondani from '../assets/service-icons/matdar-nondani.png';
 import iconBiyaneAnudanYojana from '../assets/service-icons/biyane-anudan-yojana.png';
 
-// 12 New Service Icons
-import iconLagnaBiodata from '../assets/service-icons/lagna-biodata.png';
-import icon8aUtara from '../assets/service-icons/8a-utara.png';
-import iconDigital712 from '../assets/service-icons/digital-712.png';
-import iconShetkariOlakhpatra from '../assets/service-icons/shetkari-olakhpatra.png';
+// 8 Updated Service Icons
+import iconLagnaBiodata from '../assets/service-icons/lagna-biodata copy 2.png';
+import icon8aUtara from '../assets/service-icons/8a-utara copy.png';
+import iconDigital712 from '../assets/service-icons/digital-712 copy 2.png';
+import iconShetkariOlakhpatra from '../assets/service-icons/shetkari-olakhpatra copy.png';
+import iconMaharashtraShasanRajpatra from '../assets/service-icons/maharashtra-shasan-rajpatra copy.png';
+import iconJaatPadtalaniPramanpatra from '../assets/service-icons/jaat-padtalani-pramanpatra copy.png';
+import iconHsc17 from '../assets/service-icons/hsc-17-no.png';
+import iconShopAct from '../assets/service-icons/shop-act-parvana.png';
+
+// Other Existing Service Icons
 import iconPassportPhoto from '../assets/service-icons/passport-photo.png';
 import iconAadhaarPanLink from '../assets/service-icons/aadhaar-pan-link.png';
-import iconPancard from '../assets/service-icons/pancard.png';
-import iconFssai from '../assets/service-icons/fssai.png';
-import iconMaharashtraShasanRajpatra from '../assets/service-icons/maharashtra-shasan-rajpatra.png';
-import iconJaatPadtalaniPramanpatra from '../assets/service-icons/jaat-padtalani-pramanpatra.png';
-import iconHsc17 from '../assets/service-icons/hsc17.png';
-import iconShopAct from '../assets/service-icons/shop-act.png';
+import iconPancard from '../assets/service-icons/pancard copy.png';
 
 // IDs of services that must NOT have icons
 const NO_ICON_SERVICE_IDS = new Set([1, 2]);
@@ -41,7 +42,6 @@ export const serviceIconsMap = {
   8: iconPassportPhoto,                      // पासपोर्ट साईज फोटो / Passport Size Photo
   7: iconAadhaarPanLink,                     // आधार कार्ड व पॅनकार्ड लिंक / Aadhaar-PAN Linking
   9: iconPancard,                            // पॅनकार्ड / PAN Card
-  4: iconFssai,                              // अन्न व औषध परवाना (FSSAI) / Food License - FSSAI
   5: iconMaharashtraShasanRajpatra,          // महाराष्ट्र शासन राजपत्र / Gazette Certificate
   13: iconJaatPadtalaniPramanpatra,          // जात पडताळणी प्रमाणपत्र / Caste Validity
   101: iconHsc17,                            // HSC 17 No. / HSC 17 No. Form
@@ -57,6 +57,7 @@ export const serviceIconsMap = {
   19: iconPikVima,                           // Crop Insurance / पीक विमा
   20: iconVarasNond,                         // Varas Nond / वारस नोंद / Heir Entry
   21: iconCitySurvey,                        // City Survey Extract / सिटी सर्व्हे उतारा
+  22: iconShetkariOlakhpatra,                // Farmer Identity Card
   23: iconSocietyEkarar,                     // Society E-Karar / Society E-Agreement
   24: icon712BojaKami,                       // 7/12 Boja Kami / ७/१२ बोजा कमी करणे
   25: iconPassportOnlineRegistration,        // Passport Online Registration / पासपोर्ट ऑनलाईन नोंदणी
@@ -71,6 +72,10 @@ export const serviceIconsMap = {
   'lagna-biodata.png': iconLagnaBiodata,
   '8a-utara': icon8aUtara,
   '8a-utara.png': icon8aUtara,
+  '8/a-utara': icon8aUtara,
+  '8/a-utara.png': icon8aUtara,
+  '8/a': icon8aUtara,
+  '8/a.png': icon8aUtara,
   '8a': icon8aUtara,
   '8a.png': icon8aUtara,
   'digital-712': iconDigital712,
@@ -87,8 +92,6 @@ export const serviceIconsMap = {
   'aadhaar-pan.png': iconAadhaarPanLink,
   'pancard': iconPancard,
   'pancard.png': iconPancard,
-  'fssai': iconFssai,
-  'fssai.png': iconFssai,
   'maharashtra-shasan-rajpatra': iconMaharashtraShasanRajpatra,
   'maharashtra-shasan-rajpatra.png': iconMaharashtraShasanRajpatra,
   'gazette': iconMaharashtraShasanRajpatra,
@@ -97,8 +100,12 @@ export const serviceIconsMap = {
   'jaat-padtalani-pramanpatra.png': iconJaatPadtalaniPramanpatra,
   'jaat-padtalani': iconJaatPadtalaniPramanpatra,
   'jaat-padtalani.png': iconJaatPadtalaniPramanpatra,
+  'hsc-17-no': iconHsc17,
+  'hsc-17-no.png': iconHsc17,
   'hsc17': iconHsc17,
   'hsc17.png': iconHsc17,
+  'shop-act-parvana': iconShopAct,
+  'shop-act-parvana.png': iconShopAct,
   'shop-act': iconShopAct,
   'shop-act.png': iconShopAct,
 
@@ -203,7 +210,6 @@ export function getServiceCustomIcon(service) {
   // 12 New services
   if (eng.includes('hsc 17') || mar.includes('१७ नंबर') || iconStr.includes('hsc17')) return iconHsc17;
   if (eng.includes('shop act') || mar.includes('शॉप ॲक्ट') || mar.includes('शॉप') || iconStr.includes('shop-act')) return iconShopAct;
-  if (eng.includes('fssai') || mar.includes('अन्न व औषध') || iconStr.includes('fssai')) return iconFssai;
   if (eng.includes('gazette') || mar.includes('राजपत्र') || iconStr.includes('rajpatra') || iconStr.includes('gazette')) return iconMaharashtraShasanRajpatra;
   if (eng.includes('jaat') || mar.includes('जात पडताळणी') || eng.includes('caste validity') || iconStr.includes('jaat-padtalani')) return iconJaatPadtalaniPramanpatra;
   if (eng.includes('aadhaar-pan') || eng.includes('aadhaar + pan') || (mar.includes('आधार') && mar.includes('पॅन') && mar.includes('लिंक')) || iconStr.includes('aadhaar-pan')) return iconAadhaarPanLink;

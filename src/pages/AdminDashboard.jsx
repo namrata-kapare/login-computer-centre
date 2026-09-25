@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  getBusinessInfo, 
-  getServices, 
-  logoutAdmin, 
-  updateTiming, 
-  updateStatus, 
-  updateNotice, 
-  updateBusinessInfo,
-  createService,
-  updateService,
-  deleteService 
-} from '../services/api';
+import { businessConfig } from '../config/business';
+import { servicesData } from '../data/services';
+import logoImg from '../assets/login logo1.jpeg';
+import * as Icons from 'lucide-react';
+import { getServiceCustomIcon } from '../utils/serviceIcons';
 
 import { 
   LogOut, 
@@ -28,10 +21,12 @@ import {
   Layers, 
   PhoneCall, 
   MapPin, 
-  Mail, 
   Monitor,
   Check,
-  X
+  X,
+  Info,
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -42,14 +37,15 @@ export default function AdminDashboard() {
 
   // Business info state
   const [businessInfo, setBusinessInfo] = useState({
-    businessNameMarathi: '',
-    phone: '',
-    email: '',
-    address: '',
-    openingTime: 'सकाळी ९:००',
-    closingTime: 'रात्री ८:००',
+    businessNameMarathi: businessConfig.businessNameMarathi,
+    phone: businessConfig.phone,
+    email: businessConfig.email,
+    address: businessConfig.address,
+    openingTime: businessConfig.timing?.openingTime || 'सकाळी ९:००',
+    closingTime: businessConfig.timing?.closingTime || 'रात्री ८:००',
+    todayTimingText: businessConfig.timing?.todayTimingText || 'सकाळी ९:०० ते रात्री ८:००',
     isOpen: true,
-    specialNotice: ''
+    specialNotice: businessConfig.timing?.specialNotice || ''
   });
 
   // Services list state
@@ -58,7 +54,7 @@ export default function AdminDashboard() {
   const [selectedCategory, setSelectedCategory] = useState('सर्व सेवा');
 
   // UI state
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
 
   // Timing form
@@ -91,7 +87,8 @@ export default function AdminDashboard() {
     documentsText: '',
     keywordsText: '',
     isActive: true,
-    icon: 'FileText'
+    icon: 'FileText',
+    customIcon: null
   });
 
   // Categories list
@@ -104,30 +101,38 @@ export default function AdminDashboard() {
     "इतर ऑनलाइन सेवा"
   ];
 
-  // Fetch initial data
-  const loadData = async () => {
-    setLoading(true);
+  // Fetch initial data for frontend preview
+  const loadData = () => {
     try {
-      const bData = await getBusinessInfo();
-      if (bData) {
-        setBusinessInfo(bData);
-        setOpeningTimeInput(bData.openingTime || 'सकाळी ९:००');
-        setClosingTimeInput(bData.closingTime || 'रात्री ८:००');
-        setSpecialNoticeInput(bData.specialNotice || '');
-        setContactForm({
-          businessNameMarathi: bData.businessNameMarathi || '',
-          phone: bData.phone || '',
-          email: bData.email || '',
-          address: bData.address || ''
-        });
-      }
+      const savedBusiness = localStorage.getItem('preview_business_info');
+      const bData = savedBusiness ? JSON.parse(savedBusiness) : {
+        businessNameMarathi: businessConfig.businessNameMarathi,
+        phone: businessConfig.phone,
+        email: businessConfig.email,
+        address: businessConfig.address,
+        openingTime: businessConfig.timing?.openingTime || 'सकाळी ९:००',
+        closingTime: businessConfig.timing?.closingTime || 'रात्री ८:००',
+        todayTimingText: businessConfig.timing?.todayTimingText || 'सकाळी ९:०० ते रात्री ८:००',
+        isOpen: true,
+        specialNotice: businessConfig.timing?.specialNotice || ''
+      };
 
-      const sData = await getServices(true);
+      setBusinessInfo(bData);
+      setOpeningTimeInput(bData.openingTime || 'सकाळी ९:००');
+      setClosingTimeInput(bData.closingTime || 'रात्री ८:००');
+      setSpecialNoticeInput(bData.specialNotice || '');
+      setContactForm({
+        businessNameMarathi: bData.businessNameMarathi || '',
+        phone: bData.phone || '',
+        email: bData.email || '',
+        address: bData.address || ''
+      });
+
+      const savedServices = localStorage.getItem('preview_services');
+      const sData = savedServices ? JSON.parse(savedServices) : servicesData;
       setServices(sData || []);
     } catch (err) {
-      showFeedback('error', 'माहिती लोड करण्यात त्रुटी आली.');
-    } finally {
-      setLoading(false);
+      console.warn('Frontend preview data load:', err);
     }
   };
 
@@ -142,84 +147,103 @@ export default function AdminDashboard() {
     }, 4000);
   };
 
-  const handleLogout = async () => {
-    await logoutAdmin();
-    navigate('/');
+  const handleLogout = () => {
+    localStorage.removeItem('admin_preview_logged_in');
+    localStorage.removeItem('adminToken');
+    navigate('/admin/login');
   };
 
   // 1. Status Update Toggle
-  const handleToggleStatus = async (newStatus) => {
-    try {
-      const res = await updateStatus(newStatus);
-      setBusinessInfo(prev => ({ ...prev, isOpen: res.isOpen }));
-      showFeedback('success', res.isOpen ? 'कार्यालय खुले केले आहे.' : 'कार्यालय बंद केले आहे.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+  const handleToggleStatus = (newStatus) => {
+    const updated = { ...businessInfo, isOpen: newStatus };
+    setBusinessInfo(updated);
+    localStorage.setItem('preview_business_info', JSON.stringify(updated));
+    showFeedback('success', newStatus ? 'कार्यालय खुले केले आहे (Office Open).' : 'कार्यालय बंद केले आहे (Office Closed).');
   };
 
   // 2. Timing Update
-  const handleTimingSubmit = async (e) => {
+  const handleTimingSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await updateTiming(openingTimeInput, closingTimeInput);
-      setBusinessInfo(prev => ({
-        ...prev,
-        openingTime: res.openingTime,
-        closingTime: res.closingTime,
-        todayTimingText: res.todayTimingText
-      }));
-      showFeedback('success', 'कार्यालयीन वेळ यशस्वीरीत्या अपडेट केली.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+    const todayTimingText = `${openingTimeInput} ते ${closingTimeInput}`;
+    const updated = {
+      ...businessInfo,
+      openingTime: openingTimeInput,
+      closingTime: closingTimeInput,
+      todayTimingText
+    };
+    setBusinessInfo(updated);
+    localStorage.setItem('preview_business_info', JSON.stringify(updated));
+    showFeedback('success', 'कार्यालयीन वेळ यशस्वीरीत्या सेव्ह केली.');
   };
 
   // 3. Notice Update & Clear
-  const handleNoticeSubmit = async (e) => {
+  const handleNoticeSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await updateNotice(specialNoticeInput);
-      setBusinessInfo(prev => ({ ...prev, specialNotice: res.specialNotice }));
-      showFeedback('success', 'विशेष सूचना यशस्वीरीत्या अपडेट केली.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+    const updated = { ...businessInfo, specialNotice: specialNoticeInput.trim() };
+    setBusinessInfo(updated);
+    localStorage.setItem('preview_business_info', JSON.stringify(updated));
+    showFeedback('success', 'विशेष सूचना यशस्वीरीत्या अपडेट केली.');
   };
 
-  const handleClearNotice = async () => {
-    try {
-      const res = await updateNotice('');
-      setSpecialNoticeInput('');
-      setBusinessInfo(prev => ({ ...prev, specialNotice: '' }));
-      showFeedback('success', 'विशेष सूचना काढून टाकली.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+  const handleClearNotice = () => {
+    setSpecialNoticeInput('');
+    const updated = { ...businessInfo, specialNotice: '' };
+    setBusinessInfo(updated);
+    localStorage.setItem('preview_business_info', JSON.stringify(updated));
+    showFeedback('success', 'विशेष सूचना काढून टाकली.');
   };
 
   // 4. Contact Update
-  const handleContactSubmit = async (e) => {
+  const handleContactSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await updateBusinessInfo(contactForm);
-      setBusinessInfo(prev => ({ ...prev, ...res }));
-      showFeedback('success', 'संपर्क माहिती यशस्वीरीत्या अपडेट केली.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+    const updated = { ...businessInfo, ...contactForm };
+    setBusinessInfo(updated);
+    localStorage.setItem('preview_business_info', JSON.stringify(updated));
+    showFeedback('success', 'संपर्क माहिती यशस्वीरीत्या अपडेट केली.');
   };
 
   // 5. Toggle Service Active (ON/OFF)
-  const handleToggleServiceActive = async (service) => {
-    try {
-      const newActive = !service.isActive;
-      const updated = await updateService(service.id, { isActive: newActive });
-      setServices(prev => prev.map(s => s.id === service.id ? { ...s, isActive: updated.isActive } : s));
-      showFeedback('success', `${service.marathiName} सेवा ${updated.isActive ? 'सुरू (ON)' : 'बंद (OFF)'} केली.`);
-    } catch (err) {
-      showFeedback('error', err.message);
+  const handleToggleServiceActive = (service) => {
+    const newActive = !service.isActive;
+    const updated = services.map(s => s.id === service.id ? { ...s, isActive: newActive } : s);
+    setServices(updated);
+    localStorage.setItem('preview_services', JSON.stringify(updated));
+    showFeedback('success', `${service.marathiName} सेवा ${newActive ? 'सुरू (Active)' : 'बंद (Inactive)'} केली.`);
+  };
+
+  // Handle Logo/Icon Upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showFeedback('error', 'कृपया फक्त इमेज फाइल (PNG, JPG, WEBP, SVG) निवडा.');
+      return;
     }
+
+    if (file.size > 2 * 1024 * 1024) {
+      showFeedback('error', 'इमेज साइज २MB पेक्षा कमी असावी.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (loadEvent) => {
+      const dataUrl = loadEvent.target.result;
+      setServiceFormData(prev => ({
+        ...prev,
+        customIcon: dataUrl,
+        icon: dataUrl
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveImage = () => {
+    setServiceFormData(prev => ({
+      ...prev,
+      customIcon: null,
+      icon: 'FileText'
+    }));
   };
 
   // Open Add Modal
@@ -233,7 +257,8 @@ export default function AdminDashboard() {
       documentsText: '',
       keywordsText: '',
       isActive: true,
-      icon: 'FileText'
+      icon: 'FileText',
+      customIcon: null
     });
     setIsAddModalOpen(true);
   };
@@ -241,6 +266,7 @@ export default function AdminDashboard() {
   // Open Edit Modal
   const openEditModal = (service) => {
     setEditingService(service);
+    const existingCustomIcon = service.customIcon || (typeof service.icon === 'string' && service.icon.startsWith('data:') ? service.icon : getServiceCustomIcon(service));
     setServiceFormData({
       marathiName: service.marathiName || '',
       englishName: service.englishName || '',
@@ -250,94 +276,89 @@ export default function AdminDashboard() {
       documentsText: Array.isArray(service.documents) ? service.documents.join('\n') : '',
       keywordsText: Array.isArray(service.keywords) ? service.keywords.join(', ') : '',
       isActive: service.isActive !== false,
-      icon: service.icon || 'FileText'
+      icon: service.icon || 'FileText',
+      customIcon: service.customIcon || (typeof service.icon === 'string' && service.icon.startsWith('data:') ? service.icon : existingCustomIcon)
     });
   };
 
   // Save Add Service
-  const handleSaveAddService = async (e) => {
+  const handleSaveAddService = (e) => {
     e.preventDefault();
-    try {
-      const docsArray = serviceFormData.documentsText
-        .split('\n')
-        .map(d => d.trim())
-        .filter(Boolean);
+    const docsArray = serviceFormData.documentsText
+      .split('\n')
+      .map(d => d.trim())
+      .filter(Boolean);
 
-      const keywordsArray = serviceFormData.keywordsText
-        .split(',')
-        .map(k => k.trim())
-        .filter(Boolean);
+    const keywordsArray = serviceFormData.keywordsText
+      .split(',')
+      .map(k => k.trim())
+      .filter(Boolean);
 
-      const payload = {
-        marathiName: serviceFormData.marathiName,
-        englishName: serviceFormData.englishName,
-        category: serviceFormData.category,
-        shortDescription: serviceFormData.shortDescription,
-        purpose: serviceFormData.purpose,
-        documents: docsArray,
-        keywords: keywordsArray,
-        isActive: serviceFormData.isActive,
-        icon: serviceFormData.icon
-      };
+    const newService = {
+      id: Date.now(),
+      marathiName: serviceFormData.marathiName,
+      englishName: serviceFormData.englishName,
+      category: serviceFormData.category,
+      shortDescription: serviceFormData.shortDescription,
+      purpose: serviceFormData.purpose,
+      documents: docsArray,
+      keywords: keywordsArray,
+      isActive: serviceFormData.isActive,
+      icon: serviceFormData.icon || 'FileText',
+      customIcon: serviceFormData.customIcon || null
+    };
 
-      const newService = await createService(payload);
-      setServices(prev => [...prev, newService]);
-      setIsAddModalOpen(false);
-      showFeedback('success', 'नवीन सेवा यशस्वीरीत्या जोडली.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+    const updated = [newService, ...services];
+    setServices(updated);
+    localStorage.setItem('preview_services', JSON.stringify(updated));
+    setIsAddModalOpen(false);
+    showFeedback('success', 'नवीन सेवा यशस्वीरीत्या जोडली.');
   };
 
   // Save Edit Service
-  const handleSaveEditService = async (e) => {
+  const handleSaveEditService = (e) => {
     e.preventDefault();
     if (!editingService) return;
 
-    try {
-      const docsArray = serviceFormData.documentsText
-        .split('\n')
-        .map(d => d.trim())
-        .filter(Boolean);
+    const docsArray = serviceFormData.documentsText
+      .split('\n')
+      .map(d => d.trim())
+      .filter(Boolean);
 
-      const keywordsArray = serviceFormData.keywordsText
-        .split(',')
-        .map(k => k.trim())
-        .filter(Boolean);
+    const keywordsArray = serviceFormData.keywordsText
+      .split(',')
+      .map(k => k.trim())
+      .filter(Boolean);
 
-      const payload = {
-        marathiName: serviceFormData.marathiName,
-        englishName: serviceFormData.englishName,
-        category: serviceFormData.category,
-        shortDescription: serviceFormData.shortDescription,
-        purpose: serviceFormData.purpose,
-        documents: docsArray,
-        keywords: keywordsArray,
-        isActive: serviceFormData.isActive,
-        icon: serviceFormData.icon
-      };
+    const updatedService = {
+      ...editingService,
+      marathiName: serviceFormData.marathiName,
+      englishName: serviceFormData.englishName,
+      category: serviceFormData.category,
+      shortDescription: serviceFormData.shortDescription,
+      purpose: serviceFormData.purpose,
+      documents: docsArray,
+      keywords: keywordsArray,
+      isActive: serviceFormData.isActive,
+      icon: serviceFormData.icon || 'FileText',
+      customIcon: serviceFormData.customIcon || null
+    };
 
-      const updated = await updateService(editingService.id, payload);
-      setServices(prev => prev.map(s => s.id === editingService.id ? updated : s));
-      setEditingService(null);
-      showFeedback('success', 'सेवा माहिती अपडेट केली.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+    const updated = services.map(s => s.id === editingService.id ? updatedService : s);
+    setServices(updated);
+    localStorage.setItem('preview_services', JSON.stringify(updated));
+    setEditingService(null);
+    showFeedback('success', 'सेवा माहिती अपडेट केली.');
   };
 
   // Confirm Delete Service
-  const handleConfirmDelete = async () => {
+  const handleConfirmDelete = () => {
     if (!deletingServiceId) return;
-
-    try {
-      await deleteService(deletingServiceId);
-      setServices(prev => prev.filter(s => s.id !== deletingServiceId));
-      setDeletingServiceId(null);
-      showFeedback('success', 'सेवा यशस्वीरीत्या हटवली.');
-    } catch (err) {
-      showFeedback('error', err.message);
-    }
+    const updated = services.filter(s => s.id !== deletingServiceId);
+    setServices(updated);
+    localStorage.setItem('preview_services', JSON.stringify(updated));
+    setDeletingServiceId(null);
+    showFeedback('success', 'सेवा यशस्वीरीत्या हटवली.');
   };
 
   // Filtered Services List
@@ -360,13 +381,24 @@ export default function AdminDashboard() {
       <header className="admin-topbar">
         <div className="container admin-topbar-inner">
           <div className="admin-brand">
-            <div className="admin-brand-icon">
-              <Monitor size={22} />
-            </div>
+            <img 
+              src={logoImg} 
+              alt="Login Computer Centre" 
+              style={{
+                width: '42px',
+                height: '42px',
+                borderRadius: '10px',
+                objectFit: 'contain',
+                backgroundColor: '#ffffff',
+                border: '1px solid #e2e8f0',
+                padding: '2px',
+                flexShrink: 0
+              }} 
+            />
             <div>
-              <h1 className="admin-brand-title">प्रशासक डॅशबोर्ड</h1>
+              <h1 className="admin-brand-title">Admin Dashboard</h1>
               <p className="admin-brand-subtitle">
-                Login Computer Centre आणि ई-सुविधा केंद्र वेबसाइट व्यवस्थापन
+                Login Computer Centre
               </p>
             </div>
           </div>
@@ -374,7 +406,7 @@ export default function AdminDashboard() {
           <div className="admin-user-action">
             <button onClick={handleLogout} className="btn-logout">
               <LogOut size={18} />
-              <span>लॉगआउट</span>
+              <span>Logout</span>
             </button>
           </div>
         </div>
@@ -583,8 +615,8 @@ export default function AdminDashboard() {
               </div>
 
               <button onClick={openAddModal} className="btn-add-service">
-                <Plus size={20} />
-                <span>+ नवीन सेवा जोडा</span>
+                <Plus size={18} strokeWidth={2.4} />
+                <span>नवीन सेवा जोडा</span>
               </button>
             </div>
 
@@ -614,23 +646,43 @@ export default function AdminDashboard() {
 
             {/* Services List Table / Cards */}
             <div className="admin-services-grid">
-              {filteredServices.map(service => (
-                <div 
-                  key={service.id} 
-                  className={`admin-service-card ${service.isActive === false ? 'inactive-card' : ''}`}
-                >
-                  <div className="admin-card-top">
-                    <div>
-                      <h3 className="admin-service-title">{service.marathiName}</h3>
-                      <span className="admin-service-eng">{service.englishName}</span>
+              {filteredServices.map(service => {
+                const customIconSrc = service.customIcon || (typeof service.icon === 'string' && (service.icon.startsWith('data:') || service.icon.startsWith('http') || service.icon.startsWith('/')) ? service.icon : getServiceCustomIcon(service));
+                const LucideIcon = !customIconSrc && service.icon && Icons[service.icon] ? Icons[service.icon] : null;
+                const hasIcon = Boolean(customIconSrc || LucideIcon);
+
+                return (
+                  <div 
+                    key={service.id} 
+                    className={`admin-service-card ${service.isActive === false ? 'inactive-card' : ''}`}
+                  >
+                    <div className="admin-card-top">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                        {hasIcon && (
+                          <div className="admin-service-icon-box">
+                            {customIconSrc ? (
+                              <img 
+                                src={customIconSrc} 
+                                alt={service.marathiName} 
+                                className="admin-service-custom-icon"
+                              />
+                            ) : (
+                              <LucideIcon size={20} className="admin-service-lucide-icon" />
+                            )}
+                          </div>
+                        )}
+                        <div>
+                          <h3 className="admin-service-title">{service.marathiName}</h3>
+                          <span className="admin-service-eng">{service.englishName}</span>
+                        </div>
+                      </div>
+
+                      <span className="admin-category-badge">{service.category}</span>
                     </div>
 
-                    <span className="admin-category-badge">{service.category}</span>
-                  </div>
-
-                  <p className="admin-service-desc">
-                    {service.shortDescription || 'माहिती उपलब्ध आहे.'}
-                  </p>
+                    <p className="admin-service-desc">
+                      {service.shortDescription || 'माहिती उपलब्ध आहे.'}
+                    </p>
 
                   <div className="admin-card-bottom">
                     {/* Active Toggle Switch */}
@@ -652,24 +704,25 @@ export default function AdminDashboard() {
                       <button 
                         onClick={() => openEditModal(service)}
                         className="btn-action-icon edit"
-                        title="संपादित करा"
+                        title="Edit"
                       >
                         <Edit size={16} />
-                        <span>संपादित करा</span>
+                        <span>Edit</span>
                       </button>
 
                       <button 
                         onClick={() => setDeletingServiceId(service.id)}
                         className="btn-action-icon delete"
-                        title="हटवा"
+                        title="Delete"
                       >
                         <Trash2 size={16} />
-                        <span>हटवा</span>
+                        <span>Delete</span>
                       </button>
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+            })}
 
               {filteredServices.length === 0 && (
                 <div className="admin-empty-state" style={{ gridColumn: '1 / -1' }}>
@@ -817,47 +870,75 @@ export default function AdminDashboard() {
                 </select>
               </div>
 
+              {/* Logo / Icon Upload Field */}
               <div className="form-group">
-                <label className="form-label">थोडक्यात माहिती (Short Description)</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="उदा. नवीन पॅन कार्ड किंवा दुरुस्तीसाठी..."
-                  value={serviceFormData.shortDescription}
-                  onChange={(e) => setServiceFormData({ ...serviceFormData, shortDescription: e.target.value })}
-                />
+                <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <ImageIcon size={16} style={{ color: '#2563eb' }} />
+                  <span>Logo / Icon (लोगो किंवा आयकॉन इमेज निवडा)</span>
+                </label>
+                
+                {serviceFormData.customIcon ? (
+                  <div className="admin-icon-preview-box">
+                    <div className="admin-icon-preview-img-wrap">
+                      <img 
+                        src={serviceFormData.customIcon} 
+                        alt="Selected Icon Preview" 
+                        className="admin-icon-preview-img"
+                      />
+                    </div>
+                    <div className="admin-icon-preview-info">
+                      <span className="admin-icon-preview-title">निवडलेला लोगो / आयकॉन</span>
+                      <span className="admin-icon-preview-sub">हा आयकॉन सेवा कार्डवर दिसेल</span>
+                    </div>
+                    <button 
+                      type="button" 
+                      onClick={handleRemoveImage}
+                      className="btn-remove-preview-icon"
+                      title="Remove Image"
+                    >
+                      <Trash2 size={15} />
+                      <span>Remove</span>
+                    </button>
+                  </div>
+                ) : (
+                  <label className="admin-icon-upload-dropzone">
+                    <input 
+                      type="file" 
+                      accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml"
+                      onChange={handleImageUpload}
+                      style={{ display: 'none' }}
+                    />
+                    <div className="dropzone-icon-circle">
+                      <Upload size={18} />
+                    </div>
+                    <div className="dropzone-text-group">
+                      <span className="dropzone-main-text">कंप्युटरवरून इमेज निवडा (Upload Logo / Icon)</span>
+                      <span className="dropzone-sub-text">PNG, JPG, WEBP किंवा SVG (Max 2MB)</span>
+                    </div>
+                    <span className="btn-browse-file">Browse File</span>
+                  </label>
+                )}
               </div>
 
               <div className="form-group">
-                <label className="form-label">ही सेवा कशासाठी आहे? (Purpose)</label>
+                <label className="form-label">सेवेची माहिती / उद्देश (Description)</label>
                 <textarea
                   rows={3}
                   className="form-textarea"
-                  placeholder="सेवेचा सविस्तर उद्देश लिहा..."
+                  placeholder="सेवेचा उद्देश किंवा सविस्तर माहिती लिहा..."
                   value={serviceFormData.purpose}
                   onChange={(e) => setServiceFormData({ ...serviceFormData, purpose: e.target.value })}
                 />
               </div>
 
               <div className="form-group">
-                <label className="form-label">लागणारी कागदपत्रे (प्रत्येक ओळीवर १ कागदपत्र लिहा)</label>
+                <label className="form-label">आवश्यक कागदपत्रे (Required Documents - प्रत्येक ओळीवर १ कागदपत्र लिहा)</label>
                 <textarea
                   rows={4}
                   className="form-textarea"
                   placeholder="आधार कार्ड&#10;रेशन कार्ड&#10;फोटो"
                   value={serviceFormData.documentsText}
                   onChange={(e) => setServiceFormData({ ...serviceFormData, documentsText: e.target.value })}
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Keywords (कॉमा देवून लिहा)</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="pan, card, आधार"
-                  value={serviceFormData.keywordsText}
-                  onChange={(e) => setServiceFormData({ ...serviceFormData, keywordsText: e.target.value })}
                 />
               </div>
 
@@ -935,6 +1016,56 @@ export default function AdminDashboard() {
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
+              </div>
+
+              {/* Logo / Icon Upload Field */}
+              <div className="form-group">
+                <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <ImageIcon size={16} style={{ color: '#2563eb' }} />
+                  <span>Logo / Icon (लोगो किंवा आयकॉन इमेज निवडा)</span>
+                </label>
+                
+                {serviceFormData.customIcon ? (
+                  <div className="admin-icon-preview-box">
+                    <div className="admin-icon-preview-img-wrap">
+                      <img 
+                        src={serviceFormData.customIcon} 
+                        alt="Selected Icon Preview" 
+                        className="admin-icon-preview-img"
+                      />
+                    </div>
+                    <div className="admin-icon-preview-info">
+                      <span className="admin-icon-preview-title">निवडलेला लोगो / आयकॉन</span>
+                      <span className="admin-icon-preview-sub">हा आयकॉन सेवा कार्डवर दिसेल</span>
+                    </div>
+                    <button 
+                      type="button" 
+                      onClick={handleRemoveImage}
+                      className="btn-remove-preview-icon"
+                      title="Remove Image"
+                    >
+                      <Trash2 size={15} />
+                      <span>Remove</span>
+                    </button>
+                  </div>
+                ) : (
+                  <label className="admin-icon-upload-dropzone">
+                    <input 
+                      type="file" 
+                      accept="image/png, image/jpeg, image/jpg, image/webp, image/svg+xml"
+                      onChange={handleImageUpload}
+                      style={{ display: 'none' }}
+                    />
+                    <div className="dropzone-icon-circle">
+                      <Upload size={18} />
+                    </div>
+                    <div className="dropzone-text-group">
+                      <span className="dropzone-main-text">कंप्युटरवरून इमेज निवडा (Upload Logo / Icon)</span>
+                      <span className="dropzone-sub-text">PNG, JPG, WEBP किंवा SVG (Max 2MB)</span>
+                    </div>
+                    <span className="btn-browse-file">Browse File</span>
+                  </label>
+                )}
               </div>
 
               <div className="form-group">

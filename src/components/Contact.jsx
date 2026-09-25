@@ -1,9 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { businessConfig } from '../config/business';
 
 export default function Contact() {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsRevealed(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsRevealed(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="contact" className="contact-section">
+    <section id="contact" ref={sectionRef} className="contact-section">
       <div className="container">
         <div className="section-header">
           <h2 className="section-title">आमच्याशी संपर्क</h2>
@@ -12,10 +38,10 @@ export default function Contact() {
           </p>
         </div>
 
-        {/* Contact Information Cards Grid */}
-        <div className="contact-cards-grid">
-          {/* Card 1: Address */}
-          <div className="contact-info-card">
+        {/* Contact Information Cards Grid with Spreading Scroll Animation */}
+        <div className={`contact-cards-grid ${isRevealed ? 'contact-cards-revealed' : 'contact-cards-initial'}`}>
+          {/* Card 1: Address (Moves from Center toward Left) */}
+          <div className="contact-info-card contact-card-address">
             <div className="contact-icon-bubble bubble-red">
               <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📍</span>
             </div>
@@ -30,8 +56,8 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* Card 2: Mobile & Phone */}
-          <div className="contact-info-card">
+          {/* Card 2: Mobile & Phone (Center Position) */}
+          <div className="contact-info-card contact-card-mobile">
             <div className="contact-icon-bubble bubble-green">
               <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📞</span>
             </div>
@@ -49,8 +75,8 @@ export default function Contact() {
             </p>
           </div>
 
-          {/* Card 3: Email */}
-          <div className="contact-info-card">
+          {/* Card 3: Email (Moves from Center toward Right) */}
+          <div className="contact-info-card contact-card-email">
             <div className="contact-icon-bubble bubble-yellow">
               <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>✉️</span>
             </div>

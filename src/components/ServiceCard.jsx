@@ -52,7 +52,15 @@ export default function ServiceCard({ service, onSelectService, index = 0 }) {
               <img 
                 src={customIconSrc} 
                 alt={service.marathiName || service.englishName || 'Service Icon'} 
-                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1px', display: 'block' }} 
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'contain', 
+                  padding: '1px', 
+                  display: 'block',
+                  transform: (service.id === 8 || service.icon === 'passport-photo') ? 'scale(1.18)' : 'none',
+                  transformOrigin: 'center center'
+                }} 
               />
             ) : (
               <LucideIcon size={24} />

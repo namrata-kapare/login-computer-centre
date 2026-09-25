@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, ArrowDownCircle, Zap, ShieldCheck, ThumbsUp } from 'lucide-react';
+import { ArrowDownCircle } from 'lucide-react';
 import { businessConfig } from '../config/business';
 
 export default function Hero({ onExploreClick }) {
@@ -27,26 +27,6 @@ export default function Hero({ onExploreClick }) {
             <span>आमच्या सेवा पहा</span>
             <ArrowDownCircle size={20} />
           </button>
-        </div>
-
-        {/* Feature Qualities Highlights */}
-        <div className="trust-bar">
-          <div className="trust-item">
-            <Zap size={18} style={{ color: 'var(--primary-blue)' }} />
-            <span>१. जलद सेवा</span>
-          </div>
-          <span className="trust-dot"></span>
-
-          <div className="trust-item">
-            <ShieldCheck size={18} style={{ color: 'var(--primary-blue)' }} />
-            <span>२. विश्वासार्ह सेवा</span>
-          </div>
-          <span className="trust-dot"></span>
-
-          <div className="trust-item">
-            <ThumbsUp size={18} style={{ color: 'var(--primary-blue)' }} />
-            <span>३. सोयीस्कर सेवा</span>
-          </div>
         </div>
       </div>
     </section>

@@ -21,7 +21,7 @@ export const servicesData = [
     englishName: "HSC 17 No. Form",
     category: "ऑनलाइन शैक्षणिक सेवा",
     isActive: true,
-    icon: "hsc17",
+    icon: "hsc-17-no",
     shortDescription: "फक्त 12वी (HSC) साठी",
     purpose: "खाजगी विद्यार्थी (Private Student) म्हणून १२ वी (HSC) ची परीक्षा देण्यासाठी १७ नंबरचा ऑनलाईन अर्ज भरण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
@@ -88,7 +88,7 @@ export const servicesData = [
     englishName: "Shop Act License",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "shop-act",
+    icon: "shop-act-parvana",
     shortDescription: "व्यवसाय व दुकान सुरू करण्यासाठी आवश्यक असणारा शॉप ॲक्ट परवाना.",
     purpose: "कोणताही लहान-मोठा व्यवसाय किंवा दुकान कायदेशीररित्या चालवण्यासाठी आणि स्थानिक प्राधिकरणाकडे नोंदणी करण्यासाठी हा परवाना आवश्यक असतो.",
     documents: [
@@ -108,7 +108,7 @@ export const servicesData = [
     englishName: "Food License - FSSAI",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "fssai",
+    icon: "UtensilsCrossed",
     shortDescription: "खाद्यपदार्थ, हॉटेल्स व किराणा व्यवसायासाठी FSSAI परवाना.",
     purpose: "अन्नपदार्थांची निर्मिती, विक्री किंवा साठवणूक करणाऱ्या सर्व लहान-मोठ्या व्यावसायिकांसाठी FSSAI नोंदणी / परवाना अनिवार्य आहे.",
     documents: [
@@ -461,7 +461,7 @@ export const servicesData = [
     category: "इतर ऑनलाइन सेवा",
     isActive: true,
     icon: "passport-online-registration",
-    shortDescription: "पासपोर्टसाठी ऑनलाइन अर्ज भरणे, आवश्यक माहिती नोंदवणे आणि पासपोर्ट अर्जाची प्रक्रिया पूर्ण करण्यासाठी ही सेवा उपलब्ध आहे.",
+    shortDescription: "पासपोर्टसाठी ऑनलाइन अर्ज भरण्याची सुविधा.",
     purpose: "पासपोर्टसाठी ऑनलाइन अर्ज भरणे, आवश्यक माहिती नोंदवणे आणि पासपोर्ट अर्जाची प्रक्रिया पूर्ण करण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
       "आधार कार्ड",
@@ -479,7 +479,7 @@ export const servicesData = [
     category: "शेतकरी व जमीन संबंधित सेवा",
     isActive: true,
     icon: "712-varil-boja-nondavane",
-    shortDescription: "जमिनीवर घेतलेल्या कर्जाची अधिकृत नोंद 7/12 उताऱ्यावर करण्यासाठी ही सेवा उपलब्ध आहे.",
+    shortDescription: "जमिनीवरील कर्जाची नोंद 7/12 उताऱ्यावर करण्याची सुविधा.",
     purpose: "जमिनीवर घेतलेल्या कर्जाची अधिकृत नोंद 7/12 उताऱ्यावर करण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
       "सातबारा",
@@ -495,7 +495,7 @@ export const servicesData = [
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
     icon: "tahsildar-utpanna-dakhala",
-    shortDescription: "शासकीय योजना, शैक्षणिक प्रवेश आणि इतर आवश्यक कामांसाठी तहसीलदारांकडून उत्पन्न दाखला मिळवण्यासाठी ही सेवा उपलब्ध आहे.",
+    shortDescription: "शासकीय व शैक्षणिक कामांसाठी उत्पन्न दाखला मिळवण्याची सुविधा.",
     purpose: "शासकीय योजना, शैक्षणिक प्रवेश आणि इतर आवश्यक कामांसाठी तहसीलदारांकडून उत्पन्न दाखला मिळवण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
       "आधार कार्ड",
@@ -515,7 +515,7 @@ export const servicesData = [
     category: "इतर ऑनलाइन सेवा",
     isActive: true,
     icon: "new-bank-account",
-    shortDescription: "नवीन बँक खाते उघडण्यासाठी आवश्यक ऑनलाइन प्रक्रिया आणि अर्ज करण्यासाठी ही सेवा उपलब्ध आहे.",
+    shortDescription: "नवीन बँक खाते उघडण्यासाठी ऑनलाइन अर्ज करण्याची सुविधा.",
     purpose: "नवीन बँक खाते उघडण्यासाठी आवश्यक ऑनलाइन प्रक्रिया आणि अर्ज करण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
       "आधार कार्ड",
@@ -531,7 +531,7 @@ export const servicesData = [
     category: "पॅन / आधार व ओळखपत्र सेवा",
     isActive: true,
     icon: "matdar-nondani",
-    shortDescription: "मतदार यादीमध्ये नाव नोंदवण्यासाठी तसेच नवीन मतदार नोंदणीचा ऑनलाइन अर्ज करण्यासाठी ही सेवा उपलब्ध आहे.",
+    shortDescription: "नवीन मतदार म्हणून नाव नोंदवण्यासाठी ऑनलाइन अर्जाची सुविधा.",
     purpose: "मतदार यादीमध्ये नाव नोंदवण्यासाठी तसेच नवीन मतदार नोंदणीचा ऑनलाइन अर्ज करण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
       "aadhar card",
@@ -551,7 +551,7 @@ export const servicesData = [
     category: "शेतकरी व जमीन संबंधित सेवा",
     isActive: true,
     icon: "biyane-anudan-yojana",
-    shortDescription: "शेतकऱ्यांना बियाणे खरेदीसाठी मिळणाऱ्या शासकीय अनुदान योजनेचा लाभ घेण्यासाठी ऑनलाइन अर्ज करण्यासाठी ही सेवा उपलब्ध आहे.",
+    shortDescription: "शेतकऱ्यांसाठी बियाणे अनुदान योजनेचा ऑनलाइन अर्ज करण्याची सुविधा.",
     purpose: "शेतकऱ्यांना बियाणे खरेदीसाठी मिळणाऱ्या शासकीय अनुदान योजनेचा लाभ घेण्यासाठी ऑनलाइन अर्ज करण्यासाठी ही सेवा उपलब्ध आहे.",
     documents: [
       "7/12 आणि 8/a उतारा",

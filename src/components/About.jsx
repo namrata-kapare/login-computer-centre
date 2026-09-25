@@ -1,10 +1,36 @@
-import React from 'react';
-import { ShieldCheck, Zap, Users, CheckCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { ShieldCheck, Zap, Users } from 'lucide-react';
 import { businessConfig } from '../config/business';
 
 export default function About() {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsRevealed(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsRevealed(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -30px 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="about" className="about-section">
+    <section id="about" ref={sectionRef} className="about-section">
       <div className="container">
         <div className="about-grid">
           {/* Left Text Column */}
@@ -24,9 +50,9 @@ export default function About() {
             </p>
           </div>
 
-          {/* Right Features Column */}
-          <div className="about-image-wrapper">
-            <div className="about-feature-box">
+          {/* Right Features Column with Progressive Scroll Reveal */}
+          <div className={`about-image-wrapper ${isRevealed ? 'about-features-revealed' : 'about-features-initial'}`}>
+            <div className="about-feature-box about-feature-1">
               <div className="about-feature-icon">
                 <ShieldCheck size={24} />
               </div>
@@ -38,7 +64,7 @@ export default function About() {
               </div>
             </div>
 
-            <div className="about-feature-box">
+            <div className="about-feature-box about-feature-2">
               <div className="about-feature-icon">
                 <Zap size={24} />
               </div>
@@ -50,12 +76,12 @@ export default function About() {
               </div>
             </div>
 
-            <div className="about-feature-box">
+            <div className="about-feature-box about-feature-3">
               <div className="about-feature-icon">
                 <Users size={24} />
               </div>
               <div>
-                <h4 style={{ fontSize: '1.05rem', fontWeight: 700 }}>सर्व वयोगटांसाठी सोपे</h4>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: 700 }}>चांगले मार्गदर्शन</h4>
                 <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', margin: 0 }}>
                   ज्येष्ठ नागरिक व शेतकऱ्यांसाठी सुलभ व सविस्तर मदत.
                 </p>
