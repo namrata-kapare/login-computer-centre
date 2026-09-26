@@ -71,6 +71,14 @@ export default function ServiceCard({ service, onSelectService, index = 0 }) {
         <span className="service-english-name">({service.englishName})</span>
         <p className="service-desc">{service.shortDescription}</p>
 
+        {/* Custom Red Note in Public Service Card */}
+        {Boolean(service.note || service.customNote) && (
+          <div className="service-card-custom-note">
+            <span className="custom-note-prefix">सूचना: </span>
+            <span>{(service.note || service.customNote).replace(/^(सूचना|टीप):\s*/i, '')}</span>
+          </div>
+        )}
+
         {/* Fictional Sample PAN Card Graphic Visual */}
         {service.hasSampleVisual && (
           <div className="sample-pan-graphic">

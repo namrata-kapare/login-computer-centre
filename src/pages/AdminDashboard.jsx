@@ -88,7 +88,8 @@ export default function AdminDashboard() {
     keywordsText: '',
     isActive: true,
     icon: 'FileText',
-    customIcon: null
+    customIcon: null,
+    note: ''
   });
 
   // Categories list
@@ -258,7 +259,8 @@ export default function AdminDashboard() {
       keywordsText: '',
       isActive: true,
       icon: 'FileText',
-      customIcon: null
+      customIcon: null,
+      note: ''
     });
     setIsAddModalOpen(true);
   };
@@ -277,7 +279,8 @@ export default function AdminDashboard() {
       keywordsText: Array.isArray(service.keywords) ? service.keywords.join(', ') : '',
       isActive: service.isActive !== false,
       icon: service.icon || 'FileText',
-      customIcon: service.customIcon || (typeof service.icon === 'string' && service.icon.startsWith('data:') ? service.icon : existingCustomIcon)
+      customIcon: service.customIcon || (typeof service.icon === 'string' && service.icon.startsWith('data:') ? service.icon : existingCustomIcon),
+      note: service.note || service.customNote || service.docNote || ''
     });
   };
 
@@ -294,6 +297,8 @@ export default function AdminDashboard() {
       .map(k => k.trim())
       .filter(Boolean);
 
+    const savedNote = serviceFormData.note ? serviceFormData.note.trim() : '';
+
     const newService = {
       id: Date.now(),
       marathiName: serviceFormData.marathiName,
@@ -305,7 +310,9 @@ export default function AdminDashboard() {
       keywords: keywordsArray,
       isActive: serviceFormData.isActive,
       icon: serviceFormData.icon || 'FileText',
-      customIcon: serviceFormData.customIcon || null
+      customIcon: serviceFormData.customIcon || null,
+      note: savedNote,
+      docNote: savedNote
     };
 
     const updated = [newService, ...services];
@@ -330,6 +337,8 @@ export default function AdminDashboard() {
       .map(k => k.trim())
       .filter(Boolean);
 
+    const savedNote = serviceFormData.note ? serviceFormData.note.trim() : '';
+
     const updatedService = {
       ...editingService,
       marathiName: serviceFormData.marathiName,
@@ -341,7 +350,9 @@ export default function AdminDashboard() {
       keywords: keywordsArray,
       isActive: serviceFormData.isActive,
       icon: serviceFormData.icon || 'FileText',
-      customIcon: serviceFormData.customIcon || null
+      customIcon: serviceFormData.customIcon || null,
+      note: savedNote,
+      docNote: savedNote
     };
 
     const updated = services.map(s => s.id === editingService.id ? updatedService : s);
@@ -684,6 +695,12 @@ export default function AdminDashboard() {
                       {service.shortDescription || 'माहिती उपलब्ध आहे.'}
                     </p>
 
+                    {(service.note || service.customNote || service.docNote) && (
+                      <div style={{ marginTop: '0.45rem', padding: '0.35rem 0.6rem', backgroundColor: '#fef2f2', borderLeft: '3px solid #dc2626', borderRadius: '4px', fontSize: '0.8rem', color: '#dc2626', fontWeight: 600 }}>
+                        सूचना: {(service.note || service.customNote || service.docNote).replace(/^(सूचना|टीप):\s*/i, '')}
+                      </div>
+                    )}
+
                   <div className="admin-card-bottom">
                     {/* Active Toggle Switch */}
                     <div className="toggle-switch-wrapper">
@@ -942,6 +959,17 @@ export default function AdminDashboard() {
                 />
               </div>
 
+              <div className="form-group">
+                <label className="form-label">सूचना / Note</label>
+                <textarea
+                  rows={2}
+                  className="form-textarea"
+                  placeholder="उदा. ही सेवा अर्जदाराच्या आवश्यक कागदपत्रांनुसार उपलब्ध आहे."
+                  value={serviceFormData.note}
+                  onChange={(e) => setServiceFormData({ ...serviceFormData, note: e.target.value })}
+                />
+              </div>
+
               <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <label className="form-label" style={{ margin: 0 }}>सेवा सुरू ठेवू इच्छिता (Active)?</label>
                 <input
@@ -1095,6 +1123,17 @@ export default function AdminDashboard() {
                   className="form-textarea"
                   value={serviceFormData.documentsText}
                   onChange={(e) => setServiceFormData({ ...serviceFormData, documentsText: e.target.value })}
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">सूचना / Note</label>
+                <textarea
+                  rows={2}
+                  className="form-textarea"
+                  placeholder="उदा. ही सेवा अर्जदाराच्या आवश्यक कागदपत्रांनुसार उपलब्ध आहे."
+                  value={serviceFormData.note}
+                  onChange={(e) => setServiceFormData({ ...serviceFormData, note: e.target.value })}
                 />
               </div>
 

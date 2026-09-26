@@ -1,32 +1,29 @@
 import React from 'react';
 import { ArrowDownCircle } from 'lucide-react';
-import { businessConfig } from '../config/business';
 
 export default function Hero({ onExploreClick }) {
   return (
     <section id="home" className="hero-section">
-      <div className="container hero-content">
-        {/* Main Heading in Marathi */}
-        <h1 className="hero-heading">
-          {businessConfig.businessNameMarathi}
-        </h1>
+      <div className="container hero-container">
+        <div className="hero-left-content">
+          {/* Main Large Heading in White */}
+          <h1 className="hero-heading">
+            लॉगिन कॉम्प्युटर सेंटर
+          </h1>
 
-        {/* Subheading */}
-        <h2 className="hero-subheading">
-          "{businessConfig.tagline}"
-        </h2>
+          {/* Description in Clean Lines */}
+          <p className="hero-description">
+            जेजुरी परिसरातील विविध ऑनलाइन आणि डिजिटल सेवांसाठी<br />
+            सोपे व विश्वासार्ह मार्गदर्शन.
+          </p>
 
-        {/* Supporting text */}
-        <p className="hero-description">
-          {businessConfig.subTagline}
-        </p>
-
-        {/* CTA Button */}
-        <div className="hero-actions">
-          <button onClick={onExploreClick} className="btn-primary">
-            <span>आमच्या सेवा पहा</span>
-            <ArrowDownCircle size={20} />
-          </button>
+          {/* Premium White CTA Button */}
+          <div className="hero-actions">
+            <button onClick={onExploreClick} className="btn-hero-white">
+              <span>आमच्या सेवा पहा</span>
+              <ArrowDownCircle size={20} />
+            </button>
+          </div>
         </div>
       </div>
     </section>

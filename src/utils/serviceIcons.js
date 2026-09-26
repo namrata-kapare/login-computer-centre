@@ -25,30 +25,29 @@ import iconJaatPadtalaniPramanpatra from '../assets/service-icons/jaat-padtalani
 import iconHsc17 from '../assets/service-icons/hsc-17-no.png';
 import iconShopAct from '../assets/service-icons/shop-act-parvana.png';
 
-// Other Existing Service Icons
+// Other Service Icons & Restored Icons
 import iconPassportPhoto from '../assets/service-icons/passport-photo.png';
 import iconAadhaarPanLink from '../assets/service-icons/aadhaar-pan-link.png';
 import iconPancard from '../assets/service-icons/pancard copy.png';
-
-// IDs of services that must NOT have icons
-const NO_ICON_SERVICE_IDS = new Set([1, 2]);
+import iconUdyogNondani from '../assets/service-icons/udyog-nondani.png';
+import iconDomicilePramanpatra from '../assets/service-icons/domicile-pramanpatra.png';
+import iconFssai from '../assets/service-icons/fssai.png';
 
 export const serviceIconsMap = {
-  // 12 Newly Integrated Service Icons
-  6: iconLagnaBiodata,                       // लग्नाचा बायोडाटा / Marriage Biodata
-  11: icon8aUtara,                           // 8/A उतारा / 8A Extract
-  10: iconDigital712,                        // डिजिटल 7/12 / Digital 7/12 Extract
-  22: iconShetkariOlakhpatra,                // शेतकरी ओळखपत्र / Farmer Identity Card
-  8: iconPassportPhoto,                      // पासपोर्ट साईज फोटो / Passport Size Photo
-  7: iconAadhaarPanLink,                     // आधार कार्ड व पॅनकार्ड लिंक / Aadhaar-PAN Linking
-  9: iconPancard,                            // पॅनकार्ड / PAN Card
-  5: iconMaharashtraShasanRajpatra,          // महाराष्ट्र शासन राजपत्र / Gazette Certificate
-  13: iconJaatPadtalaniPramanpatra,          // जात पडताळणी प्रमाणपत्र / Caste Validity
-  101: iconHsc17,                            // HSC 17 No. / HSC 17 No. Form
+  // Service ID Mappings
+  1: iconDomicilePramanpatra,                // अधिवास / डोमिसाईल प्रमाणपत्र / Domicile Certificate
+  2: iconUdyogNondani,                       // उद्योग नोंदणी / Udyam Registration
   3: iconShopAct,                            // शॉप ॲक्ट परवाना / Shop Act License
-
-  // Existing service icons (retained unchanged)
+  4: iconFssai,                              // अन्न व औषध परवाना (FSSAI) / Food License
+  5: iconMaharashtraShasanRajpatra,          // महाराष्ट्र शासन राजपत्र / Gazette Certificate
+  6: iconLagnaBiodata,                       // लग्नाचा बायोडाटा / Marriage Biodata
+  7: iconAadhaarPanLink,                     // आधार कार्ड व पॅनकार्ड लिंक / Aadhaar-PAN Linking
+  8: iconPassportPhoto,                      // पासपोर्ट साईज फोटो / Passport Size Photo
+  9: iconPancard,                            // पॅनकार्ड / PAN Card
+  10: iconDigital712,                        // डिजिटल 7/12 / Digital 7/12 Extract
+  11: icon8aUtara,                           // 8/A उतारा / 8A Extract
   12: iconFerfar,                            // Ferfar Extract
+  13: iconJaatPadtalaniPramanpatra,          // जात पडताळणी प्रमाणपत्र / Caste Validity
   14: iconXerox,                             // Xerox / झेरॉक्स
   15: iconColorPrint,                        // Color Print / Color Xerox / रंगीत झेरॉक्स
   16: iconColorPrint,                        // Color Print / रंगीत प्रिंट
@@ -57,7 +56,7 @@ export const serviceIconsMap = {
   19: iconPikVima,                           // Crop Insurance / पीक विमा
   20: iconVarasNond,                         // Varas Nond / वारस नोंद / Heir Entry
   21: iconCitySurvey,                        // City Survey Extract / सिटी सर्व्हे उतारा
-  22: iconShetkariOlakhpatra,                // Farmer Identity Card
+  22: iconShetkariOlakhpatra,                // शेतकरी ओळखपत्र / Farmer Identity Card
   23: iconSocietyEkarar,                     // Society E-Karar / Society E-Agreement
   24: icon712BojaKami,                       // 7/12 Boja Kami / ७/१२ बोजा कमी करणे
   25: iconPassportOnlineRegistration,        // Passport Online Registration / पासपोर्ट ऑनलाईन नोंदणी
@@ -66,8 +65,25 @@ export const serviceIconsMap = {
   28: iconNewBankAccount,                    // New Bank Account / नवीन बँक खाते
   29: iconMatdarNondani,                     // मतदार नोंदणी / Voter Registration
   30: iconBiyaneAnudanYojana,                 // बियाणे अनुदान योजना / Seed Subsidy Scheme
+  101: iconHsc17,                            // HSC 17 No. / HSC 17 No. Form
 
-  // Key mappings for the 12 new icons
+  // Key mappings for new & restored icons
+  'udyog-nondani': iconUdyogNondani,
+  'udyog-nondani.png': iconUdyogNondani,
+  'udyam': iconUdyogNondani,
+  'udyam.png': iconUdyogNondani,
+  'domicile-pramanpatra': iconDomicilePramanpatra,
+  'domicile-pramanpatra.png': iconDomicilePramanpatra,
+  'domicile': iconDomicilePramanpatra,
+  'domicile.png': iconDomicilePramanpatra,
+  'adhivas': iconDomicilePramanpatra,
+  'adhivas.png': iconDomicilePramanpatra,
+  'fssai': iconFssai,
+  'fssai.png': iconFssai,
+  'food-license': iconFssai,
+  'food-license.png': iconFssai,
+
+  // Key mappings for 12 integrated icons
   'lagna-biodata': iconLagnaBiodata,
   'lagna-biodata.png': iconLagnaBiodata,
   '8a-utara': icon8aUtara,
@@ -162,21 +178,6 @@ export const serviceIconsMap = {
 export function getServiceCustomIcon(service) {
   if (!service) return null;
 
-  // Explicitly return null for services without icons
-  if (service.id && NO_ICON_SERVICE_IDS.has(service.id)) {
-    return null;
-  }
-
-  // Check by service.marathiName or englishName for excluded services
-  const eng = (service.englishName || '').toLowerCase();
-  const mar = (service.marathiName || '').toLowerCase();
-  if (
-    eng.includes('domicile') || mar.includes('अधिवास') ||
-    eng.includes('udyam') || mar.includes('उद्योग')
-  ) {
-    return null;
-  }
-
   // 1. Direct path/URL in service.icon
   if (
     typeof service.icon === 'string' &&
@@ -205,7 +206,14 @@ export function getServiceCustomIcon(service) {
   }
 
   // 4. Fallback name-based matching
+  const eng = (service.englishName || '').toLowerCase();
+  const mar = (service.marathiName || '').toLowerCase();
   const iconStr = (typeof service.icon === 'string' ? service.icon.toLowerCase() : '');
+
+  // New & Restored services
+  if (eng.includes('udyam') || eng.includes('udyog') || mar.includes('उद्योग') || iconStr.includes('udyog') || iconStr.includes('udyam')) return iconUdyogNondani;
+  if (eng.includes('domicile') || mar.includes('डोमिसाईल') || mar.includes('अधिवास') || iconStr.includes('domicile') || iconStr.includes('adhivas')) return iconDomicilePramanpatra;
+  if (eng.includes('fssai') || eng.includes('food') || mar.includes('अन्न') || mar.includes('औषध') || iconStr.includes('fssai')) return iconFssai;
 
   // 12 New services
   if (eng.includes('hsc 17') || mar.includes('१७ नंबर') || iconStr.includes('hsc17')) return iconHsc17;

@@ -47,7 +47,7 @@ export const servicesData = [
     englishName: "Domicile Certificate",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: null,
+    icon: "domicile-pramanpatra",
     shortDescription: "महाराष्ट्रातील रहिवासाचा शासकीय दाखला दाखवण्यासाठी उपयुक्त.",
     purpose: "महाराष्ट्रातील रहिवासाचा अधिकृत पुरावा म्हणून अधिवास प्रमाणपत्राचा उपयोग विविध शैक्षणिक प्रवेश, शासकीय नोकऱ्या आणि इतर शासकीय कामांसाठी केला जातो.",
     documents: [
@@ -68,7 +68,7 @@ export const servicesData = [
     englishName: "Udyam Registration",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: null,
+    icon: "udyog-nondani",
     shortDescription: "सूक्ष्म, लघु व मध्यम उद्योगांसाठी (MSME) शासकीय नोंदणी.",
     purpose: "नवीन किंवा सुरु असलेल्या व्यवसायाला MSME अंतर्गत शासकीय ओळख मिळवण्यासाठी, बँकेचे करंट अकाऊंट उघडण्यासाठी व विविध सरकारी योजनांचा लाभ घेण्यासाठी.",
     documents: [
@@ -108,7 +108,7 @@ export const servicesData = [
     englishName: "Food License - FSSAI",
     category: "प्रमाणपत्र व शासकीय सेवा",
     isActive: true,
-    icon: "UtensilsCrossed",
+    icon: "fssai",
     shortDescription: "खाद्यपदार्थ, हॉटेल्स व किराणा व्यवसायासाठी FSSAI परवाना.",
     purpose: "अन्नपदार्थांची निर्मिती, विक्री किंवा साठवणूक करणाऱ्या सर्व लहान-मोठ्या व्यावसायिकांसाठी FSSAI नोंदणी / परवाना अनिवार्य आहे.",
     documents: [

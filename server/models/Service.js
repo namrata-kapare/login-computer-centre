@@ -12,6 +12,8 @@ const serviceSchema = new mongoose.Schema({
   documents: [{ type: String }],
   keywords: [{ type: String }],
   availabilityMessage: { type: String, default: "सेवेची सध्याची उपलब्धता जाणून घेण्यासाठी आमच्याशी संपर्क साधा." },
+  note: { type: String, default: "" },
+  docNote: { type: String, default: "" },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

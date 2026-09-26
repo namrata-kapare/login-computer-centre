@@ -9,10 +9,31 @@ import { SearchX } from 'lucide-react';
 export default function ServiceGrid({ onSelectService }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('सर्व सेवा');
-  const [services, setServices] = useState(fallbackServices.filter(s => s.isActive !== false));
+  const [services, setServices] = useState(() => {
+    try {
+      const saved = localStorage.getItem('preview_services');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.filter(s => s.isActive !== false);
+        }
+      }
+    } catch (e) {}
+    return fallbackServices.filter(s => s.isActive !== false);
+  });
 
   useEffect(() => {
     async function loadActiveServices() {
+      try {
+        const saved = localStorage.getItem('preview_services');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setServices(parsed.filter(s => s.isActive !== false));
+          }
+        }
+      } catch (e) {}
+
       const data = await getServices(false);
       if (Array.isArray(data) && data.length > 0) {
         setServices(data);

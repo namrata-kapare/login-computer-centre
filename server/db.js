@@ -78,7 +78,9 @@ async function seedInitialData() {
               shortDescription: service.shortDescription,
               purpose: service.purpose,
               documents: service.documents,
-              icon: service.icon
+              icon: service.icon,
+              ...(service.docNote ? { docNote: service.docNote } : {}),
+              ...(service.note ? { note: service.note } : {})
             } 
           }
         );

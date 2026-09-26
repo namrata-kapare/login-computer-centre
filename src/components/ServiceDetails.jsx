@@ -121,9 +121,12 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
             </ul>
 
             {/* Red Note directly below Required Documents list */}
-            {(service.docNote || (service.availabilityMessage && (service.availabilityMessage.startsWith('टीप:') || service.availabilityMessage.startsWith('महत्त्वाची सूचना:')))) && (
+            {Boolean(service.note || service.customNote || service.docNote) && (
               <div className="doc-red-note">
-                {service.docNote || service.availabilityMessage}
+                <strong>सूचना: </strong>
+                <span>
+                  {(service.note || service.customNote || service.docNote).replace(/^(सूचना|टीप):\s*/i, '')}
+                </span>
               </div>
             )}
           </div>
@@ -134,7 +137,7 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
             <div>
               <strong>महत्त्वाची सूचना:</strong>
               <p style={{ marginTop: '2px' }}>
-                {service.availabilityMessage && !service.docNote && !service.availabilityMessage.startsWith('टीप:') && !service.availabilityMessage.startsWith('महत्त्वाची सूचना:')
+                {service.availabilityMessage && !service.docNote && !service.note && !service.customNote && !service.availabilityMessage.startsWith('टीप:') && !service.availabilityMessage.startsWith('महत्त्वाची सूचना:')
                   ? service.availabilityMessage 
                   : "कागदपत्रांची आवश्यकता व प्रक्रिया सेवेनुसार बदलू शकते. अर्ज करण्यापूर्वी किंवा अधिक माहितीसाठी आमच्याशी थेट संपर्क साधा."}
               </p>
