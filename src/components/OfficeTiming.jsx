@@ -88,7 +88,7 @@ export default function OfficeTiming() {
             )}
           </div>
 
-          {/* 2. Automatic Live Info Grid: Date, Day, Current Time */}
+          {/* 2. Automatic Live Info Grid: Date, Day */}
           <div className="timing-live-grid">
             <div className="live-info-box">
               <div className="live-info-label">
@@ -104,14 +104,6 @@ export default function OfficeTiming() {
                 <span>आजचा वार</span>
               </div>
               <div className="live-info-value">{currentDay}</div>
-            </div>
-
-            <div className="live-info-box">
-              <div className="live-info-label">
-                <Clock size={17} />
-                <span>सध्याची वेळ</span>
-              </div>
-              <div className="live-info-value time-ticker">{formattedTime}</div>
             </div>
           </div>
 

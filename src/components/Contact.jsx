@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { businessConfig } from '../config/business';
+import phoneIcon from '../assets/contact-phone.png';
+import phoneWhiteIcon from '../assets/contact-phone-white.png';
+import emailIcon from '../assets/contact-email.png';
+import locationIcon from '../assets/contact-location.png';
 
 export default function Contact() {
   const [isRevealed, setIsRevealed] = useState(false);
@@ -42,8 +46,8 @@ export default function Contact() {
         <div className={`contact-cards-grid ${isRevealed ? 'contact-cards-revealed' : 'contact-cards-initial'}`}>
           {/* Card 1: Address (Moves from Center toward Left) */}
           <div className="contact-info-card contact-card-address">
-            <div className="contact-icon-bubble bubble-red">
-              <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📍</span>
+            <div className="contact-icon-wrapper-clean">
+              <img src={locationIcon} alt="पत्ता" className="contact-custom-icon" />
             </div>
             <h3 className="contact-card-title" style={{ fontWeight: 'normal' }}>
               <strong>पत्ता</strong> (<strong>Address</strong>)
@@ -58,8 +62,8 @@ export default function Contact() {
 
           {/* Card 2: Mobile & Phone (Center Position) */}
           <div className="contact-info-card contact-card-mobile">
-            <div className="contact-icon-bubble bubble-green">
-              <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>📞</span>
+            <div className="contact-icon-wrapper-clean">
+              <img src={phoneIcon} alt="मोबाईल" className="contact-custom-icon" />
             </div>
             <h3 className="contact-card-title">मोबाईल (Mobile)</h3>
             <p className="contact-card-text">
@@ -70,15 +74,12 @@ export default function Contact() {
                 {businessConfig.phone}
               </a>
             </p>
-            <p className="contact-card-text" style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-              (थेट कॉल करण्यासाठी क्लिक करा)
-            </p>
           </div>
 
           {/* Card 3: Email (Moves from Center toward Right) */}
           <div className="contact-info-card contact-card-email">
-            <div className="contact-icon-bubble bubble-yellow">
-              <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>✉️</span>
+            <div className="contact-icon-wrapper-clean">
+              <img src={emailIcon} alt="ई-मेल" className="contact-custom-icon" />
             </div>
             <h3 className="contact-card-title">ई-मेल (Email)</h3>
             <p className="contact-card-text" style={{ fontSize: '0.95rem', color: 'var(--primary-blue)', marginTop: '0.5rem' }}>
@@ -90,6 +91,7 @@ export default function Contact() {
         {/* Action Buttons */}
         <div className="contact-actions" style={{ marginBottom: '1rem' }}>
           <a href={`tel:${businessConfig.phoneRaw}`} className="btn-primary">
+            <img src={phoneWhiteIcon} alt="" className="btn-contact-action-icon" />
             <span>कॉल करा</span>
           </a>
 
@@ -99,6 +101,7 @@ export default function Contact() {
             rel="noopener noreferrer"
             className="btn-secondary"
           >
+            <img src={locationIcon} alt="" className="btn-contact-action-icon" />
             <span>नकाशावर शोधा (Find on Map)</span>
           </a>
         </div>

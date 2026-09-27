@@ -217,10 +217,11 @@ button {
 }
 
 .brand-name {
-  font-size: 1.05rem;
+  font-size: 1.08rem;
   font-weight: 800;
-  color: var(--text-dark);
+  color: #0f172a;
   line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 
 /* Desktop / Laptop Direct Navigation Links */
@@ -232,7 +233,7 @@ button {
 .nav-desktop-links {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 1.85rem;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -241,49 +242,24 @@ button {
 .nav-desktop-link {
   display: inline-flex;
   align-items: center;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #334155;
+  font-size: 0.96rem;
+  font-weight: 500;
+  color: #1e293b;
   text-decoration: none;
-  padding: 0.45rem 0.85rem;
-  border-radius: var(--radius-sm, 8px);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0.35rem 0.2rem;
+  background: transparent;
+  border: none;
+  transition: color 220ms ease, font-weight 220ms ease;
 }
 
 .nav-desktop-link:hover {
-  color: var(--primary-blue, #2563eb);
-  background-color: #eff6ff;
-  transform: translateY(-1px);
-}
-
-.nav-desktop-link.active {
-  color: var(--primary-blue, #2563eb);
-  background-color: #dbeafe;
+  color: #000000;
   font-weight: 700;
 }
 
-.nav-desktop-admin-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1.15rem;
-  font-size: 0.92rem;
-  font-weight: 600;
-  color: #1e293b;
-  background-color: #f8fafc;
-  border: 1.5px solid #cbd5e1;
-  border-radius: var(--radius-md, 10px);
-  text-decoration: none;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
-
-.nav-desktop-admin-btn:hover {
-  color: #ffffff;
-  background-color: var(--primary-blue, #2563eb);
-  border-color: var(--primary-blue, #2563eb);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+.nav-desktop-link.active {
+  color: #000000;
+  font-weight: 700;
 }
 
 .nav-mobile-toggle {
@@ -513,17 +489,17 @@ button {
 /* Hero Section - Full Viewport Landing */
 .hero-section {
   width: 100%;
-  min-height: calc(100vh - 66px);
+  height: calc(100vh - 72px);
+  min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
   position: relative;
   overflow: hidden;
-  background-color: #b7c3d1;
   background-image: url('./assets/hero-computer.png');
   background-repeat: no-repeat;
-  background-size: auto 80%;
-  background-position: right 3% center;
-  padding: 3rem 0;
+  background-size: cover;
+  background-position: right center;
+  padding: 0;
   box-sizing: border-box;
 }
 
@@ -535,28 +511,54 @@ button {
 }
 
 .hero-left-content {
-  max-width: 520px;
+  max-width: 540px;
   text-align: left;
   z-index: 2;
 }
 
+/* Subtle Hero Entrance Animation */
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-anim-heading {
+  animation: heroFadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-anim-desc {
+  opacity: 0;
+  animation: heroFadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
+}
+
+.hero-anim-btn {
+  opacity: 0;
+  animation: heroFadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 320ms forwards;
+}
+
 .hero-heading {
-  font-size: 2.85rem;
+  font-size: 3rem;
   font-weight: 800;
   color: #ffffff;
-  margin-bottom: 1.15rem;
+  margin-bottom: 1.25rem;
   letter-spacing: -0.01em;
-  line-height: 1.22;
-  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.45), 0 1px 2px rgba(15, 23, 42, 0.3);
+  line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(15, 23, 42, 0.5), 0 1px 3px rgba(15, 23, 42, 0.35);
 }
 
 .hero-description {
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   font-weight: 500;
   color: #ffffff;
   margin-bottom: 2.25rem;
   line-height: 1.7;
-  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.45), 0 1px 2px rgba(15, 23, 42, 0.3);
+  text-shadow: 0 2px 8px rgba(15, 23, 42, 0.5), 0 1px 3px rgba(15, 23, 42, 0.35);
 }
 
 .hero-actions {
@@ -573,37 +575,46 @@ button {
   gap: 0.6rem;
   background-color: #ffffff;
   color: #0f2744;
-  font-size: 1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  padding: 0.8rem 1.65rem;
-  border-radius: 10px;
+  padding: 0.85rem 1.75rem;
+  border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15);
   cursor: pointer;
   text-decoration: none;
-  transition: transform 280ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 280ms cubic-bezier(0.16, 1, 0.3, 1),
-              background-color 280ms ease,
-              color 280ms ease;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 250ms ease,
+              color 250ms ease;
 }
 
 .btn-hero-white:hover {
-  transform: translateY(-2px) scale(1.02);
-  background-color: #f8fafc;
-  color: #1e40af;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.18);
+  transform: translateY(-2px);
+  background-color: #ffffff;
+  color: #0f2744;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.22), 0 0 12px rgba(255, 255, 255, 0.3);
 }
 
 .btn-hero-white:active {
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
+  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.18);
+  outline: none;
+}
+
+.btn-hero-white:focus,
+.btn-hero-white:focus-visible {
+  outline: none;
 }
 
 @media (max-width: 860px) {
   .hero-section {
-    min-height: calc(100vh - 64px);
-    background-position: right center;
-    background-size: auto 60%;
-    padding: 2.5rem 0;
+    min-height: 100vh;
+    height: auto;
+    background-position: 75% center;
+    padding: 3rem 0;
   }
   .hero-left-content {
     max-width: 100%;
@@ -789,10 +800,10 @@ button {
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
 }
 
-/* Live Info Grid (Date, Day, Time) */
+/* Live Info Grid (Date, Day) */
 .timing-live-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 0.85rem;
 }
 
@@ -1586,12 +1597,44 @@ button {
               border-color 250ms ease;
 }
 
+.contact-icon-wrapper-clean {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  background: transparent;
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-info-card:hover .contact-icon-wrapper-clean {
+  transform: scale(1.08);
+}
+
+.contact-custom-icon {
+  width: 48px;
+  height: 48px;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.btn-contact-action-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
 .contact-icon-bubble {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background-color: var(--primary-light);
-  color: var(--primary-blue);
+  background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1601,21 +1644,6 @@ button {
 
 .contact-info-card:hover .contact-icon-bubble {
   transform: scale(1.1);
-}
-
-.contact-icon-bubble.bubble-red {
-  background-color: #fee2e2;
-  color: #dc2626;
-}
-
-.contact-icon-bubble.bubble-green {
-  background-color: #dcfce7;
-  color: #16a34a;
-}
-
-.contact-icon-bubble.bubble-yellow {
-  background-color: #fef9c3;
-  color: #ca8a04;
 }
 
 .contact-card-title {
@@ -1821,7 +1849,7 @@ button {
   }
 
   .timing-live-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 0.35rem !important;
   }
 
