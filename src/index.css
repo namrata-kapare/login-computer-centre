@@ -1421,102 +1421,210 @@ button {
 
 /* About Section */
 .about-section {
-  padding: 4rem 0;
+  padding: 4.5rem 0;
   background-color: #ffffff;
 }
 
 .about-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 3.5rem;
   align-items: center;
 }
 
-.about-image-wrapper {
-  background: linear-gradient(135deg, var(--sky-gradient-start), var(--primary-light));
-  border-radius: var(--radius-lg);
-  padding: 2.5rem;
+.about-text-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-heading {
+  text-align: left;
+  margin-bottom: 1.25rem;
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.3;
+}
+
+.about-text-content p {
+  font-size: 1.02rem;
+  color: var(--text-medium);
+  line-height: 1.75;
+  margin-bottom: 1.1rem;
+}
+
+.about-trust-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.about-pill {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #1e293b;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-full);
+}
+
+/* Right Side - Soft White Visual Card with Subtle Light-Blue Accent */
+.about-visual-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.75rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.about-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.about-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--primary-light);
+  color: var(--primary-blue);
   border: 1px solid var(--primary-border);
-  position: relative;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+}
+
+.about-card-tag {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.about-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
 }
 
 .about-feature-box {
-  background: #ffffff;
-  padding: 1.25rem;
+  background: #f8fafc;
+  padding: 1rem 1.15rem;
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  margin-bottom: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid rgba(226, 232, 240, 0.8);
-  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  border: 1px solid #f1f5f9;
+  transition: transform 250ms ease-out, box-shadow 250ms ease-out, border-color 250ms ease-out;
 }
 
 .about-feature-box:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px -4px rgba(37, 99, 235, 0.14);
+  transform: translateY(-2px);
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.08);
   border-color: #bfdbfe;
 }
 
 .about-feature-icon {
   width: 44px;
   height: 44px;
-  border-radius: 50%;
+  border-radius: 12px;
   background-color: var(--primary-light);
   color: var(--primary-blue);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: transform 250ms ease, background-color 250ms ease;
+  transition: transform 250ms ease;
 }
 
 .about-feature-box:hover .about-feature-icon {
-  transform: scale(1.1);
-  background-color: #dbeafe;
+  transform: scale(1.06);
 }
 
-/* About Us Staggered Scroll Reveal (500–700ms duration, 100–150ms stagger) */
-.about-features-initial .about-feature-box {
+.about-feature-body h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 0.2rem;
+}
+
+.about-feature-body p {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.4;
+}
+
+.about-card-footer {
+  padding-top: 0.85rem;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.82rem;
+  color: #64748b;
+  text-align: center;
+}
+
+/* About Scroll Reveal Animations */
+.about-content-initial {
   opacity: 0;
-  transform: translateY(22px) scale(0.96);
+  transform: translateY(30px);
 }
 
-.about-features-revealed .about-feature-1 {
+.about-content-revealed {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 0ms,
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 0ms,
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  transform: translateY(0);
+  transition: opacity 750ms ease-out 0ms,
+              transform 750ms ease-out 0ms;
 }
 
-.about-features-revealed .about-feature-2 {
+.about-card-initial {
+  opacity: 0;
+  transform: translateY(35px);
+}
+
+.about-card-revealed {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 130ms,
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 130ms,
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  transform: translateY(0);
+  transition: opacity 750ms ease-out 150ms,
+              transform 750ms ease-out 150ms;
 }
 
-.about-features-revealed .about-feature-3 {
+.about-card-initial .about-feature-box {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.about-card-revealed .about-feature-1 {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 260ms,
-              transform 600ms cubic-bezier(0.16, 1, 0.3, 1) 260ms,
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  transform: translateY(0);
+  transition: opacity 650ms ease-out 250ms,
+              transform 650ms ease-out 250ms;
 }
 
-.about-text-content p {
-  font-size: 1.05rem;
-  color: var(--text-medium);
-  line-height: 1.7;
-  margin-bottom: 1.25rem;
+.about-card-revealed .about-feature-2 {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 650ms ease-out 380ms,
+              transform 650ms ease-out 380ms;
+}
+
+.about-card-revealed .about-feature-3 {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 650ms ease-out 500ms,
+              transform 650ms ease-out 500ms;
 }
 
 /* Contact Section */
@@ -1535,66 +1643,139 @@ button {
 }
 
 .contact-info-card {
-  background: #ffffff;
-  padding: 1.75rem;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  box-shadow: var(--shadow-sm);
+  position: relative;
+  padding: 8px 8px 36px 8px;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
+  display: flex;
+  flex-direction: column;
   text-align: center;
-  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  transition: transform 300ms ease-out,
+              box-shadow 300ms ease-out;
 }
 
-.contact-info-card:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: var(--shadow-lg);
-  border-color: #93c5fd;
+/* Card 1 (Address) - Red Base */
+.contact-card-address {
+  background-color: #fee2e2;
 }
 
-/* Contact 3 Cards Spreading Scroll Animation */
-/* Initially: cards together in center with soft fade-out & slight scale */
-.contact-cards-initial .contact-card-address {
+.contact-card-address:hover,
+.contact-cards-revealed .contact-card-address:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 14px 30px -4px rgba(239, 68, 68, 0.4), 0 0 22px 3px rgba(248, 113, 113, 0.35) !important;
+  transition: transform 300ms ease-out, box-shadow 300ms ease-out !important;
+  z-index: 2;
+}
+
+/* Card 2 (Mobile) - Green Base */
+.contact-card-mobile {
+  background-color: #dcfce7;
+}
+
+.contact-card-mobile:hover,
+.contact-cards-revealed .contact-card-mobile:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 14px 30px -4px rgba(34, 197, 94, 0.4), 0 0 22px 3px rgba(74, 222, 128, 0.35) !important;
+  transition: transform 300ms ease-out, box-shadow 300ms ease-out !important;
+  z-index: 2;
+}
+
+/* Card 3 (Email) - Gmail-inspired Base */
+.contact-card-email {
+  background-color: #e0f2fe;
+}
+
+.contact-card-email:hover,
+.contact-cards-revealed .contact-card-email:hover {
+  transform: scale(1.03) !important;
+  box-shadow: 0 14px 30px -4px rgba(59, 130, 246, 0.4), 0 0 22px 3px rgba(96, 165, 250, 0.35) !important;
+  transition: transform 300ms ease-out, box-shadow 300ms ease-out !important;
+  z-index: 2;
+}
+
+/* Inner White Information Card - Sits above the colored base */
+.contact-card-inner {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.75rem 1.25rem 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+/* Contact Section Scroll-Reveal Animations (Heading, Description, Cards) */
+@keyframes contactHeadingReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contactSubtitleReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contactCardReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(70px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Heading & Subtitle Initial & Revealed States */
+.contact-section-initial .contact-heading-reveal {
   opacity: 0;
-  transform: translateX(calc(100% + 1.5rem)) translateY(20px) scale(0.94);
+  transform: translateY(40px);
 }
 
-.contact-cards-initial .contact-card-mobile {
+.contact-section-revealed .contact-heading-reveal {
+  animation: contactHeadingReveal 900ms ease-out 0ms both;
+}
+
+.contact-section-initial .contact-subtitle-reveal {
   opacity: 0;
-  transform: translateY(20px) scale(0.94);
+  transform: translateY(35px);
 }
 
-.contact-cards-initial .contact-card-email {
+.contact-section-revealed .contact-subtitle-reveal {
+  animation: contactSubtitleReveal 900ms ease-out 180ms both;
+}
+
+/* Contact 3 Cards Initial State & Staggered Reveal Sequence */
+.contact-cards-initial .contact-info-card {
   opacity: 0;
-  transform: translateX(calc(-100% - 1.5rem)) translateY(20px) scale(0.94);
+  transform: translateY(70px);
 }
 
-/* When In-View: Address moves center -> left, Mobile fades into center, Email moves center -> right */
 .contact-cards-revealed .contact-card-address {
-  opacity: 1;
-  transform: translate(0, 0) scale(1);
-  transition: transform 680ms cubic-bezier(0.16, 1, 0.3, 1) 0ms,
-              opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 0ms,
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  animation: contactCardReveal 1000ms ease-out 250ms both;
 }
 
 .contact-cards-revealed .contact-card-mobile {
-  opacity: 1;
-  transform: translate(0, 0) scale(1);
-  transition: transform 680ms cubic-bezier(0.16, 1, 0.3, 1) 60ms,
-              opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 60ms,
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  animation: contactCardReveal 1000ms ease-out 400ms both;
 }
 
 .contact-cards-revealed .contact-card-email {
-  opacity: 1;
-  transform: translate(0, 0) scale(1);
-  transition: transform 680ms cubic-bezier(0.16, 1, 0.3, 1) 0ms,
-              opacity 600ms cubic-bezier(0.16, 1, 0.3, 1) 0ms,
-              box-shadow 250ms ease,
-              border-color 250ms ease;
+  animation: contactCardReveal 1000ms ease-out 550ms both;
 }
 
 .contact-icon-wrapper-clean {
@@ -1667,11 +1848,58 @@ button {
   flex-wrap: wrap;
 }
 
+.btn-contact-call {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #22c55e;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #22c55e;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 280ms ease-out, box-shadow 280ms ease-out, background-color 280ms ease-out, border-color 280ms ease-out;
+  text-decoration: none;
+}
+
+.btn-contact-call:hover {
+  background-color: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.btn-contact-map {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border: 1.5px solid #000000 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 280ms ease-out, box-shadow 280ms ease-out, background-color 280ms ease-out, border-color 280ms ease-out;
+}
+
+.btn-contact-map span {
+  color: #000000 !important;
+}
+
+.btn-contact-map:hover {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08) !important;
+  outline: none !important;
+}
+
 /* Footer */
 .footer {
-  background-color: #0f172a;
-  color: #cbd5e1;
+  background-color: #E2E5E8;
+  color: #1e293b;
   padding: 3.5rem 0 1.5rem;
+  border-top: 1px solid #d1d5db;
 }
 
 .footer-grid {
@@ -1690,16 +1918,16 @@ button {
 .footer-title {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .footer-sub {
-  color: #94a3b8;
+  color: #334155;
   font-size: 0.95rem;
 }
 
 .footer-heading {
-  color: #ffffff;
+  color: #0f172a;
   font-size: 1.05rem;
   font-weight: 700;
   margin-bottom: 1rem;
@@ -1713,20 +1941,23 @@ button {
 }
 
 .footer-links a {
-  color: #94a3b8;
+  color: #1e293b;
   font-size: 0.95rem;
+  text-decoration: none;
+  transition: color 200ms ease, font-weight 200ms ease;
 }
 
 .footer-links a:hover {
-  color: #ffffff;
+  color: #000000;
+  font-weight: 600;
 }
 
 .footer-bottom {
   padding-top: 1.5rem;
-  border-top: 1px solid #1e293b;
+  border-top: 1px solid #d1d5db;
   text-align: center;
   font-size: 0.88rem;
-  color: #64748b;
+  color: #475569;
 }
 
 /* Animations */
@@ -1907,11 +2138,11 @@ button {
 
   .about-grid {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
 
   .about-feature-box {
     padding: 0.85rem 1rem;
-    margin-bottom: 0.75rem;
   }
 
   .desktop-only {
@@ -1931,32 +2162,6 @@ button {
     grid-template-columns: 1fr !important;
     gap: 0.8rem !important;
     margin-bottom: 1.5rem !important;
-  }
-
-  /* Mobile Contact Cards Animation Overrides (no horizontal overflow) */
-  .contact-cards-initial .contact-card-address,
-  .contact-cards-initial .contact-card-mobile,
-  .contact-cards-initial .contact-card-email {
-    transform: translateY(18px) scale(0.96) !important;
-    opacity: 0 !important;
-  }
-
-  .contact-cards-revealed .contact-card-address {
-    transform: translateY(0) scale(1) !important;
-    opacity: 1 !important;
-    transition: transform 550ms cubic-bezier(0.16, 1, 0.3, 1) 0ms, opacity 500ms ease 0ms !important;
-  }
-
-  .contact-cards-revealed .contact-card-mobile {
-    transform: translateY(0) scale(1) !important;
-    opacity: 1 !important;
-    transition: transform 550ms cubic-bezier(0.16, 1, 0.3, 1) 100ms, opacity 500ms ease 100ms !important;
-  }
-
-  .contact-cards-revealed .contact-card-email {
-    transform: translateY(0) scale(1) !important;
-    opacity: 1 !important;
-    transition: transform 550ms cubic-bezier(0.16, 1, 0.3, 1) 200ms, opacity 500ms ease 200ms !important;
   }
 
   /* Mobile Feature Bar responsiveness */
@@ -1988,8 +2193,13 @@ button {
   }
 
   .contact-info-card {
-    padding: 0.75rem 0.5rem !important;
-    border-radius: var(--radius-sm) !important;
+    padding: 6px 6px 28px 6px !important;
+    border-radius: 16px !important;
+  }
+
+  .contact-card-inner {
+    padding: 1.25rem 0.85rem 1rem !important;
+    border-radius: 10px !important;
   }
 
   .contact-icon-bubble {

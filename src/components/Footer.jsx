@@ -22,13 +22,13 @@ export default function Footer({ onNavigate }) {
           {/* Brand Info */}
           <div className="footer-brand">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-              <Monitor size={24} style={{ color: 'var(--primary-blue)' }} />
+              <Monitor size={24} style={{ color: '#0f172a' }} />
               <h3 className="footer-title">{businessConfig.fullBusinessNameMarathi}</h3>
             </div>
             <p className="footer-sub">
               "आपल्या विविध ऑनलाइन व डिजिटल सेवा एकाच ठिकाणी."
             </p>
-            <p style={{ fontSize: '0.88rem', color: '#94a3b8' }}>
+            <p style={{ fontSize: '0.88rem', color: '#475569' }}>
               स्थान: {businessConfig.location}
             </p>
           </div>
@@ -55,13 +55,13 @@ export default function Footer({ onNavigate }) {
           {/* Contact Summary */}
           <div>
             <h4 className="footer-heading">कार्यालयीन माहिती</h4>
-            <p style={{ fontSize: '0.9rem', color: '#94a3b8', lineHeight: '1.6' }}>
+            <p style={{ fontSize: '0.9rem', color: '#334155', lineHeight: '1.6' }}>
               कार्यालयीन वेळ:<br />
-              <strong>{businessConfig.timing.todayTimingText}</strong>
+              <strong style={{ color: '#0f172a' }}>{businessConfig.timing.todayTimingText}</strong>
             </p>
-            <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginTop: '0.5rem' }}>
-              📞 मोबाईल: <a href={`tel:${businessConfig.phoneRaw}`} style={{ color: '#ffffff' }}>{businessConfig.phone}</a><br />
-              ✉️ ई-मेल: <a href={`mailto:${businessConfig.email}`} style={{ color: '#ffffff' }}>{businessConfig.email}</a>
+            <p style={{ fontSize: '0.85rem', color: '#334155', marginTop: '0.5rem' }}>
+              📞 मोबाईल: <a href={`tel:${businessConfig.phoneRaw}`} style={{ color: '#0f172a', fontWeight: 600 }}>{businessConfig.phone}</a><br />
+              ✉️ ई-मेल: <a href={`mailto:${businessConfig.email}`} style={{ color: '#0f172a', fontWeight: 600 }}>{businessConfig.email}</a>
             </p>
             <p style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '0.4rem' }}>
               📍 {businessConfig.address}
