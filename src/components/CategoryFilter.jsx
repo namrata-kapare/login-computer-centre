@@ -7,6 +7,7 @@ export default function CategoryFilter({ selectedCategory, setSelectedCategory }
       {serviceCategories.map((cat) => (
         <button
           key={cat}
+          type="button"
           onClick={() => setSelectedCategory(cat)}
           className={`chip-btn ${selectedCategory === cat ? 'active' : ''}`}
         >

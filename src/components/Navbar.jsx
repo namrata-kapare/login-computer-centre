@@ -98,7 +98,7 @@ export default function Navbar({ onNavigate, activeSection }) {
             <li>
               <Link 
                 to="/admin/login" 
-                className={`nav-desktop-link ${activeSection === 'admin' ? 'active' : ''}`}
+                className="nav-desktop-admin-btn"
               >
                 Admin Login
               </Link>
