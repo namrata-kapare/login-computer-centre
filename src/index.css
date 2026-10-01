@@ -562,7 +562,7 @@ button {
 @keyframes heroFadeUp {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(14px);
   }
   to {
     opacity: 1;
@@ -571,17 +571,17 @@ button {
 }
 
 .hero-anim-heading {
-  animation: heroFadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: heroFadeUp 1100ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .hero-anim-desc {
   opacity: 0;
-  animation: heroFadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
+  animation: heroFadeUp 1100ms cubic-bezier(0.16, 1, 0.3, 1) 250ms forwards;
 }
 
 .hero-anim-btn {
   opacity: 0;
-  animation: heroFadeUp 600ms cubic-bezier(0.16, 1, 0.3, 1) 320ms forwards;
+  animation: heroFadeUp 1100ms cubic-bezier(0.16, 1, 0.3, 1) 450ms forwards;
 }
 
 .hero-heading {
@@ -622,27 +622,27 @@ button {
   padding: 0.85rem 1.75rem;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.95);
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.15);
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.08);
   cursor: pointer;
   text-decoration: none;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1),
-              background-color 250ms ease,
-              color 250ms ease;
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 300ms ease,
+              color 300ms ease;
 }
 
 .btn-hero-white:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
   background-color: #ffffff;
   color: #0f2744;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.22), 0 0 12px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.16), 0 2px 6px rgba(15, 23, 42, 0.08);
 }
 
 .btn-hero-white:active {
-  transform: translateY(0);
-  box-shadow: 0 3px 12px rgba(15, 23, 42, 0.18);
+  transform: translateY(0) scale(1);
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.14);
   outline: none;
 }
 
@@ -1094,8 +1094,8 @@ button {
 .service-card.revealed:hover,
 .service-card:hover {
   transform: translateY(-3px) scale(1.015);
-  box-shadow: 0 8px 24px rgba(156, 163, 175, 0.20), 0 2px 6px rgba(0, 0, 0, 0.04);
-  border-color: #E5E7EB;
+  box-shadow: 0 10px 25px -3px rgba(59, 130, 246, 0.18), 0 4px 10px rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.35);
   transition: transform 300ms ease-out, box-shadow 300ms ease-out, border-color 300ms ease-out;
 }
 
@@ -1179,12 +1179,21 @@ button {
   font-weight: 700;
   font-size: 0.92rem;
   border-radius: var(--radius-sm);
-  transition: var(--transition-fast);
+  border: 1px solid transparent;
+  transition: background-color 280ms ease, color 280ms ease, border-color 280ms ease;
+  cursor: pointer;
+}
+
+.service-card:hover .btn-card-action {
+  background-color: #1D4ED8;
+  color: #FFFFFF;
+  border-color: #1D4ED8;
 }
 
 .btn-card-action:hover {
-  background-color: var(--bg-subtle);
-  color: var(--primary-blue);
+  background-color: #1E40AF;
+  color: #FFFFFF;
+  border-color: #1E40AF;
 }
 
 /* Fictional Sample PAN Card Graphic */
@@ -1464,6 +1473,91 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.btn-modal-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  background-color: #16a34a;
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #16a34a;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+  transition: var(--transition-normal);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-modal-contact:hover {
+  background-color: #15803d;
+  border-color: #15803d;
+  color: #ffffff !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.35);
+}
+
+.btn-modal-contact span {
+  color: #ffffff !important;
+}
+
+.btn-modal-contact svg {
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  background: transparent !important;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.btn-modal-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #ffffff;
+  color: #dc2626 !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.35rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #ef4444;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: var(--transition-normal);
+  cursor: pointer;
+}
+
+.btn-modal-close:hover {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+  color: #b91c1c !important;
+}
+
+.btn-modal-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background-color: #16a34a;
+  color: #ffffff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1px solid #16a34a;
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
+  transition: var(--transition-normal);
+  cursor: pointer;
+}
+
+.btn-modal-save:hover {
+  background-color: #15803d;
+  border-color: #15803d;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
 }
 
 /* About Section */
@@ -1901,7 +1995,7 @@ button {
   justify-content: center;
   gap: 0.5rem;
   background-color: #22c55e;
-  color: #ffffff;
+  color: #ffffff !important;
   font-weight: 600;
   font-size: 1rem;
   padding: 0.85rem 1.75rem;
@@ -1912,12 +2006,20 @@ button {
   text-decoration: none;
 }
 
+.btn-contact-call span {
+  color: #ffffff !important;
+}
+
 .btn-contact-call:hover {
-  background-color: #16a34a;
-  border-color: #16a34a;
-  color: #ffffff;
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #ffffff !important;
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);
+}
+
+.btn-contact-call:hover span {
+  color: #ffffff !important;
 }
 
 .btn-contact-map {
@@ -2600,6 +2702,132 @@ button {
   border-bottom: 1px solid #fecaca;
 }
 
+/* Admin Office Status Floating Toast (Right Side) */
+.admin-status-toast {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 2000;
+  background-color: #1e293b;
+  color: #ffffff;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.22), 0 6px 12px -2px rgba(0, 0, 0, 0.15);
+  animation: toastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 440px;
+}
+
+@keyframes toastSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.admin-status-toast-content {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: #f8fafc;
+}
+
+.status-toast-icon {
+  color: #4ade80;
+  flex-shrink: 0;
+}
+
+.status-toast-close {
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 0.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: var(--transition-fast);
+  margin-left: 0.25rem;
+}
+
+.status-toast-close:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+/* Notice Interactive Summary Card */
+.admin-notice-summary-card {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  transition: var(--transition-fast);
+}
+
+.admin-notice-summary-card:hover {
+  border-color: #cbd5e1;
+}
+
+.notice-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+}
+
+.notice-badge-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.btn-toggle-notice-detail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  background-color: #eff6ff;
+  color: #2563eb;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: 1px solid #bfdbfe;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-toggle-notice-detail:hover {
+  background-color: #dbeafe;
+}
+
+.notice-expanded-content {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border-left: 3.5px solid #f59e0b;
+}
+
 .admin-main {
   margin-top: 2rem;
 }
@@ -2921,6 +3149,7 @@ button {
   flex-direction: column;
   justify-content: space-between;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  cursor: pointer;
   transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1),
               box-shadow 300ms cubic-bezier(0.16, 1, 0.3, 1),
               border-color 300ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -2947,10 +3176,6 @@ button {
   .admin-service-card:hover .admin-service-custom-icon,
   .admin-service-card:hover .admin-service-lucide-icon {
     transform: scale(1.07);
-  }
-
-  .admin-service-card:hover .admin-service-title {
-    color: var(--primary-blue);
   }
 }
 
@@ -3107,14 +3332,23 @@ button {
 }
 
 .btn-action-icon.edit {
-  background-color: var(--primary-light);
-  color: var(--primary-blue);
-  border: 1px solid var(--primary-border);
+  background-color: #FFFFFF;
+  color: #111827;
+  border: 2px solid #22C55E;
+}
+
+.btn-action-icon.edit svg {
+  color: #111827;
 }
 
 .btn-action-icon.edit:hover {
-  background-color: var(--primary-border);
-  color: var(--primary-hover);
+  background-color: #f0fdf4;
+  border-color: #16a34a;
+  color: #111827;
+}
+
+.btn-action-icon.edit:hover svg {
+  color: #111827;
 }
 
 .btn-action-icon.delete {

@@ -147,14 +147,14 @@ export default function ServiceDetails({ service, onClose, onContactClick }) {
 
         {/* Modal Footer */}
         <div className="modal-footer">
-          <button onClick={onClose} className="btn-secondary btn-sm">
+          <button onClick={onClose} className="btn-modal-close">
             बंद करा
           </button>
           
           <a
             href={`tel:${businessConfig.phoneRaw}`}
             onClick={handleContactAction}
-            className="btn-primary btn-sm"
+            className="btn-modal-contact"
           >
             <PhoneCall size={18} />
             <span>आमच्याशी संपर्क साधा</span>

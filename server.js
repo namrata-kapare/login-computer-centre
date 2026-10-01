@@ -265,7 +265,9 @@ app.post('/api/admin/services', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'मराठी नाव, इंग्रजी नाव आणि वर्ग (Category) आवश्यक आहे.' });
     }
 
-    const noteText = (typeof note === 'string' ? note : (typeof docNote === 'string' ? docNote : '')).trim();
+    const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश्यकता व प्रक्रिया सेवेनुसार बदलू शकते. अर्ज करण्यापूर्वी किंवा अधिक माहितीसाठी आमच्याशी थेट संपर्क साधा.";
+    const rawNote = (typeof note === 'string' ? note : (typeof docNote === 'string' ? docNote : '')).trim();
+    const noteText = rawNote || DEFAULT_SERVICE_NOTICE;
 
     if (getIsMongoConnected()) {
       const maxService = await Service.findOne().sort({ id: -1 });
@@ -283,7 +285,8 @@ app.post('/api/admin/services', authMiddleware, async (req, res) => {
         isActive: isActive !== false,
         icon: icon || 'FileText',
         note: noteText,
-        docNote: noteText
+        docNote: noteText,
+        availabilityMessage: noteText
       });
       return res.status(201).json(newService);
     } else {
@@ -301,7 +304,7 @@ app.post('/api/admin/services', authMiddleware, async (req, res) => {
         icon: icon || 'FileText',
         note: noteText,
         docNote: noteText,
-        availabilityMessage: "सेवेची सध्याची उपलब्धता जाणून घेण्यासाठी आमच्याशी संपर्क साधा."
+        availabilityMessage: noteText
       };
       memoryStore.services.push(newService);
       return res.status(201).json(newService);
