@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { businessConfig } from '../config/business';
-import { servicesData } from '../data/services';
+import { servicesData, serviceCategories } from '../data/services';
 import logoImg from '../assets/login logo1.jpeg';
 import * as Icons from 'lucide-react';
 import { getServiceCustomIcon } from '../utils/serviceIcons';
@@ -110,15 +110,24 @@ export default function AdminDashboard() {
     note: ''
   });
 
-  // Categories list
-  const categoryOptions = [
-    "प्रमाणपत्र व शासकीय सेवा",
-    "शेतकरी व जमीन संबंधित सेवा",
-    "ऑनलाइन शैक्षणिक सेवा",
-    "पॅन / आधार व ओळखपत्र सेवा",
-    "प्रिंटिंग, झेरॉक्स व डिजिटल सेवा",
-    "इतर ऑनलाइन सेवा"
-  ];
+  // Service categories state - initialized with existing categories + custom added categories
+  const defaultCategoryList = serviceCategories.filter(c => c !== 'सर्व सेवा');
+
+  const [categories, setCategories] = useState(() => {
+    try {
+      const saved = localStorage.getItem('preview_categories');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return Array.from(new Set([...defaultCategoryList, ...parsed]));
+        }
+      }
+    } catch (e) {}
+    return defaultCategoryList;
+  });
+
+  const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
+  const [newCategoryInput, setNewCategoryInput] = useState('');
 
   // Fetch initial data for frontend preview
   const loadData = () => {
@@ -266,6 +275,27 @@ export default function AdminDashboard() {
       customIcon: null,
       icon: 'FileText'
     }));
+  };
+
+  // Handle Add New Service Category
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+    const catName = newCategoryInput.trim();
+    if (!catName) {
+      showFeedback('error', 'कृपया वर्ग (Category) चे नाव टाका.');
+      return;
+    }
+    if (categories.some(c => c.toLowerCase() === catName.toLowerCase()) || catName === 'सर्व सेवा') {
+      showFeedback('error', 'हा वर्ग (Category) आधीपासून अस्तित्वात आहे.');
+      return;
+    }
+    const updated = [...categories, catName];
+    setCategories(updated);
+    localStorage.setItem('preview_categories', JSON.stringify(updated));
+    setSelectedCategory(catName);
+    setNewCategoryInput('');
+    setIsAddCategoryModalOpen(false);
+    showFeedback('success', `नवीन वर्ग '${catName}' यशस्वीरीत्या जोडला.`);
   };
 
   // Open Add Modal
@@ -766,13 +796,30 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
               <select 
                 className="category-select"
                 value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
+                onChange={(e) => {
+                  if (e.target.value === '__add_category__') {
+                    setIsAddCategoryModalOpen(true);
+                  } else {
+                    setSelectedCategory(e.target.value);
+                  }
+                }}
               >
                 <option value="सर्व सेवा">सर्व वर्ग (All Categories)</option>
-                {categoryOptions.map(cat => (
+                {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
+                <option value="__add_category__">➕ नवीन Category जोडा</option>
               </select>
+
+              <button 
+                type="button" 
+                onClick={() => setIsAddCategoryModalOpen(true)} 
+                className="btn-add-category"
+                title="नवीन Category जोडा"
+              >
+                <Plus size={16} />
+                <span>नवीन Category जोडा</span>
+              </button>
             </div>
 
             {/* Services List Table / Cards */}
@@ -999,7 +1046,7 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                   onChange={(e) => setServiceFormData({ ...serviceFormData, category: e.target.value })}
                   required
                 >
-                  {categoryOptions.map(cat => (
+                  {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
@@ -1158,7 +1205,7 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                   onChange={(e) => setServiceFormData({ ...serviceFormData, category: e.target.value })}
                   required
                 >
-                  {categoryOptions.map(cat => (
+                  {categories.map(cat => (
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
@@ -1281,6 +1328,61 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                 </button>
                 <button type="submit" className="btn-modal-save">
                   बदल जतन करा
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* -------------------------------------------------------------
+          MODAL: ADD NEW CATEGORY
+          ------------------------------------------------------------- */}
+      {isAddCategoryModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsAddCategoryModalOpen(false)} role="dialog" aria-modal="true">
+          <div className="modal-content" style={{ maxWidth: '460px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-title-box">
+                <h3 className="modal-marathi-title">नवीन Category जोडा</h3>
+                <span className="modal-english-title">Add Service Category</span>
+              </div>
+              <button 
+                type="button"
+                onClick={() => setIsAddCategoryModalOpen(false)} 
+                className="modal-close-btn"
+                aria-label="Close"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddCategory} className="modal-body admin-form">
+              <div className="form-group">
+                <label className="form-label">नवीन Category चे नाव *</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="उदा. सरकारी योजना सेवा"
+                  value={newCategoryInput}
+                  onChange={(e) => setNewCategoryInput(e.target.value)}
+                  required
+                  autoFocus
+                />
+                <span style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.35rem', display: 'block' }}>
+                  टीप: ही Category सेव्ह केल्यावर Category लिस्टमध्ये व Frontend वरील Filter मध्ये दिसेल.
+                </span>
+              </div>
+
+              <div className="modal-footer" style={{ paddingLeft: 0, paddingRight: 0, marginTop: '1.25rem' }}>
+                <button 
+                  type="button" 
+                  onClick={() => setIsAddCategoryModalOpen(false)} 
+                  className="btn-modal-close"
+                >
+                  रद्द करा
+                </button>
+                <button type="submit" className="btn-modal-save">
+                  Category सेव्ह करा
                 </button>
               </div>
             </form>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ShieldCheck, Zap, Users, Monitor } from 'lucide-react';
+import { ShieldCheck, Zap, Compass } from 'lucide-react';
 import { businessConfig } from '../config/business';
 
 export default function About() {
@@ -35,9 +35,8 @@ export default function About() {
         <div className="about-grid">
           {/* Left Text Column */}
           <div className={`about-text-content ${isRevealed ? 'about-content-revealed' : 'about-content-initial'}`}>
-            <div className="section-badge">आमच्याबद्दल (About Us)</div>
             <h2 className="section-title about-heading">
-              विश्वासार्ह व जलद संगणक सेवा
+              आमच्याबद्दल
             </h2>
             <p>
               <strong>{businessConfig.businessName}</strong> हे जेजुरी व परिसरातील नागरिकांसाठी सर्व प्रकारच्या शासकीय, निमशासकीय व डिजिटल सेवा एकाच छताखाली पुरवणारे प्रमुख केंद्र आहे.
@@ -48,58 +47,38 @@ export default function About() {
             <p>
               कोणत्याही कामासाठी लागणारी अचूक कागदपत्रे आणि योग्य माहिती देऊन आम्ही आपले काम वेळेत पूर्ण करण्यासाठी कटिबद्ध आहोत.
             </p>
-
-            <div className="about-trust-pills">
-              <span className="about-pill">✓ १००% अचूक व पारदर्शक</span>
-              <span className="about-pill">✓ गतिमान अर्ज प्रक्रिया</span>
-              <span className="about-pill">✓ सुलभ मार्गदर्शन</span>
-            </div>
           </div>
 
-          {/* Right Visual Information Card */}
-          <div className={`about-visual-card ${isRevealed ? 'about-card-revealed' : 'about-card-initial'}`}>
-            <div className="about-card-header">
-              <div className="about-card-badge">
-                <Monitor size={15} />
-                <span>{businessConfig.shortName}</span>
-              </div>
-              <span className="about-card-tag">डिजिटल व ई-सुविधा केंद्र</span>
-            </div>
-
-            <div className="about-features-list">
-              <div className="about-feature-box about-feature-1">
-                <div className="about-feature-icon">
-                  <ShieldCheck size={22} />
+          {/* Right Side - Exactly 3 Wide Feature Cards */}
+          <div className={`about-cards-container ${isRevealed ? 'about-cards-revealed' : 'about-cards-initial'}`}>
+            {/* Card 1: पारदर्शक व विश्वासार्ह */}
+            <div className="about-feature-card about-feature-card-1">
+              <div className="about-feature-card-inner">
+                <div className="about-feature-icon-box">
+                  <ShieldCheck size={26} strokeWidth={2.2} />
                 </div>
-                <div className="about-feature-body">
-                  <h4>पारदर्शक व विश्वासार्ह</h4>
-                  <p>योग्य मार्गदर्शन व अचूक माहितीसह कामे पूर्ण.</p>
-                </div>
-              </div>
-
-              <div className="about-feature-box about-feature-2">
-                <div className="about-feature-icon">
-                  <Zap size={22} />
-                </div>
-                <div className="about-feature-body">
-                  <h4>तत्पर व वेगवान सेवा</h4>
-                  <p>नागरिकांच्या वेळेची बचत व गतिमान अर्ज प्रक्रिया.</p>
-                </div>
-              </div>
-
-              <div className="about-feature-box about-feature-3">
-                <div className="about-feature-icon">
-                  <Users size={22} />
-                </div>
-                <div className="about-feature-body">
-                  <h4>चांगले मार्गदर्शन</h4>
-                  <p>ज्येष्ठ नागरिक, विद्यार्थी व शेतकऱ्यांसाठी सविस्तर मदत.</p>
-                </div>
+                <h3 className="about-feature-title">पारदर्शक व विश्वासार्ह</h3>
               </div>
             </div>
 
-            <div className="about-card-footer">
-              <span>📍 {businessConfig.location} — नागरिकांच्या सेवेसाठी सदैव तत्पर</span>
+            {/* Card 2: तत्पर व वेगवान सेवा */}
+            <div className="about-feature-card about-feature-card-2">
+              <div className="about-feature-card-inner">
+                <div className="about-feature-icon-box">
+                  <Zap size={26} strokeWidth={2.2} />
+                </div>
+                <h3 className="about-feature-title">तत्पर व वेगवान सेवा</h3>
+              </div>
+            </div>
+
+            {/* Card 3: अचूक मार्गदर्शन */}
+            <div className="about-feature-card about-feature-card-3">
+              <div className="about-feature-card-inner">
+                <div className="about-feature-icon-box">
+                  <Compass size={26} strokeWidth={2.2} />
+                </div>
+                <h3 className="about-feature-title">अचूक मार्गदर्शन</h3>
+              </div>
             </div>
           </div>
         </div>
@@ -107,3 +86,4 @@ export default function About() {
     </section>
   );
 }
+
