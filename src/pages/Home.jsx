@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import OfficeTiming from '../components/OfficeTiming';
@@ -11,6 +11,27 @@ import Footer from '../components/Footer';
 export default function Home() {
   const [selectedService, setSelectedService] = useState(null);
   const [activeSection, setActiveSection] = useState('home');
+
+  useEffect(() => {
+    const sections = ['home', 'services', 'about', 'contact'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.25, rootMargin: '-70px 0px -40% 0px' }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const scrollToSection = (sectionId) => {
     setActiveSection(sectionId);

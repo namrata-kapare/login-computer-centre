@@ -545,7 +545,7 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
             TAB 1: OFFICE STATUS & TIMING
             ------------------------------------------------------------- */}
         {activeTab === 'status_timing' && (
-          <div className="admin-card-section">
+          <div key="status_timing" className="admin-card-section">
             <h2 className="admin-section-title">
               <Clock size={22} style={{ color: 'var(--primary-blue)' }} />
               <span>आजची कार्यालयीन स्थिती व वेळ व्यवस्थापन</span>
@@ -633,7 +633,7 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
             TAB 2: SPECIAL NOTICE
             ------------------------------------------------------------- */}
         {activeTab === 'notice' && (
-          <div className="admin-card-section">
+          <div key="notice" className="admin-card-section">
             <h2 className="admin-section-title">
               <AlertCircle size={22} style={{ color: 'var(--primary-blue)' }} />
               <span>विशेष सूचना व्यवस्थापन</span>
@@ -761,9 +761,9 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
             TAB 3: SERVICES MANAGEMENT
             ------------------------------------------------------------- */}
         {activeTab === 'services' && (
-          <div className="admin-card-section">
+          <div key="services" className="admin-card-section">
             <div className="services-admin-header">
-              <div>
+              <div className="services-header-info">
                 <h2 className="admin-section-title" style={{ marginBottom: '0.2rem' }}>
                   <Layers size={22} style={{ color: 'var(--primary-blue)' }} />
                   <span>सेवा व्यवस्थापन (Service Management)</span>
@@ -775,15 +775,16 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                 </p>
               </div>
 
-              <button onClick={openAddModal} className="btn-add-service">
+              <button onClick={openAddModal} className="btn-add-service desktop-add-service-btn">
                 <Plus size={18} strokeWidth={2.4} />
                 <span>नवीन सेवा जोडा</span>
               </button>
             </div>
 
-            {/* Filter Bar */}
+            {/* Filter & Action Controls Bar */}
             <div className="admin-filter-bar">
-              <div className="search-input-box">
+              {/* Search Box */}
+              <div className="search-input-box admin-ctrl-search">
                 <Search size={18} />
                 <input
                   type="text"
@@ -793,8 +794,9 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                 />
               </div>
 
+              {/* Category Select */}
               <select 
-                className="category-select"
+                className="category-select admin-ctrl-category"
                 value={selectedCategory}
                 onChange={(e) => {
                   if (e.target.value === '__add_category__') {
@@ -804,21 +806,32 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                   }
                 }}
               >
-                <option value="सर्व सेवा">सर्व वर्ग (All Categories)</option>
+                <option value="सर्व सेवा">सर्व Category</option>
                 {categories.map(cat => (
                   <option key={cat} value={cat}>{cat}</option>
                 ))}
                 <option value="__add_category__">➕ नवीन Category जोडा</option>
               </select>
 
+              {/* Add Category Button */}
               <button 
                 type="button" 
                 onClick={() => setIsAddCategoryModalOpen(true)} 
-                className="btn-add-category"
+                className="btn-add-category admin-ctrl-add-category"
                 title="नवीन Category जोडा"
               >
                 <Plus size={16} />
                 <span>नवीन Category जोडा</span>
+              </button>
+
+              {/* Mobile-Only Add Service Button */}
+              <button 
+                type="button"
+                onClick={openAddModal} 
+                className="btn-add-service mobile-add-service-btn admin-ctrl-add-service"
+              >
+                <Plus size={18} strokeWidth={2.4} />
+                <span>नवीन सेवा जोडा</span>
               </button>
             </div>
 
@@ -919,7 +932,7 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
             TAB 4: CONTACT INFORMATION MANAGEMENT
             ------------------------------------------------------------- */}
         {activeTab === 'contact' && (
-          <div className="admin-card-section">
+          <div key="contact" className="admin-card-section">
             <h2 className="admin-section-title">
               <Settings size={22} style={{ color: 'var(--primary-blue)' }} />
               <span>संपर्क माहिती व्यवस्थापन</span>

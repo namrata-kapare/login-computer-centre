@@ -120,93 +120,64 @@ export default function Navbar({ onNavigate, activeSection }) {
         </div>
       </div>
 
-      {/* Menu Backdrop Overlay (Mobile/Tablet) */}
+      {/* FULL-SCREEN WHITE MOBILE NAVIGATION OVERLAY */}
       <div 
-        className={`navbar-drawer-overlay ${menuOpen ? 'open' : ''}`}
-        onClick={() => setMenuOpen(false)}
+        className={`mobile-fullscreen-overlay ${menuOpen ? 'open' : ''}`}
+        aria-label="Mobile Navigation"
         aria-hidden={!menuOpen}
-      />
-
-      {/* Slide Navigation Menu (Mobile/Tablet) */}
-      <aside 
-        className={`navbar-drawer ${menuOpen ? 'open' : ''}`}
-        aria-label="Website Navigation Menu"
       >
-        <div className="navbar-drawer-header">
-          <div className="navbar-drawer-brand">
-            <img 
-              src={logoImg} 
-              alt="लॉगिन कॉम्प्युटर सेंटर" 
-              className="drawer-logo-img" 
-            />
-            <span className="drawer-brand-name">लॉगिन कॉम्प्युटर सेंटर</span>
-          </div>
+        <div className="mobile-fullscreen-header">
           <button 
-            className="navbar-drawer-close-btn"
+            className="mobile-fullscreen-close-btn"
             onClick={() => setMenuOpen(false)}
             aria-label="मेनू बंद करा"
             title="Close Menu"
           >
-            <X size={20} />
+            <X size={24} />
           </button>
         </div>
 
-        <nav className="navbar-drawer-nav">
-          <ul className="navbar-drawer-links">
+        <nav className="mobile-fullscreen-nav" aria-label="Mobile Navigation Menu">
+          <ul className="mobile-fullscreen-links">
             <li>
               <a 
                 href="#home" 
-                className={`navbar-drawer-link ${activeSection === 'home' ? 'active' : ''}`}
+                className={`mobile-fullscreen-link ${activeSection === 'home' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('home'); }}
               >
-                <Home size={18} />
-                <span>Home</span>
+                <span className="link-text">Home</span>
               </a>
             </li>
             <li>
               <a 
                 href="#services" 
-                className={`navbar-drawer-link ${activeSection === 'services' ? 'active' : ''}`}
+                className={`mobile-fullscreen-link ${activeSection === 'services' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('services'); }}
               >
-                <Layers size={18} />
-                <span>Services</span>
+                <span className="link-text">Services</span>
               </a>
             </li>
             <li>
               <a 
                 href="#about" 
-                className={`navbar-drawer-link ${activeSection === 'about' ? 'active' : ''}`}
+                className={`mobile-fullscreen-link ${activeSection === 'about' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('about'); }}
               >
-                <Info size={18} />
-                <span>About</span>
+                <span className="link-text">About</span>
               </a>
             </li>
             <li>
               <a 
                 href="#contact" 
-                className={`navbar-drawer-link ${activeSection === 'contact' ? 'active' : ''}`}
+                className={`mobile-fullscreen-link ${activeSection === 'contact' ? 'active' : ''}`}
                 onClick={(e) => { e.preventDefault(); handleNavClick('contact'); }}
               >
-                <PhoneCall size={18} />
-                <span>Contact</span>
+                <span className="link-text">Contact</span>
               </a>
-            </li>
-            <li className="navbar-drawer-divider" />
-            <li>
-              <Link 
-                to="/admin/login" 
-                className="navbar-drawer-link admin-link"
-                onClick={() => setMenuOpen(false)}
-              >
-                <ShieldCheck size={18} />
-                <span>Admin Login</span>
-              </Link>
             </li>
           </ul>
         </nav>
-      </aside>
+      </div>
     </header>
   );
 }

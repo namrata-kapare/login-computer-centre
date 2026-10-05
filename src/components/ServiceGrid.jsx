@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import ServiceCard from './ServiceCard';
@@ -9,6 +9,32 @@ import { SearchX } from 'lucide-react';
 export default function ServiceGrid({ onSelectService }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('सर्व सेवा');
+  const [isSectionRevealed, setIsSectionRevealed] = useState(false);
+  const headerRef = useRef(null);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+
+    if (!('IntersectionObserver' in window)) {
+      setIsSectionRevealed(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsSectionRevealed(true);
+          observer.unobserve(el);
+        }
+      },
+      { threshold: 0.35, rootMargin: '0px 0px -80px 0px' }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const [services, setServices] = useState(() => {
     try {
       const saved = localStorage.getItem('preview_services');
@@ -68,12 +94,12 @@ export default function ServiceGrid({ onSelectService }) {
   }, [services, searchQuery, selectedCategory]);
 
   return (
-    <section id="services" className="services-section">
+    <section id="services" className={`services-section ${isSectionRevealed ? 'services-revealed' : 'services-hidden'}`}>
       <div className="container">
         {/* Section Heading */}
-        <div className="section-header">
-          <h2 className="section-title">आमच्याकडे उपलब्ध सेवा</h2>
-          <p className="section-subtitle">
+        <div ref={headerRef} className="section-header">
+          <h2 className="section-title services-heading-anim">आमच्याकडे उपलब्ध सेवा</h2>
+          <p className="section-subtitle services-subtitle-anim">
             आपल्या आवश्यकतेनुसार सेवा निवडा आणि लागणारी सर्व कागदपत्रे जाणून घ्या.
           </p>
         </div>
