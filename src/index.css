@@ -2365,11 +2365,32 @@ button {
     display: flex !important;
   }
 
-  /* CRITICAL MOBILE UPDATE: Vertical stacking for contact cards on mobile */
+  /* CRITICAL MOBILE UPDATE: Compact, vertical stacking for contact cards on mobile */
+  .contact-section {
+    padding: 2.25rem 0 1.75rem !important;
+  }
+
+  .contact-section .section-header {
+    margin-bottom: 1.25rem !important;
+  }
+
+  .contact-section .section-title {
+    font-size: clamp(1.35rem, 5vw, 1.75rem) !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .contact-section .section-subtitle {
+    font-size: 0.85rem !important;
+  }
+
   .contact-cards-grid {
     grid-template-columns: 1fr !important;
-    gap: 0.8rem !important;
-    margin-bottom: 1.5rem !important;
+    gap: 0.875rem !important;
+    margin-bottom: 1.25rem !important;
+    max-width: 420px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
   }
 
   /* Mobile Feature Bar responsiveness */
@@ -2401,40 +2422,65 @@ button {
   }
 
   .contact-info-card {
-    padding: 6px 6px 28px 6px !important;
-    border-radius: 16px !important;
+    padding: 3px 3px 10px 3px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+    transition: transform 200ms ease, box-shadow 200ms ease !important;
+  }
+
+  .contact-info-card:active {
+    transform: scale(0.985) !important;
   }
 
   .contact-card-inner {
-    padding: 1.25rem 0.85rem 1rem !important;
-    border-radius: 10px !important;
+    padding: 0.55rem 0.75rem 0.45rem !important;
+    border-radius: 9px !important;
+    min-height: auto !important;
   }
 
-  .contact-icon-bubble {
-    width: 38px !important;
-    height: 38px !important;
-    margin: 0 auto 0.4rem !important;
+  .contact-icon-wrapper-clean {
+    width: 30px !important;
+    height: 30px !important;
+    margin: 0 auto 0.2rem !important;
   }
 
-  .contact-icon-bubble svg {
-    width: 18px !important;
-    height: 18px !important;
+  .contact-custom-icon {
+    width: 24px !important;
+    height: 24px !important;
   }
 
   .contact-card-title {
-    font-size: 0.88rem !important;
-    margin-bottom: 0.2rem !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 0.15rem !important;
     font-weight: 700 !important;
+    line-height: 1.25 !important;
   }
 
   .contact-card-text {
-    font-size: 0.82rem !important;
-    line-height: 1.35 !important;
+    font-size: 0.8rem !important;
+    line-height: 1.25 !important;
     word-break: break-word !important;
+    margin: 0 !important;
   }
 
-  .contact-card-text a {
-    font-size: 0.95rem !important;
+  .contact-card-address .contact-card-text {
+    line-height: 1.25 !important;
+  }
+
+  .contact-card-mobile .contact-card-text a {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    display: inline-block !important;
+  }
+
+  .contact-card-email .contact-card-text {
+    font-size: 0.82rem !important;
+    margin-top: 0.15rem !important;
+    word-break: break-all !important;
+  }
+
+  .contact-card-email .contact-card-text a {
+    font-size: 0.82rem !important;
   }
 
   /* Item 7: Mobile Contact — Action Button on ONE line */
@@ -2442,7 +2488,8 @@ button {
     flex-direction: column !important;
     align-items: center !important;
     width: 100% !important;
-    gap: 0.75rem !important;
+    gap: 0.55rem !important;
+    margin-bottom: 0.5rem !important;
   }
 
   .btn-contact-call,
@@ -2450,8 +2497,8 @@ button {
     width: 100% !important;
     max-width: 360px !important;
     white-space: nowrap !important;
-    font-size: clamp(0.84rem, 3.8vw, 0.96rem) !important;
-    padding: 0.75rem 1rem !important;
+    font-size: clamp(0.84rem, 3.8vw, 0.95rem) !important;
+    padding: 0.65rem 1rem !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
