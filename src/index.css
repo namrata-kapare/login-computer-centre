@@ -184,6 +184,14 @@ button {
   border-radius: var(--radius-sm);
 }
 
+.desktop-only {
+  display: inline-block;
+}
+
+.mobile-only {
+  display: none;
+}
+
 /* Navbar (Logo + Name on LEFT, 3-Line Hamburger Menu on RIGHT) */
 .navbar {
   position: sticky;
@@ -2337,20 +2345,44 @@ button {
                 transform 1600ms cubic-bezier(0.42, 0, 0.58, 1) 0ms !important;
   }
 
+  .about-cards-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.65rem !important;
+    width: 100% !important;
+    max-width: 330px !important;
+    margin: 0 auto !important;
+  }
+
   .about-feature-card {
-    padding: 5px 5px 16px 5px !important;
-    border-radius: 14px !important;
+    width: 100% !important;
+    max-width: 330px !important;
+    padding: 3px 3px 8px 3px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04) !important;
   }
 
   .about-feature-card-inner {
-    padding: 1rem 1rem 0.9rem !important;
+    padding: 0.55rem 0.75rem 0.5rem !important;
     border-radius: 9px !important;
-    min-height: 96px !important;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  .about-feature-icon-box {
+    margin-bottom: 0.2rem !important;
+  }
+
+  .about-feature-icon-box svg {
+    width: 22px !important;
+    height: 22px !important;
   }
 
   .about-feature-title {
-    font-size: 1.12rem !important;
-    font-weight: 800 !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
   }
 
   .desktop-only {
@@ -2385,9 +2417,9 @@ button {
 
   .contact-cards-grid {
     grid-template-columns: 1fr !important;
-    gap: 0.875rem !important;
-    margin-bottom: 1.25rem !important;
-    max-width: 420px !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1rem !important;
+    max-width: 330px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     width: 100% !important;
@@ -2422,7 +2454,7 @@ button {
   }
 
   .contact-info-card {
-    padding: 3px 3px 10px 3px !important;
+    padding: 3px 3px 8px 3px !important;
     border-radius: 12px !important;
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
     transition: transform 200ms ease, box-shadow 200ms ease !important;
@@ -2483,30 +2515,280 @@ button {
     font-size: 0.82rem !important;
   }
 
-  /* Item 7: Mobile Contact — Action Button on ONE line */
+  /* Mobile Contact — Action Buttons Side-by-Side on the same horizontal line */
   .contact-actions {
-    flex-direction: column !important;
-    align-items: center !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: center !important;
     width: 100% !important;
-    gap: 0.55rem !important;
+    max-width: 330px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    gap: 0.5rem !important;
     margin-bottom: 0.5rem !important;
+    box-sizing: border-box !important;
   }
 
-  .btn-contact-call,
-  .btn-contact-map {
-    width: 100% !important;
-    max-width: 360px !important;
-    white-space: nowrap !important;
-    font-size: clamp(0.84rem, 3.8vw, 0.95rem) !important;
-    padding: 0.65rem 1rem !important;
+  .btn-contact-call {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    font-size: clamp(0.74rem, 3.2vw, 0.86rem) !important;
+    padding: 0.55rem 0.75rem !important;
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
     box-sizing: border-box !important;
+    gap: 0.35rem !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  .btn-contact-map {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    font-size: clamp(0.74rem, 3.2vw, 0.86rem) !important;
+    padding: 0.55rem 0.75rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    gap: 0.35rem !important;
+    text-align: center !important;
+    white-space: nowrap !important;
+  }
+
+  .btn-contact-action-icon {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
+    display: inline-block !important;
   }
 
   .btn-contact-map span,
   .btn-contact-call span {
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: inline-block !important;
+  }
+
+  /* Mobile Service Details Modal: Compact, structured, and fits phone screen width */
+  .modal-overlay {
+    padding: 0.65rem 0.5rem !important;
+    align-items: center !important;
+  }
+
+  .modal-content {
+    max-width: 100% !important;
+    max-height: 88vh !important;
+    border-radius: 14px !important;
+    box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.22) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .modal-header {
+    padding: 0.75rem 0.85rem 0.65rem !important;
+    gap: 0.55rem !important;
+    align-items: center !important;
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background: #ffffff !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  .modal-header-icon {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .modal-header-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+
+  .modal-title-box {
+    min-width: 0 !important;
+    flex: 1 !important;
+  }
+
+  .modal-marathi-title {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.1rem !important;
+    word-break: break-word !important;
+  }
+
+  .modal-english-title {
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    display: block !important;
+  }
+
+  /* Top-Right Cross Close Button on Mobile */
+  .modal-close-btn {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background-color: #f1f5f9 !important;
+    color: #475569 !important;
+    border: 1px solid #e2e8f0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    -webkit-tap-highlight-color: transparent !important;
+    transition: background-color 150ms ease, transform 150ms ease !important;
+  }
+
+  .modal-close-btn:active {
+    background-color: #e2e8f0 !important;
+    transform: scale(0.92) !important;
+  }
+
+  .modal-close-btn svg {
+    width: 18px !important;
+    height: 18px !important;
+    stroke-width: 2.2 !important;
+  }
+
+  .modal-body {
+    padding: 0.85rem 0.85rem !important;
+  }
+
+  .modal-section {
+    margin-bottom: 0.85rem !important;
+  }
+
+  .modal-section:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .modal-section-heading {
+    font-size: 0.92rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.4rem !important;
+    gap: 0.4rem !important;
+  }
+
+  .modal-section-heading svg {
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .modal-purpose-text {
+    font-size: 0.84rem !important;
+    line-height: 1.45 !important;
+    padding: 0.6rem 0.75rem !important;
+    border-radius: 8px !important;
+    border-left-width: 3px !important;
+  }
+
+  .doc-list {
+    gap: 0.4rem !important;
+  }
+
+  .doc-item {
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.82rem !important;
+    line-height: 1.35 !important;
+    gap: 0.5rem !important;
+    border-radius: 6px !important;
+  }
+
+  .doc-check-icon {
+    width: 15px !important;
+    height: 15px !important;
+    margin-top: 0.1rem !important;
+  }
+
+  .doc-item.doc-sub-item {
+    margin-left: 0.75rem !important;
+    padding: 0.35rem 0.55rem !important;
+    font-size: 0.78rem !important;
+  }
+
+  .doc-red-note {
+    margin-top: 0.55rem !important;
+    padding: 0.5rem 0.7rem !important;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+    border-left-width: 3px !important;
+    border-radius: 6px !important;
+  }
+
+  .notice-box {
+    padding: 0.6rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+    gap: 0.45rem !important;
+    border-radius: 8px !important;
+    border-left-width: 3px !important;
+  }
+
+  .notice-box svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .sample-pan-graphic {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .modal-footer {
+    padding: 0.65rem 0.85rem !important;
+    gap: 0.45rem !important;
+    flex-direction: row !important;
+    background-color: #f8fafc !important;
+  }
+
+  .btn-modal-close {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    padding: 0.55rem 0.85rem !important;
+    font-size: 0.82rem !important;
+    border-radius: 8px !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+  }
+
+  .btn-modal-contact {
+    flex: 1 1 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 0.55rem 0.7rem !important;
+    font-size: 0.82rem !important;
+    border-radius: 8px !important;
+    gap: 0.35rem !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+  }
+
+  .btn-modal-contact svg {
+    width: 15px !important;
+    height: 15px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .btn-modal-contact span {
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
     white-space: nowrap !important;
   }
 
@@ -2548,14 +2830,6 @@ button {
 
   .search-box {
     padding: 0.45rem 0.5rem 0.45rem 0.75rem !important;
-  }
-
-  .modal-footer {
-    flex-direction: column;
-  }
-  
-  .modal-footer button, .modal-footer a {
-    width: 100%;
   }
 }
 
