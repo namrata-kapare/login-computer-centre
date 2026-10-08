@@ -112,8 +112,7 @@ export default function Contact() {
             className="btn-secondary btn-contact-map"
           >
             <img src={locationIcon} alt="" className="btn-contact-action-icon" />
-            <span className="desktop-only">नकाशावर शोधा (Find on Map)</span>
-            <span className="mobile-only">नकाशावर शोधा</span>
+            <span>नकाशावर शोधा (Find on Map)</span>
           </a>
         </div>
       </div>
