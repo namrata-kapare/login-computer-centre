@@ -1,4 +1,8 @@
 // API Service Helper for Login Computer Centre Public & Admin API
+import { db } from '../firebase';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { businessConfig } from '../config/business';
+import { servicesData } from '../data/services';
 
 const API_BASE = '/api';
 
@@ -25,35 +29,119 @@ function getAuthHeaders() {
   };
 }
 
+// Helper to provide reliable local fallback for business information
+function getLocalBusinessFallback() {
+  try {
+    const saved = localStorage.getItem('preview_business_info');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed && typeof parsed === 'object') {
+        return parsed;
+      }
+    }
+  } catch (e) {}
+
+  return {
+    businessNameMarathi: businessConfig.businessNameMarathi,
+    phone: businessConfig.phone,
+    email: businessConfig.email,
+    address: businessConfig.address,
+    openingTime: businessConfig.timing?.openingTime || 'सकाळी ९:००',
+    closingTime: businessConfig.timing?.closingTime || 'रात्री ८:००',
+    todayTimingText: businessConfig.timing?.todayTimingText || 'सकाळी ९:०० ते रात्री ८:००',
+    isOpen: true,
+    specialNotice: businessConfig.timing?.specialNotice || ''
+  };
+}
+
+// Helper to provide reliable local fallback for services
+function getLocalServicesFallback(showAll = false) {
+  try {
+    const saved = localStorage.getItem('preview_services');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return showAll ? parsed : parsed.filter(s => s.isActive !== false);
+      }
+    }
+  } catch (e) {}
+
+  return showAll ? servicesData : servicesData.filter(s => s.isActive !== false);
+}
+
 // ------------------------------------------------------------------
-// PUBLIC API CALLS
+// PUBLIC READ CALLS (Firestore with Multi-Tier Fallback)
 // ------------------------------------------------------------------
 
 export async function getBusinessInfo() {
+  // 1. Try reading from Firebase Firestore (settings/businessInfo)
+  try {
+    const docRef = doc(db, 'settings', 'businessInfo');
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      const data = docSnap.data();
+      if (data && typeof data === 'object') {
+        return data;
+      }
+    }
+  } catch (firestoreErr) {
+    console.warn('Firestore getBusinessInfo read warning (falling back):', firestoreErr);
+  }
+
+  // 2. Try Node.js backend if server is active
   try {
     const res = await fetch(`${API_BASE}/business`);
     const data = await parseJsonResponse(res);
-    if (!res.ok || !data) return null;
-    return data;
-  } catch (err) {
-    console.error('Error fetching business info:', err);
-    return null;
+    if (res.ok && data) return data;
+  } catch (apiErr) {
+    // Backend server may not be running in frontend-only mode
   }
+
+  // 3. Graceful fallback to localStorage or businessConfig
+  return getLocalBusinessFallback();
 }
 
 export async function getServices(showAll = false) {
+  // 1. Try reading from Firebase Firestore ('services' collection)
+  try {
+    const colRef = collection(db, 'services');
+    const snapshot = await getDocs(colRef);
+    if (!snapshot.empty) {
+      const list = snapshot.docs.map(d => {
+        const data = d.data();
+        return {
+          id: data.id || d.id,
+          ...data
+        };
+      });
+
+      // Sort by order/id if available
+      list.sort((a, b) => (a.order || 0) - (b.order || 0) || (a.id || 0) - (b.id || 0));
+      const filtered = showAll ? list : list.filter(s => s.isActive !== false);
+      if (filtered.length > 0) {
+        return filtered;
+      }
+    }
+  } catch (firestoreErr) {
+    console.warn('Firestore getServices read warning (falling back):', firestoreErr);
+  }
+
+  // 2. Try Node.js backend if server is active
   try {
     const url = showAll ? `${API_BASE}/services?all=true` : `${API_BASE}/services`;
     const res = await fetch(url, {
       headers: showAll ? getAuthHeaders() : {}
     });
     const data = await parseJsonResponse(res);
-    if (!res.ok || !Array.isArray(data)) return [];
-    return data;
-  } catch (err) {
-    console.error('Error fetching services:', err);
-    return [];
+    if (res.ok && Array.isArray(data) && data.length > 0) {
+      return data;
+    }
+  } catch (apiErr) {
+    // Backend server may not be running in frontend-only mode
   }
+
+  // 3. Graceful fallback to localStorage or servicesData
+  return getLocalServicesFallback(showAll);
 }
 
 // ------------------------------------------------------------------

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User, KeyRound, Eye, EyeOff, AlertCircle, ArrowLeft, Info } from 'lucide-react';
+import { auth } from '../firebase';
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
 export default function AdminLogin() {
   const [username, setUsername] = useState('');
@@ -11,35 +13,58 @@ export default function AdminLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If already logged in in demo preview mode, redirect to /admin/dashboard
-    const isLoggedIn = localStorage.getItem('admin_preview_logged_in') === 'true';
-    if (isLoggedIn) {
-      navigate('/admin/dashboard', { replace: true });
-    }
+    // If already logged in with Firebase Auth, redirect to /admin/dashboard
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        navigate('/admin/dashboard', { replace: true });
+      }
+    });
+    return () => unsubscribe();
   }, [navigate]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!username.trim() || !password.trim()) {
-      setError('Please enter username and password');
+      setError('कृपया ई-मेल/वापरकर्तानाव आणि पासवर्ड टाका.');
       return;
     }
 
     setLoading(true);
 
-    // Frontend-only demo authentication check
-    setTimeout(() => {
-      if (username.trim() === 'Login' && password === 'Login@123') {
-        localStorage.setItem('admin_preview_logged_in', 'true');
-        localStorage.setItem('adminToken', 'demo_preview_token');
-        navigate('/admin/dashboard');
-      } else {
-        setError('Invalid username or password');
-        setLoading(false);
+    try {
+      const trimmedInput = username.trim();
+      // Support direct email or format username as email
+      const emailToUse = trimmedInput.includes('@')
+        ? trimmedInput
+        : `${trimmedInput.toLowerCase()}@loginjejuri.com`;
+
+      const userCredential = await signInWithEmailAndPassword(auth, emailToUse, password);
+      const token = await userCredential.user.getIdToken();
+      localStorage.setItem('adminToken', token);
+      localStorage.setItem('admin_preview_logged_in', 'true');
+      navigate('/admin/dashboard');
+    } catch (err) {
+      console.error('Firebase Auth Login Error:', err);
+      let errorMsg = 'लॉगिन अयशस्वी झाले. कृपया पुन्हा प्रयत्न करा.';
+      if (
+        err.code === 'auth/invalid-credential' ||
+        err.code === 'auth/user-not-found' ||
+        err.code === 'auth/wrong-password'
+      ) {
+        errorMsg = 'ई-मेल किंवा पासवर्ड चुकीचा आहे.';
+      } else if (err.code === 'auth/invalid-email') {
+        errorMsg = 'कृपया वैध ई-मेल पत्ता प्रविष्ट करा (उदा. admin@loginjejuri.com).';
+      } else if (err.code === 'auth/too-many-requests') {
+        errorMsg = 'खूप जास्त अयशस्वी प्रयत्न झाले आहेत. कृपया थोड्या वेळाने प्रयत्न करा.';
+      } else if (err.code === 'auth/network-request-failed') {
+        errorMsg = 'सर्व्हरशी संपर्क होऊ शकला नाही. इंटरनेट कनेक्शन तपासा.';
       }
-    }, 200);
+      setError(errorMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -75,11 +100,11 @@ export default function AdminLogin() {
             </div>
             <h1 className="admin-title">Admin Login</h1>
             <p className="admin-subtitle">
-              वेबसाइट व्यवस्थापनासाठी लॉगिन करा (Frontend Preview Mode)
+              वेबसाइट व्यवस्थापनासाठी सुरक्षित लॉगिन करा
             </p>
           </div>
 
-          {/* Demo Credentials Notice Banner */}
+          {/* Firebase Credentials Notice Banner */}
           <div style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -94,8 +119,8 @@ export default function AdminLogin() {
           }}>
             <Info size={18} style={{ flexShrink: 0, marginTop: '2px' }} />
             <div>
-              <strong style={{ display: 'block', marginBottom: '2px' }}>Demo Preview Credentials:</strong>
-              <span>Username: <strong>Login</strong> &nbsp;|&nbsp; Password: <strong>Login@123</strong></span>
+              <strong style={{ display: 'block', marginBottom: '2px' }}>Firebase Admin Login:</strong>
+              <span>Firebase Console मध्ये तयार केलेला तुमचा ॲडमिन ई-मेल आणि पासवर्ड वापरून लॉगिन करा.</span>
             </div>
           </div>
 
@@ -123,12 +148,12 @@ export default function AdminLogin() {
             <div className="form-group">
               <label className="form-label">
                 <User size={16} />
-                <span>Username (वापरकर्तानाव)</span>
+                <span>ई-मेल किंवा वापरकर्तानाव (Email / Username)</span>
               </label>
               <input
                 type="text"
                 className="form-input"
-                placeholder="Enter Username (e.g. Login)"
+                placeholder="उदा. admin@loginjejuri.com"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 required

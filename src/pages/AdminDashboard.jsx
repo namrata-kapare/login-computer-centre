@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db, auth } from '../firebase';
+import { signOut } from 'firebase/auth';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { getBusinessInfo, getServices } from '../services/api';
 import { businessConfig } from '../config/business';
 import { servicesData, serviceCategories } from '../data/services';
 import logoImg from '../assets/login logo1.jpeg';
@@ -129,38 +133,33 @@ export default function AdminDashboard() {
   const [isAddCategoryModalOpen, setIsAddCategoryModalOpen] = useState(false);
   const [newCategoryInput, setNewCategoryInput] = useState('');
 
-  // Fetch initial data for frontend preview
-  const loadData = () => {
+  // Fetch initial data from Firestore with fallback
+  const loadData = async () => {
     try {
-      const savedBusiness = localStorage.getItem('preview_business_info');
-      const bData = savedBusiness ? JSON.parse(savedBusiness) : {
-        businessNameMarathi: businessConfig.businessNameMarathi,
-        phone: businessConfig.phone,
-        email: businessConfig.email,
-        address: businessConfig.address,
-        openingTime: businessConfig.timing?.openingTime || 'सकाळी ९:००',
-        closingTime: businessConfig.timing?.closingTime || 'रात्री ८:००',
-        todayTimingText: businessConfig.timing?.todayTimingText || 'सकाळी ९:०० ते रात्री ८:००',
-        isOpen: true,
-        specialNotice: businessConfig.timing?.specialNotice || ''
-      };
+      // 1. Load Business Info from Firestore (or fallback)
+      const bData = await getBusinessInfo();
+      if (bData) {
+        setBusinessInfo(bData);
+        setOpeningTimeInput(bData.openingTime || 'सकाळी ९:००');
+        setClosingTimeInput(bData.closingTime || 'रात्री ८:००');
+        setSpecialNoticeInput(bData.specialNotice || '');
+        setContactForm({
+          businessNameMarathi: bData.businessNameMarathi || businessConfig.businessNameMarathi || '',
+          phone: bData.phone || businessConfig.phone || '',
+          email: bData.email || businessConfig.email || '',
+          address: bData.address || businessConfig.address || ''
+        });
+        localStorage.setItem('preview_business_info', JSON.stringify(bData));
+      }
 
-      setBusinessInfo(bData);
-      setOpeningTimeInput(bData.openingTime || 'सकाळी ९:००');
-      setClosingTimeInput(bData.closingTime || 'रात्री ८:००');
-      setSpecialNoticeInput(bData.specialNotice || '');
-      setContactForm({
-        businessNameMarathi: bData.businessNameMarathi || businessConfig.businessNameMarathi || '',
-        phone: bData.phone || businessConfig.phone || '',
-        email: bData.email || businessConfig.email || '',
-        address: bData.address || businessConfig.address || ''
-      });
-
-      const savedServices = localStorage.getItem('preview_services');
-      const sData = savedServices ? JSON.parse(savedServices) : servicesData;
-      setServices((Array.isArray(sData) && sData.length > 0) ? sData : servicesData);
+      // 2. Load Services from Firestore (or fallback)
+      const sData = await getServices(true);
+      if (Array.isArray(sData) && sData.length > 0) {
+        setServices(sData);
+        localStorage.setItem('preview_services', JSON.stringify(sData));
+      }
     } catch (err) {
-      console.warn('Frontend preview data load:', err);
+      console.warn('Dashboard data load warning:', err);
     }
   };
 
@@ -178,68 +177,115 @@ export default function AdminDashboard() {
     }, 4000);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('admin_preview_logged_in');
-    localStorage.removeItem('adminToken');
-    navigate('/admin/login');
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.warn('Firebase signOut error:', err);
+    } finally {
+      localStorage.removeItem('admin_preview_logged_in');
+      localStorage.removeItem('adminToken');
+      navigate('/admin/login');
+    }
   };
 
-  // 1. Status Update Toggle with Confirmation Toast
-  const handleToggleStatus = (newStatus) => {
+  // 1. Status Update Toggle with Firestore persistence
+  const handleToggleStatus = async (newStatus) => {
     const updated = { ...businessInfo, isOpen: newStatus };
-    setBusinessInfo(updated);
-    localStorage.setItem('preview_business_info', JSON.stringify(updated));
-    showFeedback('success', 'कार्यालयाची स्थिती यशस्वीरित्या अपडेट झाली.');
+    try {
+      await setDoc(doc(db, 'settings', 'businessInfo'), { isOpen: newStatus }, { merge: true });
+      setBusinessInfo(updated);
+      localStorage.setItem('preview_business_info', JSON.stringify(updated));
+      showFeedback('success', 'कार्यालयाची स्थिती यशस्वीरित्या अपडेट झाली.');
+    } catch (err) {
+      console.error('Firestore status update error:', err);
+      showFeedback('error', 'स्थिती अपडेट करताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
-  // 2. Timing Update
-  const handleTimingSubmit = (e) => {
+  // 2. Timing Update with Firestore persistence
+  const handleTimingSubmit = async (e) => {
     e.preventDefault();
     const todayTimingText = `${openingTimeInput} ते ${closingTimeInput}`;
-    const updated = {
-      ...businessInfo,
+    const timingPayload = {
       openingTime: openingTimeInput,
       closingTime: closingTimeInput,
       todayTimingText
     };
-    setBusinessInfo(updated);
-    localStorage.setItem('preview_business_info', JSON.stringify(updated));
-    showFeedback('success', 'कार्यालयीन वेळ यशस्वीरीत्या सेव्ह केली.');
+    const updated = {
+      ...businessInfo,
+      ...timingPayload
+    };
+    try {
+      await setDoc(doc(db, 'settings', 'businessInfo'), timingPayload, { merge: true });
+      setBusinessInfo(updated);
+      localStorage.setItem('preview_business_info', JSON.stringify(updated));
+      showFeedback('success', 'कार्यालयीन वेळ यशस्वीरीत्या सेव्ह केली.');
+    } catch (err) {
+      console.error('Firestore timing update error:', err);
+      showFeedback('error', 'वेळ अपडेट करताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
-  // 3. Notice Update & Clear
-  const handleNoticeSubmit = (e) => {
+  // 3. Notice Update & Clear with Firestore persistence
+  const handleNoticeSubmit = async (e) => {
     e.preventDefault();
-    const updated = { ...businessInfo, specialNotice: specialNoticeInput.trim() };
-    setBusinessInfo(updated);
-    localStorage.setItem('preview_business_info', JSON.stringify(updated));
-    showFeedback('success', 'विशेष सूचना यशस्वीरीत्या अपडेट केली.');
+    const noticeText = specialNoticeInput.trim();
+    const updated = { ...businessInfo, specialNotice: noticeText };
+    try {
+      await setDoc(doc(db, 'settings', 'businessInfo'), { specialNotice: noticeText }, { merge: true });
+      setBusinessInfo(updated);
+      localStorage.setItem('preview_business_info', JSON.stringify(updated));
+      showFeedback('success', 'विशेष सूचना यशस्वीरीत्या अपडेट केली.');
+    } catch (err) {
+      console.error('Firestore notice update error:', err);
+      showFeedback('error', 'सूचना अपडेट करताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
-  const handleClearNotice = () => {
-    setSpecialNoticeInput('');
+  const handleClearNotice = async () => {
     const updated = { ...businessInfo, specialNotice: '' };
-    setBusinessInfo(updated);
-    localStorage.setItem('preview_business_info', JSON.stringify(updated));
-    showFeedback('success', 'विशेष सूचना काढून टाकली.');
+    try {
+      await setDoc(doc(db, 'settings', 'businessInfo'), { specialNotice: '' }, { merge: true });
+      setSpecialNoticeInput('');
+      setBusinessInfo(updated);
+      localStorage.setItem('preview_business_info', JSON.stringify(updated));
+      showFeedback('success', 'विशेष सूचना काढून टाकली.');
+    } catch (err) {
+      console.error('Firestore clear notice error:', err);
+      showFeedback('error', 'सूचना काढून टाकताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
-  // 4. Contact Update
-  const handleContactSubmit = (e) => {
+  // 4. Contact Update with Firestore persistence
+  const handleContactSubmit = async (e) => {
     e.preventDefault();
     const updated = { ...businessInfo, ...contactForm };
-    setBusinessInfo(updated);
-    localStorage.setItem('preview_business_info', JSON.stringify(updated));
-    showFeedback('success', 'संपर्क माहिती यशस्वीरीत्या अपडेट केली.');
+    try {
+      await setDoc(doc(db, 'settings', 'businessInfo'), contactForm, { merge: true });
+      setBusinessInfo(updated);
+      localStorage.setItem('preview_business_info', JSON.stringify(updated));
+      showFeedback('success', 'संपर्क माहिती यशस्वीरीत्या अपडेट केली.');
+    } catch (err) {
+      console.error('Firestore contact update error:', err);
+      showFeedback('error', 'संपर्क माहिती अपडेट करताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
-  // 5. Toggle Service Active (ON/OFF)
-  const handleToggleServiceActive = (service) => {
+  // 5. Toggle Service Active (ON/OFF) with Firestore persistence
+  const handleToggleServiceActive = async (service) => {
     const newActive = !service.isActive;
-    const updated = services.map(s => s.id === service.id ? { ...s, isActive: newActive } : s);
-    setServices(updated);
-    localStorage.setItem('preview_services', JSON.stringify(updated));
-    showFeedback('success', `${service.marathiName} सेवा ${newActive ? 'सुरू (Active)' : 'बंद (Inactive)'} केली.`);
+    const docId = String(service.id);
+    try {
+      await setDoc(doc(db, 'services', docId), { isActive: newActive }, { merge: true });
+      const updated = services.map(s => s.id === service.id ? { ...s, isActive: newActive } : s);
+      setServices(updated);
+      localStorage.setItem('preview_services', JSON.stringify(updated));
+      showFeedback('success', `${service.marathiName} सेवा ${newActive ? 'सुरू (Active)' : 'बंद (Inactive)'} केली.`);
+    } catch (err) {
+      console.error('Firestore toggle service active error:', err);
+      showFeedback('error', 'सेवेची स्थिती बदलताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
   // Handle Logo/Icon Upload
@@ -337,8 +383,8 @@ export default function AdminDashboard() {
 
 const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश्यकता व प्रक्रिया सेवेनुसार बदलू शकते. अर्ज करण्यापूर्वी किंवा अधिक माहितीसाठी आमच्याशी थेट संपर्क साधा.";
 
-  // Save Add Service
-  const handleSaveAddService = (e) => {
+  // Save Add Service with Firestore persistence
+  const handleSaveAddService = async (e) => {
     e.preventDefault();
     const docsArray = serviceFormData.documentsText
       .split('\n')
@@ -355,8 +401,9 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
       ? serviceFormData.note.trim() 
       : DEFAULT_SERVICE_NOTICE;
 
+    const newId = Date.now();
     const newService = {
-      id: Date.now(),
+      id: newId,
       marathiName: serviceFormData.marathiName,
       englishName: serviceFormData.englishName,
       category: serviceFormData.category,
@@ -372,15 +419,21 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
       availabilityMessage: savedNote
     };
 
-    const updated = [newService, ...services];
-    setServices(updated);
-    localStorage.setItem('preview_services', JSON.stringify(updated));
-    setIsAddModalOpen(false);
-    showFeedback('success', 'नवीन सेवा यशस्वीरीत्या जोडली.');
+    try {
+      await setDoc(doc(db, 'services', String(newId)), newService);
+      const updated = [newService, ...services];
+      setServices(updated);
+      localStorage.setItem('preview_services', JSON.stringify(updated));
+      setIsAddModalOpen(false);
+      showFeedback('success', 'नवीन सेवा यशस्वीरीत्या जोडली.');
+    } catch (err) {
+      console.error('Firestore add service error:', err);
+      showFeedback('error', 'नवीन सेवा जोडताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
-  // Save Edit Service
-  const handleSaveEditService = (e) => {
+  // Save Edit Service with Firestore persistence
+  const handleSaveEditService = async (e) => {
     e.preventDefault();
     if (!editingService) return;
 
@@ -417,21 +470,35 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
       availabilityMessage: savedNote
     };
 
-    const updated = services.map(s => s.id === editingService.id ? updatedService : s);
-    setServices(updated);
-    localStorage.setItem('preview_services', JSON.stringify(updated));
-    setEditingService(null);
-    showFeedback('success', 'सेवा माहिती अपडेट केली.');
+    const docId = String(editingService.id);
+    try {
+      await setDoc(doc(db, 'services', docId), updatedService, { merge: true });
+      const updated = services.map(s => s.id === editingService.id ? updatedService : s);
+      setServices(updated);
+      localStorage.setItem('preview_services', JSON.stringify(updated));
+      setEditingService(null);
+      showFeedback('success', 'सेवा माहिती अपडेट केली.');
+    } catch (err) {
+      console.error('Firestore edit service error:', err);
+      showFeedback('error', 'सेवा अपडेट करताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
-  // Confirm Delete Service
-  const handleConfirmDelete = () => {
+  // Confirm Delete Service with Firestore persistence
+  const handleConfirmDelete = async () => {
     if (!deletingServiceId) return;
-    const updated = services.filter(s => s.id !== deletingServiceId);
-    setServices(updated);
-    localStorage.setItem('preview_services', JSON.stringify(updated));
-    setDeletingServiceId(null);
-    showFeedback('success', 'सेवा यशस्वीरीत्या हटवली.');
+    const docId = String(deletingServiceId);
+    try {
+      await deleteDoc(doc(db, 'services', docId));
+      const updated = services.filter(s => s.id !== deletingServiceId);
+      setServices(updated);
+      localStorage.setItem('preview_services', JSON.stringify(updated));
+      setDeletingServiceId(null);
+      showFeedback('success', 'सेवा यशस्वीरीत्या हटवली.');
+    } catch (err) {
+      console.error('Firestore delete service error:', err);
+      showFeedback('error', 'सेवा हटवताना त्रुटी आली. (Firestore Error)');
+    }
   };
 
   // Filtered Services List

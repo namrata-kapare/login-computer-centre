@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { businessConfig } from '../config/business';
+import { getBusinessInfo } from '../services/api';
 import phoneIcon from '../assets/contact-phone.png';
 import phoneWhiteIcon from '../assets/contact-phone-white.png';
 import emailIcon from '../assets/contact-email.png';
@@ -8,6 +9,32 @@ import locationIcon from '../assets/contact-location.png';
 export default function Contact() {
   const [isRevealed, setIsRevealed] = useState(false);
   const sectionRef = useRef(null);
+
+  // Initialize contact state with businessConfig for instant fallback while Firestore loads
+  const [contactInfo, setContactInfo] = useState({
+    shortName: businessConfig.shortName,
+    address: businessConfig.address,
+    phone: businessConfig.phone,
+    phoneRaw: businessConfig.phoneRaw,
+    email: businessConfig.email
+  });
+
+  useEffect(() => {
+    async function loadContact() {
+      const data = await getBusinessInfo();
+      if (data) {
+        setContactInfo(prev => ({
+          ...prev,
+          shortName: data.businessNameMarathi || prev.shortName,
+          address: data.address || prev.address,
+          phone: data.phone || prev.phone,
+          phoneRaw: data.phone ? data.phone.replace(/[^0-9+]/g, '') : prev.phoneRaw,
+          email: data.email || prev.email
+        }));
+      }
+    }
+    loadContact();
+  }, []);
 
   useEffect(() => {
     const el = sectionRef.current;
@@ -58,10 +85,10 @@ export default function Contact() {
                 <strong>पत्ता</strong> (<strong>Address</strong>)
               </h3>
               <p className="contact-card-text" style={{ fontWeight: 'normal', color: 'var(--text-dark)' }}>
-                {businessConfig.shortName}
+                {contactInfo.shortName}
               </p>
               <p className="contact-card-text" style={{ marginTop: '0.25rem', color: 'var(--text-muted)', fontWeight: 'normal' }}>
-                {businessConfig.address}
+                {contactInfo.address}
               </p>
             </div>
           </div>
@@ -75,10 +102,10 @@ export default function Contact() {
               <h3 className="contact-card-title">मोबाईल (Mobile)</h3>
               <p className="contact-card-text">
                 <a
-                  href={`tel:${businessConfig.phoneRaw}`}
+                  href={`tel:${contactInfo.phoneRaw}`}
                   style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--primary-blue)' }}
                 >
-                  {businessConfig.phone}
+                  {contactInfo.phone}
                 </a>
               </p>
             </div>
@@ -92,7 +119,7 @@ export default function Contact() {
               </div>
               <h3 className="contact-card-title">ई-मेल (Email)</h3>
               <p className="contact-card-text" style={{ fontSize: '0.95rem', color: 'var(--primary-blue)', marginTop: '0.5rem' }}>
-                <a href={`mailto:${businessConfig.email}`}>{businessConfig.email}</a>
+                <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
               </p>
             </div>
           </div>
@@ -100,7 +127,7 @@ export default function Contact() {
 
         {/* Action Buttons */}
         <div className="contact-actions" style={{ marginBottom: '1rem' }}>
-          <a href={`tel:${businessConfig.phoneRaw}`} className="btn-contact-call">
+          <a href={`tel:${contactInfo.phoneRaw}`} className="btn-contact-call">
             <img src={phoneWhiteIcon} alt="" className="btn-contact-action-icon" />
             <span>कॉल करा</span>
           </a>
