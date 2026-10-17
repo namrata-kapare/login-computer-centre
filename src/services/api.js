@@ -54,6 +54,40 @@ function getLocalBusinessFallback() {
   };
 }
 
+// Helper to merge Firestore/remote services with original services without duplicates
+export function mergeServicesWithOriginals(customServices = []) {
+  if (!Array.isArray(customServices) || customServices.length === 0) {
+    return [...servicesData];
+  }
+
+  const customMap = new Map();
+  customServices.forEach(s => {
+    if (s && s.id != null) {
+      customMap.set(String(s.id), s);
+    }
+  });
+
+  // 1. Merge updates into original services while preserving exact original data and order
+  const mergedBase = servicesData
+    .map(base => {
+      const idKey = String(base.id);
+      if (customMap.has(idKey)) {
+        const custom = customMap.get(idKey);
+        customMap.delete(idKey);
+        if (custom.isDeleted) return null;
+        return { ...base, ...custom };
+      }
+      return base;
+    })
+    .filter(Boolean);
+
+  // 2. Remaining items in customMap are newly created services (e.g. from Firestore/Admin Dashboard)
+  const newServices = Array.from(customMap.values()).filter(s => !s.isDeleted);
+
+  // Keep both: new Firestore services and all original cards in their exact order without duplicates
+  return [...newServices, ...mergedBase];
+}
+
 // Helper to provide reliable local fallback for services
 function getLocalServicesFallback(showAll = false) {
   try {
@@ -61,7 +95,8 @@ function getLocalServicesFallback(showAll = false) {
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        return showAll ? parsed : parsed.filter(s => s.isActive !== false);
+        const merged = mergeServicesWithOriginals(parsed);
+        return showAll ? merged : merged.filter(s => s.isActive !== false);
       }
     }
   } catch (e) {}
@@ -115,9 +150,9 @@ export async function getServices(showAll = false) {
         };
       });
 
-      // Sort by order/id if available
-      list.sort((a, b) => (a.order || 0) - (b.order || 0) || (a.id || 0) - (b.id || 0));
-      const filtered = showAll ? list : list.filter(s => s.isActive !== false);
+      // Merge Firestore documents with all original services
+      const mergedList = mergeServicesWithOriginals(list);
+      const filtered = showAll ? mergedList : mergedList.filter(s => s.isActive !== false);
       if (filtered.length > 0) {
         return filtered;
       }
@@ -134,7 +169,8 @@ export async function getServices(showAll = false) {
     });
     const data = await parseJsonResponse(res);
     if (res.ok && Array.isArray(data) && data.length > 0) {
-      return data;
+      const mergedList = mergeServicesWithOriginals(data);
+      return showAll ? mergedList : mergedList.filter(s => s.isActive !== false);
     }
   } catch (apiErr) {
     // Backend server may not be running in frontend-only mode

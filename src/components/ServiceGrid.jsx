@@ -3,7 +3,7 @@ import SearchBar from './SearchBar';
 import CategoryFilter from './CategoryFilter';
 import ServiceCard from './ServiceCard';
 import { servicesData as fallbackServices } from '../data/services';
-import { getServices } from '../services/api';
+import { getServices, mergeServicesWithOriginals } from '../services/api';
 import { SearchX } from 'lucide-react';
 
 export default function ServiceGrid({ onSelectService }) {
@@ -41,7 +41,8 @@ export default function ServiceGrid({ onSelectService }) {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed.filter(s => s.isActive !== false);
+          const merged = mergeServicesWithOriginals(parsed);
+          return merged.filter(s => s.isActive !== false);
         }
       }
     } catch (e) {}
@@ -55,7 +56,8 @@ export default function ServiceGrid({ onSelectService }) {
         if (saved) {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            setServices(parsed.filter(s => s.isActive !== false));
+            const merged = mergeServicesWithOriginals(parsed);
+            setServices(merged.filter(s => s.isActive !== false));
           }
         }
       } catch (e) {}

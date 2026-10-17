@@ -3595,7 +3595,7 @@ button {
 .admin-service-card {
   background: #ffffff;
   border-radius: 14px;
-  border: 1px solid #111827;
+  border: 1px solid #000000;
   padding: 1.35rem;
   display: flex;
   flex-direction: column;
@@ -3632,16 +3632,16 @@ button {
 
 .admin-service-card.inactive-card {
   background: #f8fafc;
-  border: 1px dashed #374151;
-  opacity: 0.75;
+  border: 1px solid #000000;
+  opacity: 0.85;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .admin-service-card.inactive-card:hover {
     transform: translateY(-3px);
-    border-color: #111827;
+    border-color: #000000;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
-    opacity: 0.9;
+    opacity: 0.95;
   }
 }
 
@@ -3916,113 +3916,130 @@ button {
   }
 
   /* --------------------------------------------------------------------------
-     Item 1: Office Open/Close Status & Timing Cards (Compact & Proportional)
+     Item 1: Office Open/Close Status & Timing Cards (Enhanced Spacing on Mobile)
      -------------------------------------------------------------------------- */
   .admin-grid-2 {
     grid-template-columns: 1fr !important;
-    gap: 0.75rem !important;
+    gap: 1.25rem !important;
   }
 
   .admin-panel-card {
-    padding: 0.85rem 0.75rem !important;
-    border-radius: 12px !important;
+    padding: 1.15rem 1rem !important;
+    border-radius: 14px !important;
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03) !important;
   }
 
   .panel-card-heading {
-    font-size: 0.95rem !important;
-    margin-bottom: 0.2rem !important;
+    font-size: 1.02rem !important;
+    font-weight: 700 !important;
+    color: #0f172a !important;
+    margin-bottom: 0.35rem !important;
   }
 
   .panel-card-desc {
-    font-size: 0.78rem !important;
-    margin-bottom: 0.65rem !important;
-    line-height: 1.35 !important;
+    font-size: 0.84rem !important;
+    color: #64748b !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.45 !important;
   }
 
   .status-current-badge {
-    font-size: 0.82rem !important;
-    margin-bottom: 0.65rem !important;
-    gap: 0.4rem !important;
+    font-size: 0.86rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 1rem !important;
+    padding: 0.65rem 0.85rem !important;
+    background-color: #f8fafc !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
   }
 
   .badge-open, .badge-closed {
-    padding: 0.2rem 0.55rem !important;
-    font-size: 0.76rem !important;
+    padding: 0.28rem 0.75rem !important;
+    font-size: 0.82rem !important;
+    font-weight: 700 !important;
+    border-radius: var(--radius-full) !important;
   }
 
   .status-toggle-actions {
-    gap: 0.45rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.65rem !important;
+    width: 100% !important;
   }
 
   .btn-status-toggle {
-    padding: 0.48rem 0.65rem !important;
-    font-size: 0.8rem !important;
-    border-radius: 8px !important;
-    gap: 0.35rem !important;
+    width: 100% !important;
+    padding: 0.65rem 1rem !important;
+    font-size: 0.88rem !important;
+    border-radius: 10px !important;
+    gap: 0.5rem !important;
+    justify-content: center !important;
   }
 
   .btn-status-toggle svg {
-    width: 16px !important;
-    height: 16px !important;
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .admin-form {
-    gap: 0.65rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.95rem !important;
+    width: 100% !important;
   }
 
   .form-group {
-    gap: 0.25rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.4rem !important;
+    width: 100% !important;
   }
 
   .form-label {
-    font-size: 0.8rem !important;
+    font-size: 0.86rem !important;
+    font-weight: 600 !important;
+    color: #334155 !important;
   }
 
   .form-input {
-    padding: 0.45rem 0.65rem !important;
-    font-size: 0.85rem !important;
-    border-radius: 8px !important;
+    padding: 0.62rem 0.85rem !important;
+    font-size: 0.9rem !important;
+    border-radius: 9px !important;
+    border: 1px solid #cbd5e1 !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
   }
 
   .btn-primary-action {
-    padding: 0.48rem 0.95rem !important;
-    font-size: 0.84rem !important;
-    border-radius: 8px !important;
+    width: 100% !important;
+    padding: 0.7rem 1.25rem !important;
+    font-size: 0.9rem !important;
+    border-radius: 10px !important;
+    justify-content: center !important;
+    margin-top: 0.25rem !important;
   }
 
   .btn-danger-outline {
-    padding: 0.48rem 0.95rem !important;
-    font-size: 0.84rem !important;
-    border-radius: 8px !important;
+    width: 100% !important;
+    padding: 0.65rem 1rem !important;
+    font-size: 0.86rem !important;
+    border-radius: 10px !important;
+    justify-content: center !important;
   }
 
   /* --------------------------------------------------------------------------
-     Item 2: Special Notice Card (Compact & Balanced Proportions)
-     -------------------------------------------------------------------------- */
-  .admin-notice-summary-card {
-    padding: 0.75rem 0.85rem !important;
-    margin-bottom: 0.75rem !important;
-    border-radius: 12px !important;
-  }
-
-  .notice-card-header {
-    gap: 0.45rem !important;
-  }
-
-  .form-textarea {
-    padding: 0.5rem 0.65rem !important;
-    font-size: 0.85rem !important;
-    border-radius: 8px !important;
-    min-height: 65px !important;
-  }
-
-  /* --------------------------------------------------------------------------
-     Item 3 & 5: Service Management Controls - Exact Mobile Sequence & Width
+     Item 2: Service Management Controls - Exact Mobile Sequence
      Sequence:
-     1st: नवीन Category जोडा
-     2nd: सर्व Category
+     1st: नवीन सेवा जोडा
+     2nd: नवीन Category जोडा
      3rd: सेवा शोधा search bar
-     4th: नवीन सेवा जोडा
+     4th: सर्व Category filter
      -------------------------------------------------------------------------- */
   .services-admin-header {
     flex-direction: column !important;
@@ -4036,124 +4053,90 @@ button {
     display: none !important;
   }
 
-  .mobile-add-service-btn {
-    display: inline-flex !important;
-    order: 4 !important;
-    width: 100% !important;
-    justify-content: center !important;
-    padding: 0.52rem 0.95rem !important;
-    font-size: 0.86rem !important;
-    box-sizing: border-box !important;
-  }
-
   .admin-filter-bar {
     display: flex !important;
     flex-direction: column !important;
-    gap: 0.55rem !important;
+    gap: 0.65rem !important;
     width: 100% !important;
     margin-bottom: 1.15rem !important;
   }
 
-  /* 1st: नवीन Category जोडा */
-  .admin-ctrl-add-category {
+  /* 1st: नवीन सेवा जोडा */
+  .mobile-add-service-btn,
+  .admin-ctrl-add-service {
+    display: inline-flex !important;
     order: 1 !important;
     width: 100% !important;
     justify-content: center !important;
-    padding: 0.52rem 0.95rem !important;
-    font-size: 0.86rem !important;
+    padding: 0.62rem 1rem !important;
+    font-size: 0.88rem !important;
     box-sizing: border-box !important;
+    border-radius: 10px !important;
   }
 
-  /* 2nd: सर्व Category */
-  .admin-ctrl-category {
+  /* Remove only the “नवीन कॅटेगरी जोडा” button on mobile */
+  .admin-ctrl-add-category {
+    display: none !important;
+  }
+
+  /* 2nd: सेवा शोधा search bar */
+  .admin-ctrl-search {
     order: 2 !important;
     width: 100% !important;
     max-width: 100% !important;
-    padding: 0.5rem 0.75rem !important;
-    font-size: 0.86rem !important;
+    min-width: 0 !important;
+    padding: 0.52rem 0.85rem !important;
+    font-size: 0.88rem !important;
     box-sizing: border-box !important;
+    border-radius: 10px !important;
   }
 
-  /* 3rd: सेवा शोधा search bar */
-  .admin-ctrl-search {
+  /* 3rd: सर्व Category filter */
+  .admin-ctrl-category {
     order: 3 !important;
     width: 100% !important;
     max-width: 100% !important;
-    min-width: 0 !important;
-    padding: 0.45rem 0.75rem !important;
-    font-size: 0.86rem !important;
+    padding: 0.58rem 0.85rem !important;
+    font-size: 0.88rem !important;
     box-sizing: border-box !important;
+    border-radius: 10px !important;
   }
 
   /* --------------------------------------------------------------------------
-     Item 4: Mobile Service Cards (2-column x 2-row Square-like Cards)
-     Shows ONLY: Icon, Name, Category, Active status, Edit, Delete
+     Item 3: Mobile Service Cards (Solid Black Borders & Clean Marathi-Only Names)
      -------------------------------------------------------------------------- */
   .admin-services-grid {
     display: grid !important;
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.55rem !important;
+    gap: 0.65rem !important;
     width: 100% !important;
   }
 
   .admin-service-card {
     padding: 0.65rem 0.55rem !important;
     border-radius: 12px !important;
+    border: 1px solid #000000 !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: space-between !important;
-    min-height: 148px !important;
+    min-height: 140px !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
   }
 
-  .admin-card-top {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 0.35rem !important;
-    margin-bottom: 0.35rem !important;
-    width: 100% !important;
+  .admin-service-card.inactive-card {
+    border: 1px solid #000000 !important;
+    background: #f8fafc !important;
   }
 
-  .admin-card-top > div {
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.45rem !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .admin-service-icon-box {
-    width: 32px !important;
-    height: 32px !important;
-    border-radius: 8px !important;
-    flex-shrink: 0 !important;
-  }
-
-  .admin-service-title {
-    font-size: 0.82rem !important;
-    font-weight: 700 !important;
-    line-height: 1.25 !important;
-    margin: 0 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
-  }
-
+  /* Hide English service names on mobile view only (kept on desktop) */
   .admin-service-eng {
     display: none !important;
   }
 
+  /* Hide category labels on mobile view only (kept on desktop) */
   .admin-category-badge {
-    font-size: 0.65rem !important;
-    padding: 0.15rem 0.45rem !important;
-    border-radius: 6px !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
+    display: none !important;
   }
 
   /* No long description or extra content on mobile service card */

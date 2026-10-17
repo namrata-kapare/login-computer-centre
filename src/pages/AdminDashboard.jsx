@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db, auth } from '../firebase';
-import { signOut } from 'firebase/auth';
+import { signOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
-import { getBusinessInfo, getServices } from '../services/api';
+import { getBusinessInfo, getServices, mergeServicesWithOriginals } from '../services/api';
 import { businessConfig } from '../config/business';
 import { servicesData, serviceCategories } from '../data/services';
 import logoImg from '../assets/login logo1.jpeg';
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
       const saved = localStorage.getItem('preview_services');
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) return mergeServicesWithOriginals(parsed);
       }
     } catch (e) {}
     return servicesData;
@@ -73,18 +73,17 @@ export default function AdminDashboard() {
 
   // UI state
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(auth.currentUser);
+  const [modalError, setModalError] = useState('');
+  const [savingService, setSavingService] = useState(false);
   const [feedback, setFeedback] = useState({ type: '', message: '' });
   const [statusToast, setStatusToast] = useState(null);
   const toastTimerRef = useRef(null);
-  const [showNoticeDetails, setShowNoticeDetails] = useState(false);
   const [selectedDetailService, setSelectedDetailService] = useState(null);
 
   // Timing form
   const [openingTimeInput, setOpeningTimeInput] = useState('सकाळी ९:००');
   const [closingTimeInput, setClosingTimeInput] = useState('रात्री ८:००');
-
-  // Notice form
-  const [specialNoticeInput, setSpecialNoticeInput] = useState('');
 
   // Contact form
   const [contactForm, setContactForm] = useState({
@@ -142,7 +141,6 @@ export default function AdminDashboard() {
         setBusinessInfo(bData);
         setOpeningTimeInput(bData.openingTime || 'सकाळी ९:००');
         setClosingTimeInput(bData.closingTime || 'रात्री ८:००');
-        setSpecialNoticeInput(bData.specialNotice || '');
         setContactForm({
           businessNameMarathi: bData.businessNameMarathi || businessConfig.businessNameMarathi || '',
           phone: bData.phone || businessConfig.phone || '',
@@ -165,13 +163,32 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     loadData();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
+    return () => unsubscribe();
   }, []);
+
+  // Ensure Firebase Auth state is resolved before executing protected writes
+  const ensureAuthUser = async () => {
+    if (typeof auth.authStateReady === 'function') {
+      await auth.authStateReady();
+    } else if (!auth.currentUser) {
+      await new Promise((resolve) => {
+        const unsubscribe = onAuthStateChanged(auth, () => {
+          unsubscribe();
+          resolve();
+        });
+      });
+    }
+    return auth.currentUser;
+  };
 
   const showFeedback = (type, message) => {
     if (toastTimerRef.current) {
       clearTimeout(toastTimerRef.current);
     }
-    setStatusToast(message);
+    setStatusToast({ type: type || 'success', message });
     toastTimerRef.current = setTimeout(() => {
       setStatusToast(null);
     }, 4000);
@@ -227,35 +244,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // 3. Notice Update & Clear with Firestore persistence
-  const handleNoticeSubmit = async (e) => {
-    e.preventDefault();
-    const noticeText = specialNoticeInput.trim();
-    const updated = { ...businessInfo, specialNotice: noticeText };
-    try {
-      await setDoc(doc(db, 'settings', 'businessInfo'), { specialNotice: noticeText }, { merge: true });
-      setBusinessInfo(updated);
-      localStorage.setItem('preview_business_info', JSON.stringify(updated));
-      showFeedback('success', 'विशेष सूचना यशस्वीरीत्या अपडेट केली.');
-    } catch (err) {
-      console.error('Firestore notice update error:', err);
-      showFeedback('error', 'सूचना अपडेट करताना त्रुटी आली. (Firestore Error)');
-    }
-  };
-
-  const handleClearNotice = async () => {
-    const updated = { ...businessInfo, specialNotice: '' };
-    try {
-      await setDoc(doc(db, 'settings', 'businessInfo'), { specialNotice: '' }, { merge: true });
-      setSpecialNoticeInput('');
-      setBusinessInfo(updated);
-      localStorage.setItem('preview_business_info', JSON.stringify(updated));
-      showFeedback('success', 'विशेष सूचना काढून टाकली.');
-    } catch (err) {
-      console.error('Firestore clear notice error:', err);
-      showFeedback('error', 'सूचना काढून टाकताना त्रुटी आली. (Firestore Error)');
-    }
-  };
 
   // 4. Contact Update with Firestore persistence
   const handleContactSubmit = async (e) => {
@@ -274,6 +262,12 @@ export default function AdminDashboard() {
 
   // 5. Toggle Service Active (ON/OFF) with Firestore persistence
   const handleToggleServiceActive = async (service) => {
+    const activeUser = await ensureAuthUser();
+    if (!activeUser) {
+      showFeedback('error', 'प्रशासकीय सत्र (Auth Session) सक्रिय नाही. कृपया पुन्हा लॉगिन करा.');
+      return;
+    }
+
     const newActive = !service.isActive;
     const docId = String(service.id);
     try {
@@ -284,7 +278,10 @@ export default function AdminDashboard() {
       showFeedback('success', `${service.marathiName} सेवा ${newActive ? 'सुरू (Active)' : 'बंद (Inactive)'} केली.`);
     } catch (err) {
       console.error('Firestore toggle service active error:', err);
-      showFeedback('error', 'सेवेची स्थिती बदलताना त्रुटी आली. (Firestore Error)');
+      const errMsg = err?.code === 'permission-denied'
+        ? 'परवानगी नाकारली (Permission Denied). तुमचे ॲडमिन खाते या सेवेसाठी अधिकृत नाही.'
+        : (err?.message || 'सेवेची स्थिती बदलताना त्रुटी आली. (Firestore Error)');
+      showFeedback('error', errMsg);
     }
   };
 
@@ -346,6 +343,7 @@ export default function AdminDashboard() {
 
   // Open Add Modal
   const openAddModal = () => {
+    setModalError('');
     setServiceFormData({
       marathiName: '',
       englishName: '',
@@ -364,6 +362,7 @@ export default function AdminDashboard() {
 
   // Open Edit Modal
   const openEditModal = (service) => {
+    setModalError('');
     setEditingService(service);
     const existingCustomIcon = service.customIcon || (typeof service.icon === 'string' && service.icon.startsWith('data:') ? service.icon : getServiceCustomIcon(service));
     setServiceFormData({
@@ -386,6 +385,19 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
   // Save Add Service with Firestore persistence
   const handleSaveAddService = async (e) => {
     e.preventDefault();
+    setModalError('');
+
+    // Ensure Firebase Auth state is resolved and valid user exists
+    const activeUser = await ensureAuthUser();
+    if (!activeUser) {
+      const authErr = 'प्रशासकीय सत्र (Auth Session) सक्रिय नाही. सेवा सेव्ह करण्यासाठी कृपया पुन्हा लॉगिन करा.';
+      setModalError(authErr);
+      showFeedback('error', authErr);
+      return;
+    }
+
+    setSavingService(true);
+
     const docsArray = serviceFormData.documentsText
       .split('\n')
       .map(d => d.trim())
@@ -404,11 +416,11 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
     const newId = Date.now();
     const newService = {
       id: newId,
-      marathiName: serviceFormData.marathiName,
-      englishName: serviceFormData.englishName,
+      marathiName: serviceFormData.marathiName.trim(),
+      englishName: serviceFormData.englishName.trim(),
       category: serviceFormData.category,
-      shortDescription: serviceFormData.shortDescription,
-      purpose: serviceFormData.purpose,
+      shortDescription: serviceFormData.shortDescription || serviceFormData.purpose || '',
+      purpose: serviceFormData.purpose || '',
       documents: docsArray,
       keywords: keywordsArray,
       isActive: serviceFormData.isActive,
@@ -425,10 +437,17 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
       setServices(updated);
       localStorage.setItem('preview_services', JSON.stringify(updated));
       setIsAddModalOpen(false);
+      setModalError('');
       showFeedback('success', 'नवीन सेवा यशस्वीरीत्या जोडली.');
     } catch (err) {
       console.error('Firestore add service error:', err);
-      showFeedback('error', 'नवीन सेवा जोडताना त्रुटी आली. (Firestore Error)');
+      const errMsg = err?.code === 'permission-denied'
+        ? 'परवानगी नाकारली (Permission Denied). तुमचे ॲडमिन खाते या सेवेसाठी अधिकृत नाही किंवा सत्र समाप्त झाले आहे.'
+        : (err?.message || 'नवीन सेवा जोडताना त्रुटी आली. (Firestore Error)');
+      setModalError(errMsg);
+      showFeedback('error', errMsg);
+    } finally {
+      setSavingService(false);
     }
   };
 
@@ -436,6 +455,17 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
   const handleSaveEditService = async (e) => {
     e.preventDefault();
     if (!editingService) return;
+    setModalError('');
+
+    const activeUser = await ensureAuthUser();
+    if (!activeUser) {
+      const authErr = 'प्रशासकीय सत्र सक्रिय नाही. सेवा अपडेट करण्यासाठी कृपया पुन्हा लॉगिन करा.';
+      setModalError(authErr);
+      showFeedback('error', authErr);
+      return;
+    }
+
+    setSavingService(true);
 
     const docsArray = serviceFormData.documentsText
       .split('\n')
@@ -455,11 +485,11 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
 
     const updatedService = {
       ...editingService,
-      marathiName: serviceFormData.marathiName,
-      englishName: serviceFormData.englishName,
+      marathiName: serviceFormData.marathiName.trim(),
+      englishName: serviceFormData.englishName.trim(),
       category: serviceFormData.category,
-      shortDescription: serviceFormData.shortDescription,
-      purpose: serviceFormData.purpose,
+      shortDescription: serviceFormData.shortDescription || serviceFormData.purpose || '',
+      purpose: serviceFormData.purpose || '',
       documents: docsArray,
       keywords: keywordsArray,
       isActive: serviceFormData.isActive,
@@ -477,16 +507,31 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
       setServices(updated);
       localStorage.setItem('preview_services', JSON.stringify(updated));
       setEditingService(null);
+      setModalError('');
       showFeedback('success', 'सेवा माहिती अपडेट केली.');
     } catch (err) {
       console.error('Firestore edit service error:', err);
-      showFeedback('error', 'सेवा अपडेट करताना त्रुटी आली. (Firestore Error)');
+      const errMsg = err?.code === 'permission-denied'
+        ? 'परवानगी नाकारली (Permission Denied). तुमचे ॲडमिन खाते या सेवेसाठी अधिकृत नाही.'
+        : (err?.message || 'सेवा अपडेट करताना त्रुटी आली. (Firestore Error)');
+      setModalError(errMsg);
+      showFeedback('error', errMsg);
+    } finally {
+      setSavingService(false);
     }
   };
 
   // Confirm Delete Service with Firestore persistence
   const handleConfirmDelete = async () => {
     if (!deletingServiceId) return;
+
+    const activeUser = await ensureAuthUser();
+    if (!activeUser) {
+      showFeedback('error', 'प्रशासकीय सत्र सक्रिय नाही. सेवा हटवण्यासाठी कृपया पुन्हा लॉगिन करा.');
+      setDeletingServiceId(null);
+      return;
+    }
+
     const docId = String(deletingServiceId);
     try {
       await deleteDoc(doc(db, 'services', docId));
@@ -497,7 +542,10 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
       showFeedback('success', 'सेवा यशस्वीरीत्या हटवली.');
     } catch (err) {
       console.error('Firestore delete service error:', err);
-      showFeedback('error', 'सेवा हटवताना त्रुटी आली. (Firestore Error)');
+      const errMsg = err?.code === 'permission-denied'
+        ? 'परवानगी नाकारली (Permission Denied).'
+        : 'सेवा हटवताना त्रुटी आली. (Firestore Error)';
+      showFeedback('error', errMsg);
     }
   };
 
@@ -555,10 +603,27 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
 
       {/* Office Status Confirmation Toast Popup */}
       {statusToast && (
-        <div className="admin-status-toast" role="alert">
+        <div 
+          className="admin-status-toast" 
+          role="alert"
+          style={{
+            zIndex: 3000,
+            ...(typeof statusToast === 'object' && statusToast.type === 'error' ? {
+              backgroundColor: '#fff5f5',
+              borderColor: '#f87171',
+              boxShadow: '0 10px 25px -5px rgba(220, 38, 38, 0.15), 0 4px 10px -2px rgba(220, 38, 38, 0.1)'
+            } : {})
+          }}
+        >
           <div className="admin-status-toast-content">
-            <CheckCircle size={18} className="status-toast-icon" />
-            <span>{statusToast}</span>
+            {typeof statusToast === 'object' && statusToast.type === 'error' ? (
+              <AlertCircle size={18} className="status-toast-icon" style={{ color: '#dc2626' }} />
+            ) : (
+              <CheckCircle size={18} className="status-toast-icon" />
+            )}
+            <span style={typeof statusToast === 'object' && statusToast.type === 'error' ? { color: '#991b1b' } : {}}>
+              {typeof statusToast === 'object' ? statusToast.message : statusToast}
+            </span>
           </div>
           <button 
             type="button" 
@@ -583,13 +648,6 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
             <span>कार्यालयीन वेळ व स्थिती</span>
           </button>
 
-          <button 
-            className={`admin-tab-btn ${activeTab === 'notice' ? 'active' : ''}`}
-            onClick={() => setActiveTab('notice')}
-          >
-            <AlertCircle size={18} />
-            <span>विशेष सूचना</span>
-          </button>
 
           <button 
             className={`admin-tab-btn ${activeTab === 'services' ? 'active' : ''}`}
@@ -625,7 +683,6 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                 <p className="panel-card-desc">
                   वेबसाइटवर आज कार्यालय खुले आहे की बंद आहे ते सेट करा.
                 </p>
-
                 <div className="status-current-badge">
                   वर्तमान स्थिती:{' '}
                   {businessInfo.isOpen ? (
@@ -692,134 +749,6 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
                   </button>
                 </form>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* -------------------------------------------------------------
-            TAB 2: SPECIAL NOTICE
-            ------------------------------------------------------------- */}
-        {activeTab === 'notice' && (
-          <div key="notice" className="admin-card-section">
-            <h2 className="admin-section-title">
-              <AlertCircle size={22} style={{ color: 'var(--primary-blue)' }} />
-              <span>विशेष सूचना व्यवस्थापन</span>
-            </h2>
-
-            {/* Existing Notice Card - Content details open ONLY when clicked */}
-            {businessInfo.specialNotice ? (
-              <div className="admin-notice-summary-card" style={{ maxWidth: '720px' }}>
-                <div 
-                  className="notice-card-header"
-                  onClick={() => setShowNoticeDetails(!showNoticeDetails)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setShowNoticeDetails(!showNoticeDetails); }}
-                >
-                  <div className="notice-badge-title">
-                    <span className="badge-open" style={{ backgroundColor: '#fef3c7', borderColor: '#fcd34d', color: '#92400e' }}>
-                      📢 सध्याची सक्रिय सूचना
-                    </span>
-                    <span style={{ fontSize: '0.88rem', color: '#64748b' }}>
-                      {showNoticeDetails ? '(तपशील लपवण्यासाठी क्लिक करा)' : '(तपशील पाहण्यासाठी कार्डवर क्लिक करा)'}
-                    </span>
-                  </div>
-
-                  <button 
-                    type="button" 
-                    className="btn-toggle-notice-detail"
-                    onClick={(e) => { e.stopPropagation(); setShowNoticeDetails(!showNoticeDetails); }}
-                  >
-                    {showNoticeDetails ? (
-                      <>
-                        <ChevronUp size={16} />
-                        <span>तपशील लपवा</span>
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDown size={16} />
-                        <span>सूचना उघडा</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-
-                {/* Show details only when clicked */}
-                {showNoticeDetails && (
-                  <div className="notice-expanded-content">
-                    <div style={{ fontWeight: 600, marginBottom: '0.35rem', color: '#0f172a' }}>
-                      सूचना मजकूर:
-                    </div>
-                    <div>{businessInfo.specialNotice}</div>
-                    <div style={{ marginTop: '0.85rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                      <button 
-                        type="button"
-                        onClick={() => {
-                          setSpecialNoticeInput(businessInfo.specialNotice);
-                          showFeedback('info', 'सूचना मजकूर खालील फॉर्ममध्ये भरला आहे. बदल करून अपडेट करा.');
-                        }}
-                        className="btn-toggle-notice-detail"
-                        style={{ background: '#ffffff' }}
-                      >
-                        <Edit size={14} />
-                        <span>बदल करा (Edit)</span>
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={handleClearNotice}
-                        className="btn-danger-outline"
-                        style={{ padding: '0.35rem 0.85rem', fontSize: '0.85rem' }}
-                      >
-                        <Trash2 size={14} />
-                        <span>सूचना काढून टाका</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : null}
-
-            {/* Default "नवीन सूचना जोडणे" Card Form - available by default every time */}
-            <div className="admin-panel-card" style={{ maxWidth: '720px' }}>
-              <h3 className="panel-card-heading" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                <Plus size={18} style={{ color: 'var(--primary-blue)' }} />
-                <span>नवीन सूचना जोडणे / सूचना अपडेट करणे</span>
-              </h3>
-              <p className="panel-card-desc">
-                नागरिक व ग्राहकांसाठी कोणतीही महत्त्वाची सूचना (उदा. "उद्या कार्यालय १० वाजता सुरू होईल", "HSC १७ नंबर फॉर्म सुरू आहेत") इथे लिहू शकता.
-              </p>
-
-              <form onSubmit={handleNoticeSubmit} className="admin-form">
-                <div className="form-group">
-                  <label className="form-label">विशेष सूचना मजकूर:</label>
-                  <textarea
-                    rows={4}
-                    className="form-textarea"
-                    value={specialNoticeInput}
-                    onChange={(e) => setSpecialNoticeInput(e.target.value)}
-                    placeholder="उदा. उद्या कार्यालय सकाळी १० वाजता सुरू होईल..."
-                    required
-                  />
-                </div>
-
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                  <button type="submit" className="btn-primary-action">
-                    <Save size={18} />
-                    <span>सूचना सेव्ह / अपडेट करा</span>
-                  </button>
-
-                  {businessInfo.specialNotice && (
-                    <button 
-                      type="button" 
-                      onClick={handleClearNotice}
-                      className="btn-danger-outline"
-                    >
-                      <Trash2 size={18} />
-                      <span>सूचना काढून टाका</span>
-                    </button>
-                  )}
-                </div>
-              </form>
             </div>
           </div>
         )}
@@ -1094,6 +1023,28 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
             </div>
 
             <form onSubmit={handleSaveAddService} className="modal-body admin-form">
+              {modalError && (
+                <div 
+                  className="admin-modal-error-banner"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.65rem',
+                    backgroundColor: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1rem',
+                    marginBottom: '1.25rem',
+                    color: '#991b1b',
+                    fontSize: '0.9rem',
+                    lineHeight: '1.4'
+                  }}
+                  role="alert"
+                >
+                  <AlertCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} />
+                  <span style={{ fontWeight: 500 }}>{modalError}</span>
+                </div>
+              )}
               <div className="form-group">
                 <label className="form-label">सेवेचे मराठी नाव *</label>
                 <input
@@ -1226,11 +1177,21 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
               </div>
 
               <div className="modal-footer" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                <button type="button" onClick={() => setIsAddModalOpen(false)} className="btn-modal-close">
+                <button 
+                  type="button" 
+                  onClick={() => setIsAddModalOpen(false)} 
+                  className="btn-modal-close"
+                  disabled={savingService}
+                >
                   बंद करा
                 </button>
-                <button type="submit" className="btn-modal-save">
-                  सेवा जतन करा
+                <button 
+                  type="submit" 
+                  className="btn-modal-save"
+                  disabled={savingService}
+                  style={savingService ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+                >
+                  {savingService ? 'जतन करत आहे...' : 'सेवा जतन करा'}
                 </button>
               </div>
             </form>
@@ -1255,6 +1216,28 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
             </div>
 
             <form onSubmit={handleSaveEditService} className="modal-body admin-form">
+              {modalError && (
+                <div 
+                  className="admin-modal-error-banner"
+                  style={{
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    gap: '0.65rem',
+                    backgroundColor: '#fef2f2',
+                    border: '1px solid #fecaca',
+                    borderRadius: '8px',
+                    padding: '0.75rem 1rem',
+                    marginBottom: '1.25rem',
+                    color: '#991b1b',
+                    fontSize: '0.9rem',
+                    lineHeight: '1.4'
+                  }}
+                  role="alert"
+                >
+                  <AlertCircle size={18} style={{ color: '#ef4444', flexShrink: 0, marginTop: '2px' }} />
+                  <span style={{ fontWeight: 500 }}>{modalError}</span>
+                </div>
+              )}
               <div className="form-group">
                 <label className="form-label">सेवेचे मराठी नाव *</label>
                 <input
@@ -1403,11 +1386,21 @@ const DEFAULT_SERVICE_NOTICE = "कागदपत्रांची आवश�
               </div>
 
               <div className="modal-footer" style={{ paddingLeft: 0, paddingRight: 0 }}>
-                <button type="button" onClick={() => setEditingService(null)} className="btn-modal-close">
+                <button 
+                  type="button" 
+                  onClick={() => setEditingService(null)} 
+                  className="btn-modal-close"
+                  disabled={savingService}
+                >
                   बंद करा
                 </button>
-                <button type="submit" className="btn-modal-save">
-                  बदल जतन करा
+                <button 
+                  type="submit" 
+                  className="btn-modal-save"
+                  disabled={savingService}
+                  style={savingService ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+                >
+                  {savingService ? 'जतन करत आहे...' : 'बदल जतन करा'}
                 </button>
               </div>
             </form>
